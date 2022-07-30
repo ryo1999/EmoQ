@@ -1,4 +1,5 @@
 import React from "react"
+import router from "next/router"
 import Avatar from "@mui/material/Avatar"
 import Button from "@mui/material/Button"
 import CssBaseline from "@mui/material/CssBaseline"
@@ -23,6 +24,7 @@ export default function SignIn() {
       email: data.get("email"),
       password: data.get("password"),
     })
+    router.push("/home")
   }
 
   return (
