@@ -1,13 +1,22 @@
 import React from "react"
-// import AppTopbar from "@/components/molecules/appTopbar"
+import Appbar from "@/components/molecules/appbar"
 import Button from "@mui/material/Button"
+import { Box } from "@mui/material"
 
-const Home = () => {
-    return(
-        <Button>
-            ウンチーコング
-        </Button>
-    )
+export default function Home() {
+  return (
+    <>
+      <Appbar />
+      <Box sx={{textAlign:"center"}}>
+        <p>ajfdkhfahfkdhfhdhghajghdfjaghjgh</p>
+        <p>ajfdkhfahfkdhfhdhghajghdfjaghjgh</p>
+        <p>ajfdkhfahfkdhfhdhghajghdfjaghjgh</p>
+        <p>ajfdkhfahfkdhfhdhghajghdfjaghjgh</p>
+        <p>ajfdkhfahfkdhfhdhghajghdfjaghjgh</p>
+        <p>ajfdkhfahfkdhfhdhghajghdfjaghjgh</p>
+        <p>ajfdkhfahfkdhfhdhghajghdfjaghjgh</p>
+        <Button>ウンチーコング</Button>
+      </Box>
+    </>
+  )
 }
-
-export default Home
