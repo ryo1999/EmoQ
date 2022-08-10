@@ -2,6 +2,10 @@ import React from "react"
 import { tags } from "@/mock/mock"
 import { Theme, useTheme } from "@mui/material/styles"
 import Box from "@mui/material/Box"
+import Dialog from "@mui/material/Dialog"
+import DialogTitle from "@mui/material/DialogTitle"
+import DialogActions from "@mui/material/DialogActions"
+import DialogContent from "@mui/material/DialogContent"
 import Card from "@mui/material/Card"
 import CardContent from "@mui/material/CardContent"
 import IconButton from "@mui/material/IconButton"
@@ -19,9 +23,11 @@ import InsertEmoticonIcon from "@mui/icons-material/InsertEmoticon"
 
 export default function PostColumn() {
     const theme = useTheme()
+    const [isOpenDialog, setOpenDialog] = React.useState(false)
     const [parameter, setParameter] = React.useState<number | number[] | string>(50)
     const [question, setQuestion] = React.useState("")
     const [tag, setTag] = React.useState<string[]>([])
+    const [newTag, setNewTag] = React.useState("")
     const [emotion, setEmotion] = React.useState("")
 
     const MenuProps = {
@@ -65,19 +71,55 @@ export default function PostColumn() {
         const {
             target: { value },
         } = event
-        console.log(value)
         if (tag.length <= 2) {
             setTag(typeof value === "string" ? value.split(",") : value)
         } else {
-            if (event.target.value.length > tag.length) { //何もしない
+            if (event.target.value.length > tag.length) {
+                //何もしない
             } else {
                 setTag(typeof value === "string" ? value.split(",") : value)
             }
         }
     }
 
+    const handleCreateTag = (value: string) => {
+        setNewTag(value)
+    }
+
+    const handleClickOpen = () => {
+        setOpenDialog(true)
+    }
+    const handleClose = () => {
+        setOpenDialog(false)
+    }
+
+    const handleTagSave = () => {
+        //tagsのデータベースにnewTagを追加する処理を書く
+        setOpenDialog(false)
+    }
+
     return (
         <>
+            <Dialog open={isOpenDialog} onClose={handleClose}>
+                <DialogTitle>新しいタグを作成</DialogTitle>
+                <DialogContent>
+                    <Box
+                        component="form"
+                        sx={{
+                            // width:"1000px",
+                            "& > :not(style)": { m: 1, width: "300px" },
+                        }}
+                        noValidate
+                        autoComplete="name"
+                    >
+                        <TextField id="outlined-basic" variant="outlined" onChange={(e) => handleCreateTag(e.target.value)}/>
+                    </Box>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleClose}>キャンセル</Button>
+                    <Button onClick={handleTagSave}>保存</Button>
+                </DialogActions>
+            </Dialog>
             <Card sx={{ width: "100%", maxWidth: "800px", mt: "10px" }}>
                 <CardContent sx={{ display: "flex" }}>
                     <Box
@@ -127,7 +169,9 @@ export default function PostColumn() {
                         />
                     </Box>
                 </CardContent>
-                <Typography variant="caption" sx={{marginLeft:"15px"}}>タグは3つまで選択可能</Typography>
+                <Typography variant="caption" sx={{ marginLeft: "15px" }}>
+                    タグは3つまで選択可能
+                </Typography>
                 <Box sx={{ margin: "5px 0px 10px 15px" }}>
                     <FormControl sx={{ minWidth: "80px" }} size="small">
                         <InputLabel id="demo-simple-select-label">タグ</InputLabel>
@@ -141,7 +185,7 @@ export default function PostColumn() {
                             renderValue={(selected) => (
                                 <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
                                     {selected.map((value: string) => (
-                                        <Chip key={value} label={value} sx={{bgcolor:"aqua"}}/>
+                                        <Chip key={value} label={value} sx={{ bgcolor: "aqua" }} />
                                     ))}
                                 </Box>
                             )}
@@ -151,7 +195,7 @@ export default function PostColumn() {
                                     {tagValue}
                                 </MenuItem>
                             ))}
-                            <MenuItem>新しく作る</MenuItem>
+                            <MenuItem onClick={handleClickOpen}>新しく作る</MenuItem>
                         </Select>
                     </FormControl>
                 </Box>
