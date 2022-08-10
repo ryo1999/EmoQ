@@ -13,6 +13,8 @@ import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder"
 import BookmarkIcon from "@mui/icons-material/Bookmark"
 import CommentIcon from "@mui/icons-material/Comment"
 import Slider from "@mui/material/Slider"
+import Chip from "@mui/material/Chip"
+import InsertEmoticonIcon from "@mui/icons-material/InsertEmoticon"
 
 type CardContentProps = {
     value: {
@@ -48,25 +50,32 @@ export default function CardDetail(props: CardContentProps) {
 
     return (
         <Card key={index} sx={{ position: "relative", width: "100%", maxWidth: "800px", mt: "10px" }}>
-            <Box sx={{ display: "flex", position: "absolute", right: "0px" }}>
-                {value.tag.map((v, i) => {
-                    return (
-                        <Box key={i} sx={{ marginRight: "10px", border: "1px solid blue" }}>
-                            {v}
-                        </Box>
-                    )
-                })}
+            <Box sx={{ display: "flex", marginLeft: "5px" }}>
+                {value.tag.map((v, i) => (
+                    <Chip key={i} label={v} sx={{ marginTop: "10px", marginRight: "5px", bgcolor: "aqua" }} />
+                ))}
             </Box>
-            <Slider
-                defaultValue={value.parameter}
-                marks
-                step={10}
-                min={0}
-                max={100}
-                sx={{ width: "300px", position: "absolute", right: "60px", top: "30px" }}
-                disabled
-            />
-            <Box sx={{ width: "30px", position: "absolute", right: "10px", top: "35px" }}>{value.parameter}</Box>
+            <Box sx={{ display: "flex", justifyContent: "right", alignItems: "center" }}>
+                <InsertEmoticonIcon sx={{ marginRight: "20px" }} />
+                <Slider
+                    defaultValue={value.parameter}
+                    marks
+                    step={10}
+                    min={0}
+                    max={100}
+                    sx={{ width: "200px", marginRight: "30px" }}
+                    disabled
+                />
+                <Box
+                    sx={{
+                        width: "30px",
+                        marginRight: "20px",
+                        borderBottom:"solid 1px"
+                    }}
+                >
+                    {value.parameter}
+                </Box>
+            </Box>
             <CardHeader
                 avatar={<Avatar onClick={handleClickAvatar} sx={{ cursor: "pointer" }} />}
                 title={value.name}
