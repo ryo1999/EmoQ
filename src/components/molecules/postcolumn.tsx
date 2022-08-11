@@ -1,11 +1,9 @@
 import React from "react"
 import { tags } from "@/mock/mock"
+import TagDialog from "./tagDialog"
+import StampDialog from "./stampDialog"
 import { Theme, useTheme } from "@mui/material/styles"
 import Box from "@mui/material/Box"
-import Dialog from "@mui/material/Dialog"
-import DialogTitle from "@mui/material/DialogTitle"
-import DialogActions from "@mui/material/DialogActions"
-import DialogContent from "@mui/material/DialogContent"
 import Card from "@mui/material/Card"
 import CardContent from "@mui/material/CardContent"
 import IconButton from "@mui/material/IconButton"
@@ -19,16 +17,16 @@ import Input from "@mui/material/Input"
 import TextField from "@mui/material/TextField"
 import Typography from "@mui/material/Typography"
 import Chip from "@mui/material/Chip"
-import InsertEmoticonIcon from "@mui/icons-material/InsertEmoticon"
+import { Icon } from "@iconify/react"
 
 export default function PostColumn() {
     const theme = useTheme()
-    const [isOpenDialog, setOpenDialog] = React.useState(false)
+    const [isOpenTagDialog, setOpenTagDialog] = React.useState(false)
+    const [isOpenStampDialog, setOpenStampDialog] = React.useState(false)
     const [parameter, setParameter] = React.useState<number | number[] | string>(50)
     const [question, setQuestion] = React.useState("")
     const [tag, setTag] = React.useState<string[]>([])
-    const [newTag, setNewTag] = React.useState("")
-    const [emotion, setEmotion] = React.useState("")
+    const [currentEmotion, setCurrentEmotion] = React.useState(<Icon icon="fa6-regular:face-meh" />)
 
     const MenuProps = {
         PaperProps: {
@@ -82,46 +80,24 @@ export default function PostColumn() {
         }
     }
 
-    const handleCreateTag = (value: string) => {
-        setNewTag(value)
+    const handleClickTagOpen = () => {
+        setOpenTagDialog(true)
     }
 
-    const handleClickOpen = () => {
-        setOpenDialog(true)
-    }
-    const handleClose = () => {
-        setOpenDialog(false)
-    }
-
-    const handleTagSave = () => {
-        //tagsのデータベースにnewTagを追加する処理を書く
-        setOpenDialog(false)
+    const handleClickStampOpen = () => {
+        setOpenStampDialog(true)
     }
 
     return (
         <>
-            <Dialog open={isOpenDialog} onClose={handleClose}>
-                <DialogTitle>新しいタグを作成</DialogTitle>
-                <DialogContent>
-                    <Box
-                        component="form"
-                        sx={{
-                            // width:"1000px",
-                            "& > :not(style)": { m: 1, width: "300px" },
-                        }}
-                        noValidate
-                        autoComplete="name"
-                    >
-                        <TextField id="outlined-basic" variant="outlined" onChange={(e) => handleCreateTag(e.target.value)}/>
-                    </Box>
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={handleClose}>キャンセル</Button>
-                    <Button onClick={handleTagSave}>保存</Button>
-                </DialogActions>
-            </Dialog>
-            <Card sx={{ width: "100%", maxWidth: "800px", mt: "10px" }}>
-                <CardContent sx={{ display: "flex" }}>
+            <StampDialog
+                isOpenStampDialog={isOpenStampDialog}
+                setOpenStampDialog={setOpenStampDialog}
+                setCurrentEmotion={setCurrentEmotion}
+            />
+            <TagDialog isOpenTagDialog={isOpenTagDialog} setOpenTagDialog={setOpenTagDialog} />
+            <Card sx={{ width: "100%", maxWidth: "800px", mt: "10px", borderRadius: "10px" }}>
+                <CardContent sx={{ display: "flex", justifyContent:"space-between" }}>
                     <Box
                         component="form"
                         sx={{
@@ -140,33 +116,38 @@ export default function PostColumn() {
                             variant="outlined"
                         />
                     </Box>
-                    <Box sx={{ display: "flex", alignItems: "center" }}>
-                        <IconButton sx={{ marginRight: "10px" }}>
-                            <InsertEmoticonIcon />
-                        </IconButton>
-                        <Slider
-                            value={typeof parameter === "number" ? parameter : 0}
-                            valueLabelDisplay="auto"
-                            marks
-                            onChange={handleSliderChange}
-                            step={10}
-                            min={0}
-                            max={100}
-                            sx={{ width: "200px", marginRight: "20px" }}
-                        />
-                        <Input
-                            value={parameter}
-                            size="small"
-                            onChange={handleInputChange}
-                            onBlur={handleBlur}
-                            inputProps={{
-                                step: 10,
-                                min: 0,
-                                max: 100,
-                                type: "number",
-                            }}
-                            sx={{ width: "50px" }}
-                        />
+                    <Box sx={{ display: "flex", alignItems: "center"}}>
+                        {(currentEmotion.props.icon == "fa6-regular:face-sad-tear" ||
+                            currentEmotion.props.icon == "fa6-regular:face-angry" ||
+                            currentEmotion.props.icon == "fa6-regular:face-grin-beam-sweat" ||
+                            currentEmotion.props.icon == "fa6-regular:face-rolling-eyes") && (
+                            <>
+                                <Slider
+                                    value={typeof parameter === "number" ? parameter : 0}
+                                    valueLabelDisplay="auto"
+                                    marks
+                                    onChange={handleSliderChange}
+                                    step={10}
+                                    min={0}
+                                    max={100}
+                                    sx={{ width: "200px", marginRight: "20px" }}
+                                />
+                                <Input
+                                    value={parameter}
+                                    size="small"
+                                    onChange={handleInputChange}
+                                    onBlur={handleBlur}
+                                    inputProps={{
+                                        step: 10,
+                                        min: 0,
+                                        max: 100,
+                                        type: "number",
+                                    }}
+                                    sx={{ width: "50px" }}
+                                />
+                            </>
+                        )}
+                        <IconButton onClick={handleClickStampOpen}>{currentEmotion}</IconButton>
                     </Box>
                 </CardContent>
                 <Typography variant="caption" sx={{ marginLeft: "15px" }}>
@@ -179,6 +160,7 @@ export default function PostColumn() {
                             labelId="demo-simple-select-label"
                             id="demo-simple-select"
                             value={tag}
+                            label="タグ"
                             onChange={handleTagChange}
                             multiple
                             MenuProps={MenuProps}
@@ -195,7 +177,7 @@ export default function PostColumn() {
                                     {tagValue}
                                 </MenuItem>
                             ))}
-                            <MenuItem onClick={handleClickOpen}>新しく作る</MenuItem>
+                            <MenuItem onClick={handleClickTagOpen}>新しく作る</MenuItem>
                         </Select>
                     </FormControl>
                 </Box>

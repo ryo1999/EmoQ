@@ -53,7 +53,7 @@ export const questions = [
         question:"便秘を治す方法を教えてください便秘を治す方法を教えてください便秘を治す方法を教えてください便秘を治す方法を教えてください便秘を治す方法を教えてください",
         tag: ["日常"],
         time: "2022-5-20",
-        emotion: "sad",
+        emotion: "悲しみ",
         parameter: 100,
     },
     {
@@ -63,7 +63,7 @@ export const questions = [
         question: "SSRとSSGについてそれぞれのメリットが知りたいです",
         tag: ["SSG", "SSR"],
         time: "2022-6-20",
-        emotion: "焦り",
+        emotion: "悲しみ",
         parameter: 5,
     },
     {
@@ -73,7 +73,7 @@ export const questions = [
         question: "データサイエンスの授業のレポートの提出締め切りを教えてください",
         tag: ["課題", "レポート", "データサイエンス"],
         time: "2022-6-10",
-        emotion: "緊急度",
+        emotion: "普通",
         parameter: 90,
     },
 ]

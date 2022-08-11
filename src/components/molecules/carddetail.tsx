@@ -1,6 +1,7 @@
 import React from "react"
 import router from "next/router"
 import { comments } from "@/mock/mock"
+import ReturnIcon from "../atoms/returnIcon"
 import { Box } from "@mui/material"
 import Card from "@mui/material/Card"
 import CardActions from "@mui/material/CardActions"
@@ -14,7 +15,6 @@ import BookmarkIcon from "@mui/icons-material/Bookmark"
 import CommentIcon from "@mui/icons-material/Comment"
 import Slider from "@mui/material/Slider"
 import Chip from "@mui/material/Chip"
-import InsertEmoticonIcon from "@mui/icons-material/InsertEmoticon"
 
 type CardContentProps = {
     value: {
@@ -49,39 +49,51 @@ export default function CardDetail(props: CardContentProps) {
     }
 
     return (
-        <Card key={index} sx={{ position: "relative", width: "100%", maxWidth: "800px", mt: "10px" }}>
+        <Card
+            key={index}
+            sx={{ position: "relative", width: "100%", maxWidth: "800px", mt: "10px", borderRadius: "10px" }}
+        >
             <Box sx={{ display: "flex", marginLeft: "5px" }}>
                 {value.tag.map((v, i) => (
                     <Chip key={i} label={v} sx={{ marginTop: "10px", marginRight: "5px", bgcolor: "aqua" }} />
                 ))}
             </Box>
             <Box sx={{ display: "flex", justifyContent: "right", alignItems: "center" }}>
-                <InsertEmoticonIcon sx={{ marginRight: "20px" }} />
-                <Slider
-                    defaultValue={value.parameter}
-                    marks
-                    step={10}
-                    min={0}
-                    max={100}
-                    sx={{ width: "200px", marginRight: "30px" }}
-                    disabled
-                />
-                <Box
-                    sx={{
-                        width: "30px",
-                        marginRight: "20px",
-                        borderBottom:"solid 1px"
-                    }}
-                >
-                    {value.parameter}
-                </Box>
+                {(value.emotion == "悲しみ" ||
+                    value.emotion == "怒り" ||
+                    value.emotion == "焦り" ||
+                    value.emotion == "絶望") && (
+                    <>
+                        <Slider
+                            defaultValue={value.parameter}
+                            marks
+                            step={10}
+                            min={0}
+                            max={100}
+                            sx={{ width: "200px", marginRight: "30px" }}
+                            disabled
+                        />
+                        <Box
+                            sx={{
+                                width: "30px",
+                                marginRight: "20px",
+                                borderBottom: "solid 1px",
+                            }}
+                        >
+                            {value.parameter}
+                        </Box>
+                    </>
+                )}
+                <IconButton disabled sx={{ marginRight: "10px", marginTop: "3px" }}>
+                    {ReturnIcon(value.emotion)}
+                </IconButton>
             </Box>
             <CardHeader
                 avatar={<Avatar onClick={handleClickAvatar} sx={{ cursor: "pointer" }} />}
                 title={value.name}
                 subheader={value.time}
             />
-            <CardContent>
+            <CardContent sx={{ marginLeft: "50px", width: "650px" }}>
                 <Typography variant="body2">{value.question}</Typography>
             </CardContent>
             <CardActions sx={{ justifyContent: "right" }}>
