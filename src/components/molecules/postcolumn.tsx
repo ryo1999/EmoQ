@@ -97,7 +97,7 @@ export default function PostColumn() {
             />
             <TagDialog isOpenTagDialog={isOpenTagDialog} setOpenTagDialog={setOpenTagDialog} />
             <Card sx={{ width: "100%", maxWidth: "800px", mt: "10px", borderRadius: "10px" }}>
-                <CardContent sx={{ display: "flex", justifyContent:"space-between" }}>
+                <CardContent sx={{ display: "flex", justifyContent: "space-between" }}>
                     <Box
                         component="form"
                         sx={{
@@ -116,9 +116,8 @@ export default function PostColumn() {
                             variant="outlined"
                         />
                     </Box>
-                    <Box sx={{ display: "flex", alignItems: "center"}}>
-                        {(currentEmotion.props.icon == "fa6-regular:face-sad-tear" ||
-                            currentEmotion.props.icon == "fa6-regular:face-angry" ||
+                    <Box sx={{ display: "flex", alignItems: "center" }}>
+                        {(currentEmotion.props.icon == "fa6-regular:face-angry" ||
                             currentEmotion.props.icon == "fa6-regular:face-grin-beam-sweat" ||
                             currentEmotion.props.icon == "fa6-regular:face-rolling-eyes") && (
                             <>

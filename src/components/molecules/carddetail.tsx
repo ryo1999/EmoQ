@@ -59,10 +59,7 @@ export default function CardDetail(props: CardContentProps) {
                 ))}
             </Box>
             <Box sx={{ display: "flex", justifyContent: "right", alignItems: "center" }}>
-                {(value.emotion == "悲しみ" ||
-                    value.emotion == "怒り" ||
-                    value.emotion == "焦り" ||
-                    value.emotion == "絶望") && (
+                {(value.emotion == "怒り" || value.emotion == "焦り" || value.emotion == "絶望") && (
                     <>
                         <Slider
                             defaultValue={value.parameter}
