@@ -44,7 +44,6 @@ export default function Appbar() {
 
     return (
         <Box>
-            <PostColumn isOpenFormDialog={isOpenFormDialog} setOpenFormDialog={setOpenFormDialog} />
             <AppBar position="fixed">
                 <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
                     <Typography variant="h6" component="div">
@@ -118,6 +117,7 @@ export default function Appbar() {
                     </div>
                 </Toolbar>
             </AppBar>
+            <PostColumn isOpenFormDialog={isOpenFormDialog} setOpenFormDialog={setOpenFormDialog} />
         </Box>
     )
 }

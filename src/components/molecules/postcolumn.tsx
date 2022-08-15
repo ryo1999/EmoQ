@@ -14,15 +14,37 @@ import TextField from "@mui/material/TextField"
 import Typography from "@mui/material/Typography"
 import Chip from "@mui/material/Chip"
 import Dialog from "@mui/material/Dialog"
-import DialogTitle from "@mui/material/DialogTitle"
 import DialogContent from "@mui/material/DialogContent"
-import DialogActions from "@mui/material/DialogActions"
+import CloseIcon from "@mui/icons-material/Close"
+import Slide from "@mui/material/Slide"
+import { TransitionProps } from "@mui/material/transitions"
+import AppBar from "@mui/material/AppBar"
+import Toolbar from "@mui/material/Toolbar"
+import IconButton from "@mui/material/IconButton"
 import { getTag } from "@/pages/api/tagApi"
 
 type PostColumnProps = {
     isOpenFormDialog: boolean
     setOpenFormDialog: React.Dispatch<boolean>
 }
+
+const MenuProps = {
+    PaperProps: {
+        style: {
+            maxHeight: "200px",
+            // maxWidth: "300px",
+            overflow: "auto",
+        },
+    },
+}
+const Transition = React.forwardRef(function Transition(
+    props: TransitionProps & {
+        children: React.ReactElement
+    },
+    ref: React.Ref<unknown>
+) {
+    return <Slide direction="up" ref={ref} {...props} />
+})
 
 export default function PostColumn(props: PostColumnProps) {
     const { isOpenFormDialog, setOpenFormDialog } = props
@@ -34,22 +56,14 @@ export default function PostColumn(props: PostColumnProps) {
     const [emotion, setEmotion] = React.useState("普通")
     const [tags, setTags] = React.useState<string[]>([])
 
-    const MenuProps = {
-        PaperProps: {
-            style: {
-                maxHeight: "200px",
-                maxWidth: "300px",
-                overflow: "auto",
-            },
-        },
-    }
-
     React.useEffect(() => {
         getTag()
             .then((data) => {
                 setTags(data)
             })
-            .catch((e) => {console.log(e)})
+            .catch((e) => {
+                console.log(e)
+            })
     }, [])
 
     React.useEffect(() => {
@@ -113,15 +127,31 @@ export default function PostColumn(props: PostColumnProps) {
     return (
         <>
             <TagDialog isOpenTagDialog={isOpenTagDialog} setOpenTagDialog={setOpenTagDialog} />
-            <Dialog fullScreen open={isOpenFormDialog} onClose={() => setOpenFormDialog(false)} sx={{ margin: "0px" }}>
-                <DialogTitle>質問、感情、タグを入力</DialogTitle>
-                <DialogContent sx={{ maxWidth: "350px" }}>
+            <Dialog
+                TransitionComponent={Transition}
+                fullScreen
+                open={isOpenFormDialog}
+                onClose={() => setOpenFormDialog(false)}
+            >
+                <AppBar sx={{ position: "relative" }}>
+                    <Toolbar>
+                        <IconButton edge="start" color="inherit" onClick={handleCancelClick} aria-label="close">
+                            <CloseIcon />
+                        </IconButton>
+                        <Typography sx={{ marginLeft: "10px", flex: 1 }} variant="h6" component="div">
+                            投稿フォーム
+                        </Typography>
+                        <Button color="inherit" onClick={handleSubmitClick} sx={{ fontSize: "17px" }}>
+                            投稿
+                        </Button>
+                    </Toolbar>
+                </AppBar>
+                <DialogContent sx={{ maxWidth: "350px", textAlign: "center", margin:"0 auto" }}>
                     <Box
                         component="form"
                         sx={{
-                            "& > :not(style)": { width: "280px" },
+                            "& > :not(style)": { width: "300px" },
                             marginBottom: "20px",
-                            marginTop: "-20px",
                         }}
                         noValidate
                         autoComplete="off"
@@ -133,15 +163,15 @@ export default function PostColumn(props: PostColumnProps) {
                             label="質問内容"
                             onChange={(e) => setQuestion(e.target.value)}
                             variant="outlined"
-                            sx={{ marginTop: "20px", maxHeight: "400px", overflow: "auto" }}
+                            sx={{ marginTop: "20px", maxHeight: "360px", overflow: "auto" }}
                         />
                     </Box>
                     <Typography variant="caption" sx={{ marginLeft: "5px" }}>
-                        怒り、焦り、絶望にはパラメータが存在します
+                        焦り、絶望にはパラメータが存在します
                     </Typography>
                     <StampList emotion={emotion} setEmotion={setEmotion} setParameter={setParameter} />
                     <Box sx={{ display: "flex", justifyContent: "center", marginBottom: "20px" }}>
-                        {(emotion == "怒り" || emotion == "焦り" || emotion == "絶望") && (
+                        {(emotion == "焦り" || emotion == "絶望") && (
                             <>
                                 <Slider
                                     value={typeof parameter === "number" ? parameter : 0}
@@ -169,10 +199,8 @@ export default function PostColumn(props: PostColumnProps) {
                             </>
                         )}
                     </Box>
-                    <Typography variant="caption" sx={{ marginLeft: "15px" }}>
-                        タグは3つまで選択可能
-                    </Typography>
-                    <Box sx={{ margin: "10px 0px 10px 15px" }}>
+                    <Typography variant="caption">タグは3つまで選択可能</Typography>
+                    <Box sx={{ margin: "10px 0px 10px 0px" }}>
                         <FormControl sx={{ minWidth: "80px" }} size="small">
                             <InputLabel id="simple-select-label">タグ</InputLabel>
                             <Select
@@ -184,9 +212,9 @@ export default function PostColumn(props: PostColumnProps) {
                                 multiple
                                 MenuProps={MenuProps}
                                 renderValue={(selected) => (
-                                    <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+                                    <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5}}>
                                         {selected.map((value: string) => (
-                                            <Chip key={value} label={value} sx={{ bgcolor: "aqua" }} />
+                                            <Chip key={value} label={value} sx={{ bgcolor: "aqua", maxWidth:"250px" }} />
                                         ))}
                                     </Box>
                                 )}
@@ -201,10 +229,6 @@ export default function PostColumn(props: PostColumnProps) {
                         </FormControl>
                     </Box>
                 </DialogContent>
-                <DialogActions>
-                    <Button onClick={handleCancelClick}>キャンセル</Button>
-                    <Button onClick={handleSubmitClick}>投稿</Button>
-                </DialogActions>
             </Dialog>
         </>
     )
