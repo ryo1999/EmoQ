@@ -56,15 +56,30 @@ export default function PostColumn(props: PostColumnProps) {
     const [emotion, setEmotion] = React.useState("普通")
     const [tags, setTags] = React.useState<string[]>([])
 
+    // React.useEffect(() => {
+    //     getTag()
+    //         .then((data) => {
+    //             setTags(data)
+    //         })
+    //         .catch((e) => {
+    //             console.log(e)
+    //         })
+    // }, [])
+
+    //たまに反映されない時がある
     React.useEffect(() => {
-        getTag()
-            .then((data) => {
-                setTags(data)
-            })
-            .catch((e) => {
-                console.log(e)
-            })
-    }, [])
+        if (isOpenTagDialog == true) {
+            //何もしない
+        } else {
+            getTag()
+                .then((data) => {
+                    setTags(data)
+                })
+                .catch((e) => {
+                    console.log(e)
+                })
+        }
+    },[isOpenTagDialog])
 
     React.useEffect(() => {
         //isOpenFormDialogがopenになったら初期化
@@ -146,7 +161,7 @@ export default function PostColumn(props: PostColumnProps) {
                         </Button>
                     </Toolbar>
                 </AppBar>
-                <DialogContent sx={{ maxWidth: "350px", textAlign: "center", margin:"0 auto" }}>
+                <DialogContent sx={{ maxWidth: "350px", textAlign: "center", margin: "0 auto" }}>
                     <Box
                         component="form"
                         sx={{
@@ -212,9 +227,13 @@ export default function PostColumn(props: PostColumnProps) {
                                 multiple
                                 MenuProps={MenuProps}
                                 renderValue={(selected) => (
-                                    <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5}}>
+                                    <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
                                         {selected.map((value: string) => (
-                                            <Chip key={value} label={value} sx={{ bgcolor: "aqua", maxWidth:"250px" }} />
+                                            <Chip
+                                                key={value}
+                                                label={value}
+                                                sx={{ bgcolor: "aqua", maxWidth: "250px" }}
+                                            />
                                         ))}
                                     </Box>
                                 )}
