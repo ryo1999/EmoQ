@@ -1,6 +1,7 @@
 import React from "react"
-import router from "next/router"
 import ReturnIcon from "../atoms/returnIcon"
+import { ReturnEmotionColor } from "../atoms/returnEmotionColor"
+import { ReturnEmotionFontColor } from "../atoms/returnEmotionFontColor"
 import { Box } from "@mui/material"
 import Card from "@mui/material/Card"
 import CardActions from "@mui/material/CardActions"
@@ -9,45 +10,30 @@ import CardHeader from "@mui/material/CardHeader"
 import Typography from "@mui/material/Typography"
 import IconButton from "@mui/material/IconButton"
 import Avatar from "@mui/material/Avatar"
+import Slider from "@mui/material/Slider"
+import Chip from "@mui/material/Chip"
 import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder"
 import BookmarkIcon from "@mui/icons-material/Bookmark"
 import CommentIcon from "@mui/icons-material/Comment"
-import Slider from "@mui/material/Slider"
-import Chip from "@mui/material/Chip"
+import { QuestionsCollectionData } from "@/utils/types"
 
 type CardContentProps = {
-    value: {
-        contributor_id: string,
-        contributor_name: string,
-        question: string
-        tag: string[]
-        time: string
-        emotion: string
-        parameter: number
-    }
-    index: number
+    value: QuestionsCollectionData
 }
 
 export default function CardDetail(props: CardContentProps) {
-    const { value, index } = props
+    const { value } = props
     const [bookMark, setBookMark] = React.useState(false)
 
-    const handleClickAvatar = () => {
-        router.push("/mypage")
-    }
-
     return (
-        <Card
-            key={index}
-            sx={{ width: "100%", mt: "10px", borderRadius: "10px" }}
-        >
+        <Card sx={{ width: "100%", mt: "10px", borderRadius: "10px", bgcolor: ReturnEmotionColor(value.emotion), color: ReturnEmotionFontColor(value.emotion) }}>
             <Box sx={{ display: "flex", marginLeft: "5px" }}>
                 {value.tag.map((v, i) => (
-                    <Chip key={i} label={v} sx={{ marginTop: "10px", marginRight: "5px", bgcolor: "aqua" }} />
+                    <Chip key={i} label={v} sx={{ marginTop: "10px", marginRight: "5px", bgcolor: "white" }} />
                 ))}
             </Box>
             <Box sx={{ display: "flex", justifyContent: "right", alignItems: "center" }}>
-                {(value.emotion == "怒り" || value.emotion == "焦り" || value.emotion == "絶望") && (
+                {(value.emotion == "イライラ" || value.emotion == "焦り" || value.emotion == "絶望") && (
                     <>
                         <Slider
                             defaultValue={value.parameter}
@@ -69,25 +55,25 @@ export default function CardDetail(props: CardContentProps) {
                         </Box>
                     </>
                 )}
-                <IconButton disabled sx={{ marginRight: "10px", marginTop: "3px" }}>
+                <IconButton disabled sx={{ marginRight: "10px", marginTop: "3px", color: "white" }}>
                     {ReturnIcon(value.emotion)}
                 </IconButton>
             </Box>
             <CardHeader
-                avatar={<Avatar onClick={handleClickAvatar} sx={{ cursor: "pointer" }} />}
+                avatar={<Avatar sx={{bgcolor:"white", color:"black"}}>{value.contributor_name[0]}</Avatar>}
                 title={value.contributor_name}
-                subheader={value.time}
+                subheader={<Typography variant="caption" sx={{color:"white"}}>{value.time}</Typography>}
             />
             <CardContent sx={{ marginLeft: "55px", maxWidth: "650px" }}>
                 <Typography variant="body2">{value.question}</Typography>
             </CardContent>
             <CardActions sx={{ justifyContent: "right" }}>
                 <IconButton onClick={() => setBookMark(!bookMark)}>
-                    {bookMark ? <BookmarkIcon sx={{ color: "blue" }} /> : <BookmarkBorderIcon sx={{ color: "blue" }} />}
+                    {bookMark ? <BookmarkIcon sx={{ color: "white" }} /> : <BookmarkBorderIcon sx={{ color: "white" }} />}
                 </IconButton>
                 <IconButton sx={{ fontSize: "15px" }}>
-                    <CommentIcon sx={{ color: "blue" }} />
-                    {0}
+                    <CommentIcon sx={{ color: "white" }} />
+                    <Typography variant="button" sx={{color:"white"}}>0</Typography>
                 </IconButton>
             </CardActions>
         </Card>
