@@ -1,5 +1,6 @@
 import React from "react"
 import router from "next/router"
+import PostColumn from "./postcolumn"
 import AppBar from "@mui/material/AppBar"
 import Box from "@mui/material/Box"
 import Toolbar from "@mui/material/Toolbar"
@@ -14,10 +15,12 @@ import PersonIcon from "@mui/icons-material/Person"
 import LogoutIcon from "@mui/icons-material/Logout"
 import CachedIcon from "@mui/icons-material/Cached"
 import MailIcon from "@mui/icons-material/Mail"
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline"
 
 export default function Appbar() {
     const [avatarAnchorEl, setAvatarAnchorEl] = React.useState<null | HTMLElement>(null)
     const [mailAnchorEl, setMailAnchorEl] = React.useState<null | HTMLElement>(null)
+    const [isOpenFormDialog, setOpenFormDialog] = React.useState(false)
 
     const handleClickAvatar = (event: React.MouseEvent<HTMLElement>) => {
         setAvatarAnchorEl(event.currentTarget)
@@ -35,14 +38,22 @@ export default function Appbar() {
         router.push(url)
     }
 
+    const handleClickOpen = () => {
+        setOpenFormDialog(true)
+    }
+
     return (
-        <Box sx={{ flexGrow: 1 }}>
+        <Box>
+            <PostColumn isOpenFormDialog={isOpenFormDialog} setOpenFormDialog={setOpenFormDialog} />
             <AppBar position="fixed">
-                <Toolbar>
-                    <Typography variant="h6" component="div" sx={{ flexGrow: 1, marginLeft: "30px" }}>
+                <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
+                    <Typography variant="h6" component="div">
                         EmoCha
                     </Typography>
                     <div>
+                        <IconButton color="inherit" onClick={handleClickOpen} sx={{ marginRight: "10px" }}>
+                            <AddCircleOutlineIcon sx={{ fontSize: "30px" }} />
+                        </IconButton>
                         <IconButton onClick={handleClickMail} color="inherit">
                             <Badge badgeContent={4} color="success">
                                 <MailIcon sx={{ width: "30px", height: "30px" }} />

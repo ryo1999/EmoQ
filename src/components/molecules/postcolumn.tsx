@@ -1,12 +1,8 @@
 import React from "react"
-import { tags } from "@/mock/mock"
 import TagDialog from "./tagDialog"
-import StampDialog from "./stampDialog"
+import StampList from "./stampList"
 import { Theme, useTheme } from "@mui/material/styles"
 import Box from "@mui/material/Box"
-import Card from "@mui/material/Card"
-import CardContent from "@mui/material/CardContent"
-import IconButton from "@mui/material/IconButton"
 import InputLabel from "@mui/material/InputLabel"
 import MenuItem from "@mui/material/MenuItem"
 import FormControl from "@mui/material/FormControl"
@@ -17,26 +13,56 @@ import Input from "@mui/material/Input"
 import TextField from "@mui/material/TextField"
 import Typography from "@mui/material/Typography"
 import Chip from "@mui/material/Chip"
-import { Icon } from "@iconify/react"
+import Dialog from "@mui/material/Dialog"
+import DialogTitle from "@mui/material/DialogTitle"
+import DialogContent from "@mui/material/DialogContent"
+import DialogActions from "@mui/material/DialogActions"
+import { getTag } from "@/pages/api/tagApi"
 
-export default function PostColumn() {
+type PostColumnProps = {
+    isOpenFormDialog: boolean
+    setOpenFormDialog: React.Dispatch<boolean>
+}
+
+export default function PostColumn(props: PostColumnProps) {
+    const { isOpenFormDialog, setOpenFormDialog } = props
     const theme = useTheme()
     const [isOpenTagDialog, setOpenTagDialog] = React.useState(false)
-    const [isOpenStampDialog, setOpenStampDialog] = React.useState(false)
     const [parameter, setParameter] = React.useState<number | number[] | string>(50)
     const [question, setQuestion] = React.useState("")
     const [tag, setTag] = React.useState<string[]>([])
-    const [currentEmotion, setCurrentEmotion] = React.useState(<Icon icon="fa6-regular:face-meh" />)
+    const [emotion, setEmotion] = React.useState("普通")
+    const [tags, setTags] = React.useState<string[]>([])
 
     const MenuProps = {
         PaperProps: {
             style: {
                 maxHeight: "200px",
-                width: "200px",
+                maxWidth: "300px",
                 overflow: "auto",
             },
         },
     }
+
+    React.useEffect(() => {
+        getTag()
+            .then((data) => {
+                setTags(data)
+            })
+            .catch((e) => {console.log(e)})
+    }, [])
+
+    React.useEffect(() => {
+        //isOpenFormDialogがopenになったら初期化
+        if (isOpenFormDialog == false) {
+            //何もしない
+        } else {
+            setParameter(50)
+            setQuestion("")
+            setTag([])
+            setEmotion("普通")
+        }
+    }, [isOpenFormDialog])
 
     const getStyles = (name: string, tag: string | string[], theme: Theme) => {
         return {
@@ -47,14 +73,6 @@ export default function PostColumn() {
 
     const handleSliderChange = (event: Event, value: number | number[]) => {
         setParameter(value)
-    }
-
-    const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setParameter(event.target.value === "" ? "" : Number(event.target.value))
-    }
-
-    const handleQuestionChange = (value: string) => {
-        setQuestion(value)
     }
 
     const handleBlur = () => {
@@ -84,25 +102,26 @@ export default function PostColumn() {
         setOpenTagDialog(true)
     }
 
-    const handleClickStampOpen = () => {
-        setOpenStampDialog(true)
+    const handleSubmitClick = () => {
+        //データベースに保存して
+        setOpenFormDialog(false)
+    }
+    const handleCancelClick = () => {
+        setOpenFormDialog(false)
     }
 
     return (
         <>
-            <StampDialog
-                isOpenStampDialog={isOpenStampDialog}
-                setOpenStampDialog={setOpenStampDialog}
-                setCurrentEmotion={setCurrentEmotion}
-            />
             <TagDialog isOpenTagDialog={isOpenTagDialog} setOpenTagDialog={setOpenTagDialog} />
-            <Card sx={{ width: "100%", maxWidth: "800px", mt: "10px", borderRadius: "10px" }}>
-                <CardContent sx={{ display: "flex", justifyContent: "space-between" }}>
+            <Dialog fullScreen open={isOpenFormDialog} onClose={() => setOpenFormDialog(false)} sx={{ margin: "0px" }}>
+                <DialogTitle>質問、感情、タグを入力</DialogTitle>
+                <DialogContent sx={{ maxWidth: "350px" }}>
                     <Box
                         component="form"
                         sx={{
-                            "& > :not(style)": { width: "450px" },
-                            marginRight: "10px",
+                            "& > :not(style)": { width: "280px" },
+                            marginBottom: "20px",
+                            marginTop: "-20px",
                         }}
                         noValidate
                         autoComplete="off"
@@ -110,16 +129,19 @@ export default function PostColumn() {
                         <TextField
                             id="outlined-basic"
                             multiline
-                            defaultValue={question}
+                            value={question}
                             label="質問内容"
-                            onChange={(e) => handleQuestionChange(e.target.value)}
+                            onChange={(e) => setQuestion(e.target.value)}
                             variant="outlined"
+                            sx={{ marginTop: "20px", maxHeight: "400px", overflow: "auto" }}
                         />
                     </Box>
-                    <Box sx={{ display: "flex", alignItems: "center" }}>
-                        {(currentEmotion.props.icon == "fa6-regular:face-angry" ||
-                            currentEmotion.props.icon == "fa6-regular:face-grin-beam-sweat" ||
-                            currentEmotion.props.icon == "fa6-regular:face-rolling-eyes") && (
+                    <Typography variant="caption" sx={{ marginLeft: "5px" }}>
+                        怒り、焦り、絶望にはパラメータが存在します
+                    </Typography>
+                    <StampList emotion={emotion} setEmotion={setEmotion} setParameter={setParameter} />
+                    <Box sx={{ display: "flex", justifyContent: "center", marginBottom: "20px" }}>
+                        {(emotion == "怒り" || emotion == "焦り" || emotion == "絶望") && (
                             <>
                                 <Slider
                                     value={typeof parameter === "number" ? parameter : 0}
@@ -134,7 +156,7 @@ export default function PostColumn() {
                                 <Input
                                     value={parameter}
                                     size="small"
-                                    onChange={handleInputChange}
+                                    onChange={(e) => setParameter(e.target.value === "" ? "" : Number(e.target.value))}
                                     onBlur={handleBlur}
                                     inputProps={{
                                         step: 10,
@@ -146,44 +168,44 @@ export default function PostColumn() {
                                 />
                             </>
                         )}
-                        <IconButton onClick={handleClickStampOpen}>{currentEmotion}</IconButton>
                     </Box>
-                </CardContent>
-                <Typography variant="caption" sx={{ marginLeft: "15px" }}>
-                    タグは3つまで選択可能
-                </Typography>
-                <Box sx={{ margin: "5px 0px 10px 15px" }}>
-                    <FormControl sx={{ minWidth: "80px" }} size="small">
-                        <InputLabel id="demo-simple-select-label">タグ</InputLabel>
-                        <Select
-                            labelId="demo-simple-select-label"
-                            id="demo-simple-select"
-                            value={tag}
-                            label="タグ"
-                            onChange={handleTagChange}
-                            multiple
-                            MenuProps={MenuProps}
-                            renderValue={(selected) => (
-                                <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
-                                    {selected.map((value: string) => (
-                                        <Chip key={value} label={value} sx={{ bgcolor: "aqua" }} />
-                                    ))}
-                                </Box>
-                            )}
-                        >
-                            {tags.map((tagValue) => (
-                                <MenuItem style={getStyles(tagValue, tag, theme)} value={tagValue} key={tagValue}>
-                                    {tagValue}
-                                </MenuItem>
-                            ))}
-                            <MenuItem onClick={handleClickTagOpen}>新しく作る</MenuItem>
-                        </Select>
-                    </FormControl>
-                </Box>
-            </Card>
-            <Button type="submit" variant="contained" sx={{ mt: "10px", mb: "20px", width: "100%", maxWidth: "800px" }}>
-                投稿
-            </Button>
+                    <Typography variant="caption" sx={{ marginLeft: "15px" }}>
+                        タグは3つまで選択可能
+                    </Typography>
+                    <Box sx={{ margin: "10px 0px 10px 15px" }}>
+                        <FormControl sx={{ minWidth: "80px" }} size="small">
+                            <InputLabel id="simple-select-label">タグ</InputLabel>
+                            <Select
+                                labelId="simple-select-label"
+                                id="simple-select"
+                                value={tag}
+                                label="タグ"
+                                onChange={handleTagChange}
+                                multiple
+                                MenuProps={MenuProps}
+                                renderValue={(selected) => (
+                                    <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+                                        {selected.map((value: string) => (
+                                            <Chip key={value} label={value} sx={{ bgcolor: "aqua" }} />
+                                        ))}
+                                    </Box>
+                                )}
+                            >
+                                {tags.map((tagValue) => (
+                                    <MenuItem style={getStyles(tagValue, tag, theme)} value={tagValue} key={tagValue}>
+                                        {tagValue}
+                                    </MenuItem>
+                                ))}
+                                <MenuItem onClick={handleClickTagOpen}>新しく作る</MenuItem>
+                            </Select>
+                        </FormControl>
+                    </Box>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleCancelClick}>キャンセル</Button>
+                    <Button onClick={handleSubmitClick}>投稿</Button>
+                </DialogActions>
+            </Dialog>
         </>
     )
 }

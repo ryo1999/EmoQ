@@ -6,14 +6,15 @@ import DialogContent from "@mui/material/DialogContent"
 import Box from "@mui/material/Box"
 import Button from "@mui/material/Button"
 import TextField from "@mui/material/TextField"
+import {addTag} from "@/pages/api/tagApi"
 
 type TagDialogProps = {
-    isOpenTagDialog:boolean
-    setOpenTagDialog:React.Dispatch<boolean>
+    isOpenTagDialog: boolean
+    setOpenTagDialog: React.Dispatch<boolean>
 }
 
-export default function TagDialog(props:TagDialogProps){
-    const {isOpenTagDialog, setOpenTagDialog} = props
+export default function TagDialog(props: TagDialogProps) {
+    const { isOpenTagDialog, setOpenTagDialog } = props
     const [newTag, setNewTag] = React.useState("")
 
     const handleCreateTag = (value: string) => {
@@ -25,30 +26,34 @@ export default function TagDialog(props:TagDialogProps){
     }
 
     const handleTagSave = () => {
-        //tagsのデータベースにnewTagを追加する処理を書く
+        addTag(newTag)
         setOpenTagDialog(false)
     }
 
-    return(
+    return (
         <Dialog open={isOpenTagDialog} onClose={handleTagClose}>
-                    <DialogTitle>新しいタグを作成</DialogTitle>
-                    <DialogContent>
-                        <Box
-                            component="form"
-                            sx={{
-                                // width:"1000px",
-                                "& > :not(style)": { m: 1, width: "300px" },
-                            }}
-                            noValidate
-                            autoComplete="name"
-                        >
-                            <TextField id="outlined-basic" variant="outlined" onChange={(e) => handleCreateTag(e.target.value)}/>
-                        </Box>
-                    </DialogContent>
-                    <DialogActions>
-                        <Button onClick={handleTagClose}>キャンセル</Button>
-                        <Button onClick={handleTagSave}>保存</Button>
-                    </DialogActions>
-                </Dialog>
+            <DialogTitle>新しいタグを作成</DialogTitle>
+            <DialogContent>
+                <Box
+                    component="form"
+                    sx={{
+                        maxHeight:"300px"
+                    }}
+                    noValidate
+                    autoComplete="name"
+                >
+                    <TextField
+                        id="outlined-basic"
+                        variant="outlined"
+                        multiline
+                        onChange={(e) => handleCreateTag(e.target.value)}
+                    />
+                </Box>
+            </DialogContent>
+            <DialogActions>
+                <Button onClick={handleTagClose}>キャンセル</Button>
+                <Button onClick={handleTagSave}>保存</Button>
+            </DialogActions>
+        </Dialog>
     )
 }

@@ -1,6 +1,5 @@
 import React from "react"
 import router from "next/router"
-import { comments } from "@/mock/mock"
 import ReturnIcon from "../atoms/returnIcon"
 import { Box } from "@mui/material"
 import Card from "@mui/material/Card"
@@ -18,9 +17,8 @@ import Chip from "@mui/material/Chip"
 
 type CardContentProps = {
     value: {
-        user_id: string
-        name: string
-        question_id: string
+        contributor_id: string,
+        contributor_name: string,
         question: string
         tag: string[]
         time: string
@@ -34,16 +32,6 @@ export default function CardDetail(props: CardContentProps) {
     const { value, index } = props
     const [bookMark, setBookMark] = React.useState(false)
 
-    const countComments = (questionId: string) => {
-        let count = 0
-        comments.map((commentValue, index) => {
-            if (questionId === commentValue.question_id) {
-                count++
-            }
-        })
-        return count
-    }
-
     const handleClickAvatar = () => {
         router.push("/mypage")
     }
@@ -51,7 +39,7 @@ export default function CardDetail(props: CardContentProps) {
     return (
         <Card
             key={index}
-            sx={{ position: "relative", width: "100%", maxWidth: "800px", mt: "10px", borderRadius: "10px" }}
+            sx={{ width: "100%", mt: "10px", borderRadius: "10px" }}
         >
             <Box sx={{ display: "flex", marginLeft: "5px" }}>
                 {value.tag.map((v, i) => (
@@ -87,10 +75,10 @@ export default function CardDetail(props: CardContentProps) {
             </Box>
             <CardHeader
                 avatar={<Avatar onClick={handleClickAvatar} sx={{ cursor: "pointer" }} />}
-                title={value.name}
+                title={value.contributor_name}
                 subheader={value.time}
             />
-            <CardContent sx={{ marginLeft: "50px", width: "650px" }}>
+            <CardContent sx={{ marginLeft: "55px", maxWidth: "650px" }}>
                 <Typography variant="body2">{value.question}</Typography>
             </CardContent>
             <CardActions sx={{ justifyContent: "right" }}>
@@ -99,7 +87,7 @@ export default function CardDetail(props: CardContentProps) {
                 </IconButton>
                 <IconButton sx={{ fontSize: "15px" }}>
                     <CommentIcon sx={{ color: "blue" }} />
-                    {countComments(value.question_id)}
+                    {0}
                 </IconButton>
             </CardActions>
         </Card>
