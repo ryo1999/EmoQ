@@ -1,4 +1,5 @@
 import React from "react"
+import { format } from "date-fns"
 import TagDialog from "./tagDialog"
 import StampList from "./stampList"
 import { Theme, useTheme } from "@mui/material/styles"
@@ -126,7 +127,7 @@ export default function PostColumn(props: PostColumnProps) {
 
     return (
         <>
-            <TagDialog isOpenTagDialog={isOpenTagDialog} setOpenTagDialog={setOpenTagDialog} setTags={setTags}/>
+            <TagDialog isOpenTagDialog={isOpenTagDialog} setOpenTagDialog={setOpenTagDialog} setTags={setTags} />
             <Dialog
                 TransitionComponent={Transition}
                 fullScreen
