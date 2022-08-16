@@ -1,7 +1,9 @@
-export const ReturnEmotionFontColor = (emotion: string) =>{
+import { Emotion } from "@/utils/types"
+
+export const ReturnEmotionFontColor = (emotion: Emotion) =>{
     switch (emotion) {
         case "普通":
-            return "white"
+            return "black"
         case "悲しみ":
             return "white"
         case "イライラ":

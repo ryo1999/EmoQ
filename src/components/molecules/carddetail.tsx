@@ -1,7 +1,7 @@
 import React from "react"
 import ReturnIcon from "../atoms/returnIcon"
-import { ReturnEmotionColor } from "../atoms/returnEmotionColor"
-import { ReturnEmotionFontColor } from "../atoms/returnEmotionFontColor"
+import { ReturnEmotionColor } from "../../utils/commonFunctions/returnEmotionColor"
+import { ReturnEmotionFontColor } from "../../utils/commonFunctions/returnEmotionFontColor"
 import { Box } from "@mui/material"
 import Card from "@mui/material/Card"
 import CardActions from "@mui/material/CardActions"
@@ -62,18 +62,18 @@ export default function CardDetail(props: CardContentProps) {
             <CardHeader
                 avatar={<Avatar sx={{bgcolor:"white", color:"black"}}>{value.contributor_name[0]}</Avatar>}
                 title={value.contributor_name}
-                subheader={<Typography variant="caption" sx={{color:"white"}}>{value.time}</Typography>}
+                subheader={<Typography variant="caption" sx={{color:ReturnEmotionFontColor(value.emotion)}}>{value.time}</Typography>}
             />
             <CardContent sx={{ marginLeft: "55px", maxWidth: "650px" }}>
                 <Typography variant="body2">{value.question}</Typography>
             </CardContent>
             <CardActions sx={{ justifyContent: "right" }}>
                 <IconButton onClick={() => setBookMark(!bookMark)}>
-                    {bookMark ? <BookmarkIcon sx={{ color: "white" }} /> : <BookmarkBorderIcon sx={{ color: "white" }} />}
+                    {bookMark ? <BookmarkIcon sx={{ color: "black" }} /> : <BookmarkBorderIcon sx={{ color: "black" }} />}
                 </IconButton>
                 <IconButton sx={{ fontSize: "15px" }}>
-                    <CommentIcon sx={{ color: "white" }} />
-                    <Typography variant="button" sx={{color:"white"}}>0</Typography>
+                    <CommentIcon sx={{ color: "black" }} />
+                    <Typography variant="button" sx={{color:"black"}}>0</Typography>
                 </IconButton>
             </CardActions>
         </Card>
