@@ -7,14 +7,16 @@ import Box from "@mui/material/Box"
 import Button from "@mui/material/Button"
 import TextField from "@mui/material/TextField"
 import {addTag} from "@/pages/api/tagApi"
+import { getTag } from "@/pages/api/tagApi"
 
 type TagDialogProps = {
     isOpenTagDialog: boolean
     setOpenTagDialog: React.Dispatch<boolean>
+    setTags:React.Dispatch<string[]>
 }
 
 export default function TagDialog(props: TagDialogProps) {
-    const { isOpenTagDialog, setOpenTagDialog } = props
+    const { isOpenTagDialog, setOpenTagDialog, setTags } = props
     const [newTag, setNewTag] = React.useState("")
 
     const handleCreateTag = (value: string) => {
@@ -25,9 +27,10 @@ export default function TagDialog(props: TagDialogProps) {
         setOpenTagDialog(false)
     }
 
-    const handleTagSave = () => {
-        addTag(newTag)
+    const handleTagSave = async() => {
         setOpenTagDialog(false)
+        await addTag(newTag)
+        setTags(await getTag())
     }
 
     return (

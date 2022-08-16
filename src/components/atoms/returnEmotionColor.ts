@@ -1,5 +1,5 @@
-export const ReturnEmotionColor = (props: string) =>{
-    switch (props) {
+export const ReturnEmotionColor = (emotion: string) =>{
+    switch (emotion) {
         case "普通":
             return "gray"
         case "悲しみ":

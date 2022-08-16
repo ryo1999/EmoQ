@@ -1,8 +1,8 @@
 import React from "react"
 import { Icon } from "@iconify/react"
 
-export default function ReturnIcon(props: string) {
-    switch (props) {
+export default function ReturnIcon(emotion: string) {
+    switch (emotion) {
         case "普通":
             return <Icon color="white" icon="fa6-regular:face-meh" />
         case "悲しみ":

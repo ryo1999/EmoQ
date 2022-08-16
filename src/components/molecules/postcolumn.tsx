@@ -56,30 +56,15 @@ export default function PostColumn(props: PostColumnProps) {
     const [emotion, setEmotion] = React.useState("普通")
     const [tags, setTags] = React.useState<string[]>([])
 
-    // React.useEffect(() => {
-    //     getTag()
-    //         .then((data) => {
-    //             setTags(data)
-    //         })
-    //         .catch((e) => {
-    //             console.log(e)
-    //         })
-    // }, [])
-
-    //たまに反映されない時がある
     React.useEffect(() => {
-        if (isOpenTagDialog == true) {
-            //何もしない
-        } else {
-            getTag()
-                .then((data) => {
-                    setTags(data)
-                })
-                .catch((e) => {
-                    console.log(e)
-                })
-        }
-    },[isOpenTagDialog])
+        getTag()
+            .then((data) => {
+                setTags(data)
+            })
+            .catch((e) => {
+                console.log(e)
+            })
+    }, [])
 
     React.useEffect(() => {
         //isOpenFormDialogがopenになったら初期化
@@ -141,7 +126,7 @@ export default function PostColumn(props: PostColumnProps) {
 
     return (
         <>
-            <TagDialog isOpenTagDialog={isOpenTagDialog} setOpenTagDialog={setOpenTagDialog} />
+            <TagDialog isOpenTagDialog={isOpenTagDialog} setOpenTagDialog={setOpenTagDialog} setTags={setTags}/>
             <Dialog
                 TransitionComponent={Transition}
                 fullScreen
