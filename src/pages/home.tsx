@@ -1,5 +1,4 @@
 import React from "react"
-// import { questions } from "@/mock/mock"
 import Appbar from "@/components/molecules/appbar"
 import TagFilter from "@/components/atoms/tagFilterButton"
 import { Box } from "@mui/material"

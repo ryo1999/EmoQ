@@ -18,7 +18,17 @@ export const getQuestion = async () => {
     const questionId = query(collection(db, "questions"))
     const questionDoc = await getDocs(questionId)
     questionDoc.forEach((doc) => {
-        questionList.push(doc.data())
+        const questionField = {
+            contributor_id:doc.data().contributor_id,
+            contributor_name:doc.data().contributor_name,
+            question_id:doc.id,
+            question:doc.data().question,
+            tag:doc.data().tag,
+            time:doc.data().time,
+            emotion:doc.data().emotion,
+            parameter:doc.data().parameter
+        }
+        questionList.push(questionField)
     })
     return questionList
 }
