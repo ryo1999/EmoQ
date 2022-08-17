@@ -68,6 +68,12 @@ export default function PostColumn(props: PostColumnProps) {
             })
     }, [])
 
+    const returnTop = () => {
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth",
+        })
+    }
     const initializeState = () => {
         setParameter(50)
         setQuestion("")
@@ -127,6 +133,7 @@ export default function PostColumn(props: PostColumnProps) {
             })
             .catch((e) => console.log(e))
         initializeState()
+        returnTop()
     }
     const handleCancelClick = () => {
         setOpenFormDialog(false)
@@ -168,6 +175,7 @@ export default function PostColumn(props: PostColumnProps) {
                         <TextField
                             id="outlined-basic"
                             multiline
+                            required
                             value={question}
                             label="質問内容"
                             onChange={(e) => setQuestion(e.target.value)}

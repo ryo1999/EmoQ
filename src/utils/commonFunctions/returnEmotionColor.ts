@@ -38,7 +38,7 @@ export const ReturnEmotionFontColor = (emotion: Emotion) =>{
         case "絶望":
             return "white"
         case "どや":
-            return "white"
+            return "black"
         case "喜び":
             return "black"
         case "お願い":
