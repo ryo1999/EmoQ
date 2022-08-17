@@ -22,7 +22,7 @@ type CardContentProps = {
     value: QuestionsCollectionData
 }
 
-export default function CardDetail(props: CardContentProps) {
+const CardDetail = React.memo((props: CardContentProps) => {
     const { value } = props
     const [bookMark, setBookMark] = React.useState(false)
     const [commentLength, setCommentLength] = React.useState(0)
@@ -36,6 +36,9 @@ export default function CardDetail(props: CardContentProps) {
             })
             .catch((e) => console.log(e))
     }, [])
+
+    console.log(value.emotion)
+    console.log(ReturnEmotionFontColor(value.emotion))
 
     return (
         <Card
@@ -53,7 +56,7 @@ export default function CardDetail(props: CardContentProps) {
                 ))}
             </Box>
             <Box sx={{ display: "flex", justifyContent: "right", alignItems: "center" }}>
-                {(value.emotion == "イライラ" || value.emotion == "焦り" || value.emotion == "絶望") && (
+                {(value.emotion == "焦り" || value.emotion == "絶望") && (
                     <>
                         <Slider
                             defaultValue={value.parameter}
@@ -108,4 +111,6 @@ export default function CardDetail(props: CardContentProps) {
             </CardActions>
         </Card>
     )
-}
+})
+
+export default CardDetail

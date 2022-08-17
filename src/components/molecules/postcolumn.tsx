@@ -22,17 +22,19 @@ import AppBar from "@mui/material/AppBar"
 import Toolbar from "@mui/material/Toolbar"
 import IconButton from "@mui/material/IconButton"
 import { getTag } from "@/pages/api/tagApi"
+import { addQuestion, getQuestion } from "@/pages/api/questionApi"
+import { QuestionsCollectionData } from "@/utils/types"
 
 type PostColumnProps = {
     isOpenFormDialog: boolean
     setOpenFormDialog: React.Dispatch<boolean>
+    setQuestions: React.Dispatch<QuestionsCollectionData[]>
 }
 
 const MenuProps = {
     PaperProps: {
         style: {
             maxHeight: "200px",
-            // maxWidth: "300px",
             overflow: "auto",
         },
     },
@@ -47,36 +49,31 @@ const Transition = React.forwardRef(function Transition(
 })
 
 export default function PostColumn(props: PostColumnProps) {
-    const { isOpenFormDialog, setOpenFormDialog } = props
+    const { isOpenFormDialog, setOpenFormDialog, setQuestions } = props
     const theme = useTheme()
     const [isOpenTagDialog, setOpenTagDialog] = React.useState(false)
     const [parameter, setParameter] = React.useState<number | number[] | string>(50)
     const [question, setQuestion] = React.useState("")
     const [tag, setTag] = React.useState<string[]>([])
     const [emotion, setEmotion] = React.useState("普通")
-    const [tags, setTags] = React.useState<string[]>([])
+    const [tagList, setTagList] = React.useState<string[]>([])
 
     React.useEffect(() => {
         getTag()
             .then((data) => {
-                setTags(data)
+                setTagList(data)
             })
             .catch((e) => {
                 console.log(e)
             })
     }, [])
 
-    React.useEffect(() => {
-        //isOpenFormDialogがopenになったら初期化
-        if (isOpenFormDialog == false) {
-            //何もしない
-        } else {
-            setParameter(50)
-            setQuestion("")
-            setTag([])
-            setEmotion("普通")
-        }
-    }, [isOpenFormDialog])
+    const initializeState = () => {
+        setParameter(50)
+        setQuestion("")
+        setTag([])
+        setEmotion("普通")
+    }
 
     const getStyles = (name: string, tag: string | string[], theme: Theme) => {
         return {
@@ -116,17 +113,29 @@ export default function PostColumn(props: PostColumnProps) {
         setOpenTagDialog(true)
     }
 
-    const handleSubmitClick = () => {
-        //データベースに保存して
+    const handleSubmitClick = async () => {
         setOpenFormDialog(false)
+        //データベースに保存する(ユーザーidと名前が必要)
+        if (emotion === "焦り" || emotion === "絶望") {
+            await addQuestion("0fkyo9tTHGG7w66HC3CU", "大月凌", question, tag, new Date(), emotion, parameter)
+        } else {
+            await addQuestion("0fkyo9tTHGG7w66HC3CU", "大月凌", question, tag, new Date(), emotion, "")
+        }
+        getQuestion()
+            .then((Q) => {
+                setQuestions(Q)
+            })
+            .catch((e) => console.log(e))
+        initializeState()
     }
     const handleCancelClick = () => {
         setOpenFormDialog(false)
+        initializeState()
     }
 
     return (
         <>
-            <TagDialog isOpenTagDialog={isOpenTagDialog} setOpenTagDialog={setOpenTagDialog} setTags={setTags} />
+            <TagDialog isOpenTagDialog={isOpenTagDialog} setOpenTagDialog={setOpenTagDialog} setTagList={setTagList} />
             <Dialog
                 TransitionComponent={Transition}
                 fullScreen
@@ -223,7 +232,7 @@ export default function PostColumn(props: PostColumnProps) {
                                     </Box>
                                 )}
                             >
-                                {tags.map((tagValue) => (
+                                {tagList.map((tagValue) => (
                                     <MenuItem style={getStyles(tagValue, tag, theme)} value={tagValue} key={tagValue}>
                                         {tagValue}
                                     </MenuItem>

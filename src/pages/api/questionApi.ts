@@ -16,7 +16,7 @@ import { QuestionsCollectionData } from "@/utils/types"
 //質問全部を取ってくる
 export const getQuestion = async () => {
     const questionList: QuestionsCollectionData[] = []
-    const questionId = query(collection(db, "questions"),orderBy("time"))
+    const questionId = query(collection(db, "questions"),orderBy("time","desc"))
     const questionDoc = await getDocs(questionId)
     questionDoc.forEach((doc) => {
         const questionField = {
@@ -35,14 +35,14 @@ export const getQuestion = async () => {
 }
 
 //質問を投稿した時
-// export const addQuestion = async (id,name,question,tag,time,emotion,parameter) => {
-//     await addDoc(collection(db,"questions"),{
-//         contributor_id: id,
-//         contributor_name: name,
-//         question: question,
-//         tag: tag,
-//         time: time,
-//         emotion: emotion,
-//         parameter: parameter,
-//     })
-// }
+export const addQuestion = async (contributor_id:string,contributor_name:string,question:string,tag:string[],time:Date,emotion:string,parameter?:string | number | number[]) => {
+    await addDoc(collection(db,"questions"),{
+        contributor_id: contributor_id,
+        contributor_name: contributor_name,
+        question: question,
+        tag: tag,
+        time: time,
+        emotion: emotion,
+        parameter: parameter,
+    })
+}

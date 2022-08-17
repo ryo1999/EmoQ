@@ -12,11 +12,11 @@ import { getTag } from "@/pages/api/tagApi"
 type TagDialogProps = {
     isOpenTagDialog: boolean
     setOpenTagDialog: React.Dispatch<boolean>
-    setTags:React.Dispatch<string[]>
+    setTagList:React.Dispatch<string[]>
 }
 
 export default function TagDialog(props: TagDialogProps) {
-    const { isOpenTagDialog, setOpenTagDialog, setTags } = props
+    const { isOpenTagDialog, setOpenTagDialog, setTagList } = props
     const [newTag, setNewTag] = React.useState("")
 
     const handleCreateTag = (value: string) => {
@@ -30,7 +30,7 @@ export default function TagDialog(props: TagDialogProps) {
     const handleTagSave = async() => {
         setOpenTagDialog(false)
         await addTag(newTag)
-        setTags(await getTag())
+        setTagList(await getTag())
     }
 
     return (

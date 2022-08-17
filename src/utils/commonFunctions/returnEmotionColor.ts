@@ -40,7 +40,7 @@ export const ReturnEmotionFontColor = (emotion: Emotion) =>{
         case "どや":
             return "white"
         case "喜び":
-            return "white"
+            return "black"
         case "お願い":
             return "white"
         case "ホッ":

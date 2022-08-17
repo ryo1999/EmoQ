@@ -7,8 +7,6 @@ import Toolbar from "@mui/material/Toolbar"
 import CardDetail from "@/components/molecules/carddetail"
 import IconButton from "@mui/material/IconButton"
 import { Icon } from "@iconify/react"
-import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline"
-
 import { getQuestion } from "./api/questionApi"
 import { QuestionsCollectionData } from "@/utils/types"
 
@@ -57,7 +55,7 @@ export default function Home() {
                     <Icon icon="clarity:note-edit-line" />
                 </IconButton>
             </div>
-            <PostColumn isOpenFormDialog={isOpenFormDialog} setOpenFormDialog={setOpenFormDialog} />
+            <PostColumn isOpenFormDialog={isOpenFormDialog} setOpenFormDialog={setOpenFormDialog} setQuestions={setQuestions} />
         </div>
     )
 }
