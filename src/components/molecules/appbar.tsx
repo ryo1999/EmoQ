@@ -1,6 +1,5 @@
 import React from "react"
 import router from "next/router"
-import PostColumn from "./postcolumn"
 import AppBar from "@mui/material/AppBar"
 import Box from "@mui/material/Box"
 import Toolbar from "@mui/material/Toolbar"
@@ -20,7 +19,6 @@ import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline"
 export default function Appbar() {
     const [avatarAnchorEl, setAvatarAnchorEl] = React.useState<null | HTMLElement>(null)
     const [mailAnchorEl, setMailAnchorEl] = React.useState<null | HTMLElement>(null)
-    const [isOpenFormDialog, setOpenFormDialog] = React.useState(false)
 
     const handleClickAvatar = (event: React.MouseEvent<HTMLElement>) => {
         setAvatarAnchorEl(event.currentTarget)
@@ -38,10 +36,6 @@ export default function Appbar() {
         router.push(url)
     }
 
-    const handleClickOpen = () => {
-        setOpenFormDialog(true)
-    }
-
     return (
         <Box>
             <AppBar position="fixed">
@@ -50,9 +44,6 @@ export default function Appbar() {
                         EmoCha
                     </Typography>
                     <div>
-                        <IconButton color="inherit" onClick={handleClickOpen} sx={{ marginRight: "10px" }}>
-                            <AddCircleOutlineIcon sx={{ fontSize: "30px" }} />
-                        </IconButton>
                         <IconButton onClick={handleClickMail} color="inherit">
                             <Badge badgeContent={4} color="success">
                                 <MailIcon sx={{ width: "30px", height: "30px" }} />
@@ -117,7 +108,6 @@ export default function Appbar() {
                     </div>
                 </Toolbar>
             </AppBar>
-            <PostColumn isOpenFormDialog={isOpenFormDialog} setOpenFormDialog={setOpenFormDialog} />
         </Box>
     )
 }
