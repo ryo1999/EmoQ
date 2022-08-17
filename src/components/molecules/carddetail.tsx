@@ -1,4 +1,5 @@
 import React from "react"
+import { format } from "date-fns"
 import ReturnIcon from "../atoms/returnIcon"
 import { ReturnEmotionColor, ReturnEmotionFontColor } from "@/utils/commonFunctions/returnEmotionColor"
 import { Box } from "@mui/material"
@@ -25,6 +26,8 @@ export default function CardDetail(props: CardContentProps) {
     const { value } = props
     const [bookMark, setBookMark] = React.useState(false)
     const [commentLength, setCommentLength] = React.useState(0)
+    const date = value.time.toDate()
+    const dateString = format(date, "yyyy/MM/dd HH:mm:ss")
 
     React.useEffect(() => {
         getComment(value.question_id)
@@ -81,7 +84,7 @@ export default function CardDetail(props: CardContentProps) {
                 title={value.contributor_name}
                 subheader={
                     <Typography variant="caption" sx={{ color: ReturnEmotionFontColor(value.emotion) }}>
-                        {value.time}
+                        {dateString}
                     </Typography>
                 }
             />

@@ -6,7 +6,7 @@ export type QuestionsCollectionData = {
     question_id:string
     question: string
     tag: string[]
-    time: string
+    time: Date
     emotion: Emotion
     parameter?: number
 }
@@ -15,7 +15,7 @@ export type CommentsCollectionData = {
     commenter_id: string
     commenter_name: string
     comment:string
-    time: string
+    time: Date
     emotion: Emotion
     parameter?: number
 }

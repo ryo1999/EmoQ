@@ -9,13 +9,14 @@ import {
     updateDoc,
     deleteDoc,
     deleteField,
+    orderBy
 } from "firebase/firestore/lite"
 import { QuestionsCollectionData } from "@/utils/types"
 
 //質問全部を取ってくる
 export const getQuestion = async () => {
     const questionList: QuestionsCollectionData[] = []
-    const questionId = query(collection(db, "questions"))
+    const questionId = query(collection(db, "questions"),orderBy("time"))
     const questionDoc = await getDocs(questionId)
     questionDoc.forEach((doc) => {
         const questionField = {
