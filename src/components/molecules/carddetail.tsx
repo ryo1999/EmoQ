@@ -26,8 +26,7 @@ const CardDetail = React.memo((props: CardContentProps) => {
     const { value } = props
     const [bookMark, setBookMark] = React.useState(false)
     const [commentLength, setCommentLength] = React.useState(0)
-    const date = value.time.toDate()
-    const dateString = format(date, "yyyy/MM/dd HH:mm:ss")
+    const date = format(value.time, "yyyy/MM/dd HH:mm:ss")
 
     React.useEffect(() => {
         getComment(value.question_id)
@@ -38,7 +37,6 @@ const CardDetail = React.memo((props: CardContentProps) => {
     }, [])
 
     console.log(value.emotion)
-    console.log(ReturnEmotionFontColor(value.emotion))
 
     return (
         <Card
@@ -59,6 +57,7 @@ const CardDetail = React.memo((props: CardContentProps) => {
                 {(value.emotion == "焦り" || value.emotion == "絶望") && (
                     <>
                         <Slider
+                            key={value.parameter}
                             defaultValue={value.parameter}
                             marks
                             step={10}
@@ -87,7 +86,7 @@ const CardDetail = React.memo((props: CardContentProps) => {
                 title={value.contributor_name}
                 subheader={
                     <Typography variant="caption" sx={{ color: ReturnEmotionFontColor(value.emotion) }}>
-                        {dateString}
+                        {date}
                     </Typography>
                 }
             />

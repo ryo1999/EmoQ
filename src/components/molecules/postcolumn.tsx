@@ -11,6 +11,7 @@ import Slider from "@mui/material/Slider"
 import Button from "@mui/material/Button"
 import Input from "@mui/material/Input"
 import TextField from "@mui/material/TextField"
+import { FormHelperText } from "@mui/material"
 import Typography from "@mui/material/Typography"
 import Chip from "@mui/material/Chip"
 import Dialog from "@mui/material/Dialog"
@@ -57,6 +58,10 @@ export default function PostColumn(props: PostColumnProps) {
     const [tag, setTag] = React.useState<string[]>([])
     const [emotion, setEmotion] = React.useState("普通")
     const [tagList, setTagList] = React.useState<string[]>([])
+    const [questionValidation, setQuestionValidation] = React.useState(true)
+    const [questionErrorMesseage, setQuestionErrorMesseage] = React.useState("必ず記入してください")
+    const [tagExist, setTagExist] = React.useState(true)
+    const [tagErrorMesseage, setTagErrorMesseage] = React.useState("最低1つは選択してください")
 
     React.useEffect(() => {
         getTag()
@@ -67,6 +72,24 @@ export default function PostColumn(props: PostColumnProps) {
                 console.log(e)
             })
     }, [])
+
+    React.useEffect(() => {
+        if (tag.length == 0) {
+            setTagErrorMesseage("最低1つは選択してください")
+            setTagExist(true)
+        } else {
+            setTagExist(false)
+        }
+    }, [tag])
+
+    React.useEffect(() => {
+        if (question === "") {
+            setQuestionErrorMesseage("必ず記入してください")
+            setQuestionValidation(true)
+        } else if (questionValidation === true) {
+            setQuestionValidation(false)
+        }
+    }, [question])
 
     const returnTop = () => {
         window.scrollTo({
@@ -108,7 +131,6 @@ export default function PostColumn(props: PostColumnProps) {
             setTag(typeof value === "string" ? value.split(",") : value)
         } else {
             if (event.target.value.length > tag.length) {
-                //何もしない
             } else {
                 setTag(typeof value === "string" ? value.split(",") : value)
             }
@@ -142,7 +164,12 @@ export default function PostColumn(props: PostColumnProps) {
 
     return (
         <>
-            <TagDialog isOpenTagDialog={isOpenTagDialog} setOpenTagDialog={setOpenTagDialog} setTagList={setTagList} />
+            <TagDialog
+                tagList={tagList}
+                isOpenTagDialog={isOpenTagDialog}
+                setOpenTagDialog={setOpenTagDialog}
+                setTagList={setTagList}
+            />
             <Dialog
                 TransitionComponent={Transition}
                 fullScreen
@@ -157,17 +184,24 @@ export default function PostColumn(props: PostColumnProps) {
                         <Typography sx={{ marginLeft: "10px", flex: 1 }} variant="h6" component="div">
                             投稿フォーム
                         </Typography>
-                        <Button color="inherit" onClick={handleSubmitClick} sx={{ fontSize: "17px" }}>
+                        <Button
+                            disabled={questionValidation || tagExist}
+                            color="inherit"
+                            onClick={handleSubmitClick}
+                            sx={{ fontSize: "17px" }}
+                        >
                             投稿
                         </Button>
                     </Toolbar>
                 </AppBar>
-                <DialogContent sx={{ maxWidth: "350px", textAlign: "center", margin: "0 auto" }}>
+                <DialogContent sx={{ maxWidth: "350px", textAlign: "center", margin: "0 auto", padding: "0px" }}>
                     <Box
                         component="form"
                         sx={{
                             "& > :not(style)": { width: "300px" },
                             marginBottom: "20px",
+                            maxHeight: "360px",
+                            overflowY: "auto",
                         }}
                         noValidate
                         autoComplete="off"
@@ -178,9 +212,10 @@ export default function PostColumn(props: PostColumnProps) {
                             required
                             value={question}
                             label="質問内容"
+                            helperText={questionValidation ? questionErrorMesseage : ""}
                             onChange={(e) => setQuestion(e.target.value)}
                             variant="outlined"
-                            sx={{ marginTop: "20px", maxHeight: "360px", overflow: "auto" }}
+                            sx={{ marginTop: "20px" }}
                         />
                     </Box>
                     <Typography variant="caption" sx={{ marginLeft: "5px" }}>
@@ -218,7 +253,7 @@ export default function PostColumn(props: PostColumnProps) {
                     </Box>
                     <Typography variant="caption">タグは3つまで選択可能</Typography>
                     <Box sx={{ margin: "10px 0px 10px 0px" }}>
-                        <FormControl sx={{ minWidth: "80px" }} size="small">
+                        <FormControl required sx={{ minWidth: "80px" }} size="small">
                             <InputLabel id="simple-select-label">タグ</InputLabel>
                             <Select
                                 labelId="simple-select-label"
@@ -247,6 +282,7 @@ export default function PostColumn(props: PostColumnProps) {
                                 ))}
                                 <MenuItem onClick={handleClickTagOpen}>新しく作る</MenuItem>
                             </Select>
+                            <FormHelperText>{tagExist ? tagErrorMesseage : ""}</FormHelperText>
                         </FormControl>
                     </Box>
                 </DialogContent>

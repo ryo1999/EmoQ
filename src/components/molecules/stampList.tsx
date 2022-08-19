@@ -9,7 +9,19 @@ type StampList = {
     setParameter: React.Dispatch<number>
 }
 
-export default function StampList(props: StampList) {
+const EmotionIcon:{[name:string]:string} = {
+    "普通": "fa6-regular:face-meh",
+    "悲しみ": "fa6-regular:face-sad-tear",
+    "イライラ": "fa6-regular:face-angry",
+    "焦り": "fa6-regular:face-grin-beam-sweat",
+    "絶望": "fa6-regular:face-rolling-eyes",
+    "どや": "fa6-regular:face-smile-wink",
+    "喜び": "fa6-regular:face-laugh-squint",
+    "お願い": "emojione-monotone:folded-hands",
+    "ホッ": "fa-regular:handshake",
+}
+
+const StampList = React.memo((props: StampList) => {
     const { emotion, setEmotion, setParameter } = props
 
     const handleClickStamp = (currentEmotion: string) => {
@@ -26,38 +38,15 @@ export default function StampList(props: StampList) {
                     marginBottom: "20px",
                 }}
             >
-                <IconButton size={emotion == "普通" ? "medium" : "small"} onClick={() => handleClickStamp("普通")}>
-                    <Icon icon="fa6-regular:face-meh" />
-                </IconButton>
-                <IconButton size={emotion == "悲しみ" ? "medium" : "small"} onClick={() => handleClickStamp("悲しみ")}>
-                    <Icon icon="fa6-regular:face-sad-tear" />
-                </IconButton>
-                <IconButton
-                    size={emotion == "イライラ" ? "medium" : "small"}
-                    onClick={() => handleClickStamp("イライラ")}
-                >
-                    <Icon icon="fa6-regular:face-angry" />
-                </IconButton>
-                <IconButton size={emotion == "焦り" ? "medium" : "small"} onClick={() => handleClickStamp("焦り")}>
-                    <Icon icon="fa6-regular:face-grin-beam-sweat" />
-                </IconButton>
-                <IconButton size={emotion == "絶望" ? "medium" : "small"} onClick={() => handleClickStamp("絶望")}>
-                    <Icon icon="fa6-regular:face-rolling-eyes" />
-                </IconButton>
-                <IconButton size={emotion == "どや" ? "medium" : "small"} onClick={() => handleClickStamp("どや")}>
-                    <Icon icon="fa6-regular:face-smile-wink" />
-                </IconButton>
-                <IconButton size={emotion == "喜び" ? "medium" : "small"} onClick={() => handleClickStamp("喜び")}>
-                    <Icon icon="fa6-regular:face-laugh-squint" />
-                </IconButton>
-                <IconButton size={emotion == "お願い" ? "medium" : "small"} onClick={() => handleClickStamp("お願い")}>
-                    <Icon icon="emojione-monotone:folded-hands" />
-                </IconButton>
-                <IconButton size={emotion == "ホッ" ? "medium" : "small"} onClick={() => handleClickStamp("ホッ")}>
-                    <Icon icon="fa-regular:handshake" />
-                </IconButton>
+                {Object.keys(EmotionIcon).map((emo: string) => 
+                    <IconButton key={emo} size={emotion == emo ? "medium" : "small"} onClick={() => handleClickStamp(emo)}>
+                        <Icon icon={EmotionIcon[emo]} />
+                    </IconButton>
+                )}
             </Box>
             <Box sx={{ textAlign: "center", marginBottom: "10px" }}>{emotion}</Box>
         </>
     )
-}
+})
+
+export default StampList

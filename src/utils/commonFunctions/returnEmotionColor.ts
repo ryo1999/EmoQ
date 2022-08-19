@@ -1,51 +1,21 @@
 import { Emotion } from "@/utils/types"
 
-export const ReturnEmotionColor = (emotion: Emotion) =>{
-    switch (emotion) {
-        case "普通":
-            return "#dddddd"
-        case "悲しみ":
-            return "#2e60b4"
-        case "イライラ":
-            return "#eb352c"
-        case "焦り":
-            return "red"
-        case "絶望":
-            return "gray"
-        case "どや":
-            return "aqua"
-        case "喜び":
-            return "#f4c900"
-        case "お願い":
-            return "#F5B090"
-        case "ホッ":
-            return "#5cb23a"
-        default:
-            return "gray"
-    }
+const EmotionCOLORS = {
+    "普通":["#dddddd","black"],
+    "悲しみ":["#2e60b4","white"],
+    "イライラ":["#eb352c","white"],
+    "焦り":["red","white"],
+    "絶望":["gray","white"],
+    "どや":["aqua","black"],
+    "喜び":["#f4c900","black"],
+    "お願い":["#F5B090","white"],
+    "ホッ":["#5cb23a","white"]
+}
+
+export const ReturnEmotionColor = (emotion: Emotion):string =>{
+    return EmotionCOLORS[emotion][0]
 }
 
 export const ReturnEmotionFontColor = (emotion: Emotion) =>{
-    switch (emotion) {
-        case "普通":
-            return "black"
-        case "悲しみ":
-            return "white"
-        case "イライラ":
-            return "white"
-        case "焦り":
-            return "white"
-        case "絶望":
-            return "white"
-        case "どや":
-            return "black"
-        case "喜び":
-            return "black"
-        case "お願い":
-            return "white"
-        case "ホッ":
-            return "white"
-        default:
-            return "white"
-    }
+    return EmotionCOLORS[emotion][1]
 }

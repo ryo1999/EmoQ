@@ -25,7 +25,7 @@ export const getQuestion = async () => {
             question_id:doc.id,
             question:doc.data().question,
             tag:doc.data().tag,
-            time:doc.data().time,
+            time:doc.data().time.toDate(),
             emotion:doc.data().emotion,
             parameter:doc.data().parameter
         }
