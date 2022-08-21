@@ -14,7 +14,8 @@ import PersonIcon from "@mui/icons-material/Person"
 import LogoutIcon from "@mui/icons-material/Logout"
 import CachedIcon from "@mui/icons-material/Cached"
 import MailIcon from "@mui/icons-material/Mail"
-import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline"
+import Swal from "sweetalert2"
+import {auth, signOut} from "@/firebase"
 
 export default function Appbar() {
     const [avatarAnchorEl, setAvatarAnchorEl] = React.useState<null | HTMLElement>(null)
@@ -30,6 +31,22 @@ export default function Appbar() {
     const handleClose = () => {
         setAvatarAnchorEl(null)
         setMailAnchorEl(null)
+    }
+
+    const handleClickLogOut = () => {
+        signOut(auth).then(() => {
+            Swal.fire({
+                icon:"success",
+                timer:1000,
+                text: "ログアウトしました",
+              })
+            router.push("/")
+        }).catch((error) => {
+            Swal.fire({
+                icon:"error",
+                text: "ログアウトに失敗しました",
+              })
+        })
     }
 
     const handleMenuClick = (url: string) => {
@@ -83,7 +100,7 @@ export default function Appbar() {
                                 マイページ
                             </MenuItem>
                             <Divider />
-                            <MenuItem onClick={() => handleMenuClick("/")}>
+                            <MenuItem onClick={handleClickLogOut}>
                                 <LogoutIcon sx={{ marginRight: "20px" }} />
                                 ログアウト
                             </MenuItem>
