@@ -3,38 +3,34 @@ import router from "next/router"
 import Button from "@mui/material/Button"
 import CssBaseline from "@mui/material/CssBaseline"
 import TextField from "@mui/material/TextField"
-import FormControlLabel from "@mui/material/FormControlLabel"
-import Checkbox from "@mui/material/Checkbox"
 import Link from "@mui/material/Link"
 import Box from "@mui/material/Box"
 import Typography from "@mui/material/Typography"
 import Container from "@mui/material/Container"
 import { createTheme, ThemeProvider } from "@mui/material/styles"
 import Swal from "sweetalert2"
-import { auth, signInWithEmailAndPassword } from "@/firebase"
+import { auth, sendPasswordResetEmail } from "@/firebase"
 
 const theme = createTheme()
 
-export default function SignIn() {
+export default function ForgetPassword() {
     const [email, setEmail] = React.useState("")
-    const [password, setPassword] = React.useState("")
 
-    const handleSignIn = () => {
-        signInWithEmailAndPassword(auth, email, password)
-            .then((data) => {
+    const submitPasswordResetEmail = () => {
+        sendPasswordResetEmail(auth, email)
+            .then(() => {
                 Swal.fire({
-                    icon:"success",
-                    timer:1000,
-                    text: "ログインしました",
-                  })
-                router.push("/home")
-                // console.log(data.user.uid)
+                    icon: "success",
+                    timer: 1000,
+                    text: "送信しました",
+                })
+                router.push("/")
             })
-            .catch(() => {
+            .catch((error) => {
                 Swal.fire({
                     icon: "error",
-                    title: "ログイン失敗",
-                    text: "メールアドレス、または、パスワードが違います",
+                    title: "送信失敗",
+                    text: "登録されたメールアドレスを入力してください",
                 })
             })
     }
@@ -51,11 +47,11 @@ export default function SignIn() {
                         alignItems: "center",
                     }}
                 >
-                    <Typography variant="h2" sx={{ marginBottom: "50px" }}>
-                        EmoCha
+                    <Typography variant="h5" sx={{ marginBottom: "50px" }}>
+                        パスワード再設定用メール送信
                     </Typography>
                     <Box sx={{ mt: 1, width: "100%" }}>
-                        <Typography variant="h6">メールアドレス*</Typography>
+                        <Typography variant="h6">登録したメールアドレスを入力</Typography>
                         <TextField
                             margin="normal"
                             fullWidth
@@ -67,35 +63,18 @@ export default function SignIn() {
                             sx={{ marginBottom: "30px" }}
                             onChange={(e) => setEmail(e.target.value)}
                         />
-                        <Typography variant="h6">パスワード*</Typography>
-                        <TextField
-                            margin="normal"
-                            fullWidth
-                            name="password"
-                            placeholder="ローマ字と数字を必ず含めてください"
-                            type="password"
-                            id="password"
-                            autoComplete="current-password"
-                            onChange={(e) => setPassword(e.target.value)}
-                        />
-                        {/* <FormControlLabel control={<Checkbox value="remember" color="primary" />} label="Remember me" /> */}
                         <Button
                             type="submit"
-                            onClick={handleSignIn}
+                            onClick={submitPasswordResetEmail}
                             fullWidth
                             variant="contained"
                             sx={{ mt: 3, mb: 2 }}
                         >
-                            ログイン
+                            送信
                         </Button>
                         <Box sx={{ margin: "20px 0px" }}>
-                            <Link href="/signUp" variant="body2">
-                                アカウントをお持ちでない方はこちら
-                            </Link>
-                        </Box>
-                        <Box>
-                            <Link href="/forgetPassword" variant="body2">
-                                パスワードを忘れた方はこちら
+                            <Link href="/" variant="body2">
+                                ログイン画面へ
                             </Link>
                         </Box>
                     </Box>

@@ -36,7 +36,7 @@ const CardDetail = React.memo((props: CardContentProps) => {
             .catch((e) => console.log(e))
     }, [])
 
-    console.log(value.emotion)
+    // console.log(value.emotion)
 
     return (
         <Card

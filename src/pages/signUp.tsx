@@ -3,39 +3,35 @@ import router from "next/router"
 import Button from "@mui/material/Button"
 import CssBaseline from "@mui/material/CssBaseline"
 import TextField from "@mui/material/TextField"
-import FormControlLabel from "@mui/material/FormControlLabel"
-import Checkbox from "@mui/material/Checkbox"
 import Link from "@mui/material/Link"
 import Box from "@mui/material/Box"
 import Typography from "@mui/material/Typography"
 import Container from "@mui/material/Container"
 import { createTheme, ThemeProvider } from "@mui/material/styles"
+import { auth, createUserWithEmailAndPassword } from "@/firebase"
 import Swal from "sweetalert2"
-import { auth, signInWithEmailAndPassword } from "@/firebase"
+import {singUp} from "@/pages/api/userApi"
 
 const theme = createTheme()
 
-export default function SignIn() {
+export default function SignUp() {
     const [email, setEmail] = React.useState("")
     const [password, setPassword] = React.useState("")
+    const [accountName, setAccountName] = React.useState("")
 
-    const handleSignIn = () => {
-        signInWithEmailAndPassword(auth, email, password)
-            .then((data) => {
-                Swal.fire({
-                    icon:"success",
-                    timer:1000,
-                    text: "ログインしました",
-                  })
-                router.push("/home")
-                // console.log(data.user.uid)
+    const handleSignUp = () => {
+        createUserWithEmailAndPassword(auth, email, password)
+            .then(async(data) => {
+                singUp(data.user.uid,accountName)
+                Swal.fire({ title: "ご登録ありがとうございます", timer: 1000, icon:"success",showConfirmButton: false, })
+                router.push("/")
             })
-            .catch(() => {
+            .catch((error) => {
                 Swal.fire({
-                    icon: "error",
-                    title: "ログイン失敗",
-                    text: "メールアドレス、または、パスワードが違います",
-                })
+                    icon: 'error',
+                    title: 'アカウント登録失敗',
+                    text: error,
+                  })
             })
     }
 
@@ -51,10 +47,22 @@ export default function SignIn() {
                         alignItems: "center",
                     }}
                 >
-                    <Typography variant="h2" sx={{ marginBottom: "50px" }}>
-                        EmoCha
+                    <Typography variant="h4" sx={{ marginBottom: "20px" }}>
+                        新規登録
                     </Typography>
                     <Box sx={{ mt: 1, width: "100%" }}>
+                        <Typography variant="h6">アカウント名*</Typography>
+                        <TextField
+                            margin="normal"
+                            fullWidth
+                            id="account"
+                            placeholder="太郎"
+                            name="account"
+                            autoComplete="account"
+                            autoFocus
+                            sx={{ marginBottom: "30px" }}
+                            onChange={(e) => setAccountName(e.target.value)}
+                        />
                         <Typography variant="h6">メールアドレス*</Typography>
                         <TextField
                             margin="normal"
@@ -78,24 +86,18 @@ export default function SignIn() {
                             autoComplete="current-password"
                             onChange={(e) => setPassword(e.target.value)}
                         />
-                        {/* <FormControlLabel control={<Checkbox value="remember" color="primary" />} label="Remember me" /> */}
                         <Button
                             type="submit"
-                            onClick={handleSignIn}
+                            onClick={handleSignUp}
                             fullWidth
                             variant="contained"
                             sx={{ mt: 3, mb: 2 }}
                         >
-                            ログイン
+                            登録
                         </Button>
                         <Box sx={{ margin: "20px 0px" }}>
-                            <Link href="/signUp" variant="body2">
-                                アカウントをお持ちでない方はこちら
-                            </Link>
-                        </Box>
-                        <Box>
-                            <Link href="/forgetPassword" variant="body2">
-                                パスワードを忘れた方はこちら
+                            <Link href="/" variant="body2">
+                                アカウントをお持ちの方はこちら
                             </Link>
                         </Box>
                     </Box>
