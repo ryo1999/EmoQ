@@ -8,7 +8,8 @@ import Box from "@mui/material/Box"
 import Typography from "@mui/material/Typography"
 import Container from "@mui/material/Container"
 import { createTheme, ThemeProvider } from "@mui/material/styles"
-import Swal from "sweetalert2"
+import { ToastContainer, toast } from "react-toastify"
+import "react-toastify/dist/ReactToastify.css"
 import { auth, sendPasswordResetEmail } from "@/firebase"
 
 const theme = createTheme()
@@ -19,19 +20,11 @@ export default function ForgetPassword() {
     const submitPasswordResetEmail = () => {
         sendPasswordResetEmail(auth, email)
             .then(() => {
-                Swal.fire({
-                    icon: "success",
-                    timer: 1000,
-                    text: "送信しました",
-                })
+                toast.success("送信が完了しました。ご確認ください。")
                 router.push("/")
             })
             .catch((error) => {
-                Swal.fire({
-                    icon: "error",
-                    title: "送信失敗",
-                    text: "登録されたメールアドレスを入力してください",
-                })
+                toast.error("登録されたメールアドレスを入力してください")
             })
     }
 
@@ -80,6 +73,7 @@ export default function ForgetPassword() {
                     </Box>
                 </Box>
             </Container>
+            <ToastContainer position="bottom-center" closeOnClick autoClose={2000} />
         </ThemeProvider>
     )
 }

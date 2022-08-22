@@ -9,7 +9,8 @@ import Typography from "@mui/material/Typography"
 import Container from "@mui/material/Container"
 import { createTheme, ThemeProvider } from "@mui/material/styles"
 import { auth, createUserWithEmailAndPassword } from "@/firebase"
-import Swal from "sweetalert2"
+import { ToastContainer, toast } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css"
 import {singUp} from "@/pages/api/userApi"
 
 const theme = createTheme()
@@ -22,16 +23,12 @@ export default function SignUp() {
     const handleSignUp = () => {
         createUserWithEmailAndPassword(auth, email, password)
             .then(async(data) => {
+                toast.update("登録が完了しました")
                 singUp(data.user.uid,accountName)
-                Swal.fire({ title: "ご登録ありがとうございます", timer: 1000, icon:"success",showConfirmButton: false, })
                 router.push("/")
             })
             .catch((error) => {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'アカウント登録失敗',
-                    text: error,
-                  })
+                toast.update("登録できませんでした")
             })
     }
 
@@ -103,6 +100,11 @@ export default function SignUp() {
                     </Box>
                 </Box>
             </Container>
+            <ToastContainer
+                position="bottom-center"
+                closeOnClick
+                autoClose={2000}
+            />
         </ThemeProvider>
     )
 }

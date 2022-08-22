@@ -10,7 +10,8 @@ import Box from "@mui/material/Box"
 import Typography from "@mui/material/Typography"
 import Container from "@mui/material/Container"
 import { createTheme, ThemeProvider } from "@mui/material/styles"
-import Swal from "sweetalert2"
+import { ToastContainer, toast } from "react-toastify"
+import "react-toastify/dist/ReactToastify.css"
 import { auth, signInWithEmailAndPassword } from "@/firebase"
 
 const theme = createTheme()
@@ -22,20 +23,12 @@ export default function SignIn() {
     const handleSignIn = () => {
         signInWithEmailAndPassword(auth, email, password)
             .then((data) => {
-                Swal.fire({
-                    icon:"success",
-                    timer:1000,
-                    text: "ログインしました",
-                  })
+                toast.success("ログイン成功")
                 router.push("/home")
                 // console.log(data.user.uid)
             })
-            .catch(() => {
-                Swal.fire({
-                    icon: "error",
-                    title: "ログイン失敗",
-                    text: "メールアドレス、または、パスワードが違います",
-                })
+            .catch((error) => {
+                toast.error("ログイン失敗")
             })
     }
 
@@ -101,6 +94,7 @@ export default function SignIn() {
                     </Box>
                 </Box>
             </Container>
+            <ToastContainer position="bottom-center" closeOnClick autoClose={2000} />
         </ThemeProvider>
     )
 }

@@ -55,7 +55,11 @@ export default function Home() {
                     <Icon icon="clarity:note-edit-line" />
                 </IconButton>
             </div>
-            <PostColumn isOpenFormDialog={isOpenFormDialog} setOpenFormDialog={setOpenFormDialog} setQuestions={setQuestions} />
+            <PostColumn
+                isOpenFormDialog={isOpenFormDialog}
+                setOpenFormDialog={setOpenFormDialog}
+                setQuestions={setQuestions}
+            />
         </div>
     )
 }

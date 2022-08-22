@@ -14,7 +14,8 @@ import PersonIcon from "@mui/icons-material/Person"
 import LogoutIcon from "@mui/icons-material/Logout"
 import CachedIcon from "@mui/icons-material/Cached"
 import MailIcon from "@mui/icons-material/Mail"
-import Swal from "sweetalert2"
+import { ToastContainer, toast } from "react-toastify"
+import "react-toastify/dist/ReactToastify.css"
 import {auth, signOut} from "@/firebase"
 
 export default function Appbar() {
@@ -35,17 +36,10 @@ export default function Appbar() {
 
     const handleClickLogOut = () => {
         signOut(auth).then(() => {
-            Swal.fire({
-                icon:"success",
-                timer:1000,
-                text: "ログアウトしました",
-              })
+            toast.success("ログアウトしました")
             router.push("/")
         }).catch((error) => {
-            Swal.fire({
-                icon:"error",
-                text: "ログアウトに失敗しました",
-              })
+            toast.error("ログアウトできませんでした")
         })
     }
 
@@ -125,6 +119,7 @@ export default function Appbar() {
                     </div>
                 </Toolbar>
             </AppBar>
+            <ToastContainer position="bottom-center" closeOnClick autoClose={2000} />
         </Box>
     )
 }
