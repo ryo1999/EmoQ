@@ -1,4 +1,6 @@
 import React from "react"
+import { ToastContainer, toast } from "react-toastify"
+import "react-toastify/dist/ReactToastify.css"
 import router from "next/router"
 import AppBar from "@mui/material/AppBar"
 import Box from "@mui/material/Box"
@@ -14,11 +16,12 @@ import PersonIcon from "@mui/icons-material/Person"
 import LogoutIcon from "@mui/icons-material/Logout"
 import CachedIcon from "@mui/icons-material/Cached"
 import MailIcon from "@mui/icons-material/Mail"
-import { ToastContainer, toast } from "react-toastify"
-import "react-toastify/dist/ReactToastify.css"
-import {auth, signOut} from "@/firebase"
+import { useRecoilValue } from "recoil"
+import { auth, signOut } from "@/firebase"
+import { userInfo } from "@/store/userInfo"
 
 export default function Appbar() {
+    const userState = useRecoilValue(userInfo)
     const [avatarAnchorEl, setAvatarAnchorEl] = React.useState<null | HTMLElement>(null)
     const [mailAnchorEl, setMailAnchorEl] = React.useState<null | HTMLElement>(null)
 
@@ -35,12 +38,14 @@ export default function Appbar() {
     }
 
     const handleClickLogOut = () => {
-        signOut(auth).then(() => {
-            toast.success("ログアウトしました")
-            router.push("/")
-        }).catch((error) => {
-            toast.error("ログアウトできませんでした")
-        })
+        signOut(auth)
+            .then(() => {
+                toast.success("ログアウトしました")
+                router.push("/")
+            })
+            .catch((error) => {
+                toast.error("ログアウトできませんでした")
+            })
     }
 
     const handleMenuClick = (url: string) => {
@@ -67,7 +72,9 @@ export default function Appbar() {
                             onClick={handleClickAvatar}
                             color="inherit"
                         >
-                            <Avatar sx={{ width: "30px", height: "30px", marginLeft: "10px" }} />
+                            <Avatar sx={{bgcolor:"white", color:"black", width: "30px", height: "30px", marginLeft: "10px" }}>
+                                {userState.userName[0]}
+                            </Avatar>
                         </IconButton>
                         <Menu
                             id="menu-appbar"

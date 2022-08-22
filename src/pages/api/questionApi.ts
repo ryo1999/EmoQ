@@ -1,14 +1,9 @@
 import { db } from "@/firebase"
 import {
     collection,
-    doc,
     getDocs,
-    setDoc,
     query,
     addDoc,
-    updateDoc,
-    deleteDoc,
-    deleteField,
     orderBy
 } from "firebase/firestore/lite"
 import { QuestionsCollectionData } from "@/utils/types"

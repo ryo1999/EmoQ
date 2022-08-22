@@ -1,31 +1,41 @@
 import React from "react"
+import { ToastContainer, toast } from "react-toastify"
+import "react-toastify/dist/ReactToastify.css"
 import router from "next/router"
 import Button from "@mui/material/Button"
 import CssBaseline from "@mui/material/CssBaseline"
 import TextField from "@mui/material/TextField"
-import FormControlLabel from "@mui/material/FormControlLabel"
-import Checkbox from "@mui/material/Checkbox"
+// import FormControlLabel from "@mui/material/FormControlLabel"
+// import Checkbox from "@mui/material/Checkbox"
 import Link from "@mui/material/Link"
 import Box from "@mui/material/Box"
 import Typography from "@mui/material/Typography"
 import Container from "@mui/material/Container"
 import { createTheme, ThemeProvider } from "@mui/material/styles"
-import { ToastContainer, toast } from "react-toastify"
-import "react-toastify/dist/ReactToastify.css"
+import { useSetRecoilState } from "recoil"
 import { auth, signInWithEmailAndPassword } from "@/firebase"
+import { getUserName } from "@/pages/api/userApi"
+import { userInfo } from "@/store/userInfo"
 
 const theme = createTheme()
 
 export default function SignIn() {
+    const setUserInfo = useSetRecoilState(userInfo)
     const [email, setEmail] = React.useState("")
     const [password, setPassword] = React.useState("")
 
     const handleSignIn = () => {
         signInWithEmailAndPassword(auth, email, password)
             .then((data) => {
-                toast.success("ログイン成功")
-                router.push("/home")
-                // console.log(data.user.uid)
+                if (data.user.uid) {
+                    getUserName(data.user.uid).then((userdata)=>{
+                        if (userdata){
+                            setUserInfo(userdata)
+                        }
+                    })
+                    toast.success("ログイン成功")
+                    router.push("/home")
+                }
             })
             .catch((error) => {
                 toast.error("ログイン失敗")

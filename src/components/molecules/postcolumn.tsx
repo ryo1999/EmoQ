@@ -22,8 +22,10 @@ import { TransitionProps } from "@mui/material/transitions"
 import AppBar from "@mui/material/AppBar"
 import Toolbar from "@mui/material/Toolbar"
 import IconButton from "@mui/material/IconButton"
+import { useRecoilValue } from "recoil"
 import { getTag } from "@/pages/api/tagApi"
 import { addQuestion, getQuestion } from "@/pages/api/questionApi"
+import { userInfo } from "@/store/userInfo"
 import { QuestionsCollectionData } from "@/utils/types"
 
 type PostColumnProps = {
@@ -52,6 +54,7 @@ const Transition = React.forwardRef(function Transition(
 export default function PostColumn(props: PostColumnProps) {
     const { isOpenFormDialog, setOpenFormDialog, setQuestions } = props
     const theme = useTheme()
+    const userState = useRecoilValue(userInfo)
     const [isOpenTagDialog, setOpenTagDialog] = React.useState(false)
     const [parameter, setParameter] = React.useState<number | number[] | string>(50)
     const [question, setQuestion] = React.useState("")
@@ -145,9 +148,9 @@ export default function PostColumn(props: PostColumnProps) {
         setOpenFormDialog(false)
         //データベースに保存する(ユーザーidと名前が必要)
         if (emotion === "焦り" || emotion === "絶望") {
-            await addQuestion("0fkyo9tTHGG7w66HC3CU", "大月凌", question, tag, new Date(), emotion, parameter)
+            await addQuestion(userState.userId, userState.userName, question, tag, new Date(), emotion, parameter)
         } else {
-            await addQuestion("0fkyo9tTHGG7w66HC3CU", "大月凌", question, tag, new Date(), emotion, "")
+            await addQuestion(userState.userId, userState.userName, question, tag, new Date(), emotion, "")
         }
         getQuestion()
             .then((Q) => {
