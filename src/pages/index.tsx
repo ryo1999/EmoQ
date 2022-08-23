@@ -27,13 +27,13 @@ export default function SignIn() {
     const handleSignIn = () => {
         signInWithEmailAndPassword(auth, email, password)
             .then((data) => {
+                toast.loading("ログイン中")
                 if (data.user.uid) {
-                    getUserName(data.user.uid).then((userdata)=>{
-                        if (userdata){
+                    getUserName(data.user.uid).then((userdata) => {
+                        if (userdata) {
                             setUserInfo(userdata)
                         }
                     })
-                    toast.success("ログイン成功")
                     router.push("/home")
                 }
             })
@@ -104,7 +104,7 @@ export default function SignIn() {
                     </Box>
                 </Box>
             </Container>
-            <ToastContainer position="bottom-center" closeOnClick autoClose={2000} />
+            <ToastContainer position="bottom-center" pauseOnHover={false} closeOnClick autoClose={2000} />
         </ThemeProvider>
     )
 }

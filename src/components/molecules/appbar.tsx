@@ -40,7 +40,7 @@ export default function Appbar() {
     const handleClickLogOut = () => {
         signOut(auth)
             .then(() => {
-                toast.success("ログアウトしました")
+                toast.loading("ログアウト")
                 router.push("/")
             })
             .catch((error) => {
@@ -61,9 +61,9 @@ export default function Appbar() {
                     </Typography>
                     <div>
                         <IconButton onClick={handleClickMail} color="inherit">
-                            <Badge badgeContent={4} color="success">
+                            {/* <Badge badgeContent={4} color="success"> */}
                                 <MailIcon sx={{ width: "30px", height: "30px" }} />
-                            </Badge>
+                            {/* </Badge> */}
                         </IconButton>
                         <IconButton
                             aria-label="account of current user"
@@ -126,7 +126,7 @@ export default function Appbar() {
                     </div>
                 </Toolbar>
             </AppBar>
-            <ToastContainer position="bottom-center" closeOnClick autoClose={2000} />
+            <ToastContainer position="bottom-center" pauseOnHover={false} closeOnClick autoClose={2000} />
         </Box>
     )
 }

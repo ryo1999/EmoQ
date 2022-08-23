@@ -1,90 +1,77 @@
 import React from "react"
 import router from "next/router"
+import Appbar from "@/components/molecules/appbar"
+import CardDetail from "@/components/molecules/carddetail"
+import Toolbar from "@mui/material/Toolbar"
 import Avatar from "@mui/material/Avatar"
-import Button from "@mui/material/Button"
-import CssBaseline from "@mui/material/CssBaseline"
-import TextField from "@mui/material/TextField"
-import FormControlLabel from "@mui/material/FormControlLabel"
-import Checkbox from "@mui/material/Checkbox"
-import Link from "@mui/material/Link"
-import Grid from "@mui/material/Grid"
 import Box from "@mui/material/Box"
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined"
 import Typography from "@mui/material/Typography"
-import Container from "@mui/material/Container"
-import { createTheme, ThemeProvider } from "@mui/material/styles"
+import Tabs from "@mui/material/Tabs"
+import Tab from "@mui/material/Tab"
+import IconButton from "@mui/material/IconButton"
+import ArrowBackIcon from "@mui/icons-material/ArrowBack"
+import { useRecoilValue } from "recoil"
+import { userInfo } from "@/store/userInfo"
+import { getMyQuestion } from "./api/questionApi"
+import { QuestionsCollectionData } from "@/utils/types"
 
-const theme = createTheme()
+export default function MyPage() {
+    const userState = useRecoilValue(userInfo)
+    const [value, setValue] = React.useState(0)
+    const [myQuestions, setMyQuestions] = React.useState<QuestionsCollectionData[]>([])
 
-export default function SignIn() {
-    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault()
-        const data = new FormData(event.currentTarget)
-        console.log({
-            email: data.get("email"),
-            password: data.get("password"),
-        })
-        router.push("/home")
+    React.useEffect(() => {
+        getMyQuestion(userState.userId)
+            .then((question) => {
+                setMyQuestions(question)
+            })
+            .catch((e) => console.log(e))
+    }, [])
+
+    const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+        setValue(newValue)
     }
 
     return (
-        <ThemeProvider theme={theme}>
-            <Container component="main" maxWidth="xs">
-                <CssBaseline />
-                <Box
-                    sx={{
-                        marginTop: 8,
-                        display: "flex",
-                        flexDirection: "column",
-                        alignItems: "center",
-                    }}
-                >
-                    <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-                        <LockOutlinedIcon />
+        <div>
+            <Appbar />
+            <Toolbar />
+            <div style={{ margin: "0 auto", maxWidth: "800px" }}>
+                <Box>
+                    <IconButton onClick={() => router.push("/home")} sx={{ marginTop: "5px" }}>
+                        <ArrowBackIcon sx={{ color: "black", fontSize: "20px" }} />
+                        <Typography variant="subtitle1" sx={{ color: "black" }}>
+                            {"ホームへ"}
+                        </Typography>
+                    </IconButton>
+                </Box>
+                <Box>
+                    <Avatar
+                        sx={{
+                            margin: "0 auto",
+                            fontSize: "40px",
+                            width: "80px",
+                            height: "80px",
+                            border: "solid 2px",
+                            bgcolor: "white",
+                            color: "black",
+                        }}
+                    >
+                        {userState.userName[0]}
                     </Avatar>
-                    <Typography component="h1" variant="h5">
-                        Sign in
+                    <Typography variant="h4" sx={{ color: "black", textAlign: "center" }}>
+                        {userState.userName}
                     </Typography>
-                    <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
-                        <TextField
-                            margin="normal"
-                            required
-                            fullWidth
-                            id="email"
-                            label="Email Address"
-                            name="email"
-                            autoComplete="email"
-                            autoFocus
-                        />
-                        <TextField
-                            margin="normal"
-                            required
-                            fullWidth
-                            name="password"
-                            label="Password"
-                            type="password"
-                            id="password"
-                            autoComplete="current-password"
-                        />
-                        <FormControlLabel control={<Checkbox value="remember" color="primary" />} label="Remember me" />
-                        <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
-                            Sign In
-                        </Button>
-                        <Grid container>
-                            <Grid item xs>
-                                <Link href="#" variant="body2">
-                                    パスワードを忘れた
-                                </Link>
-                            </Grid>
-                            <Grid item>
-                                <Link href="#" variant="body2">
-                                    {"Sign Up"}
-                                </Link>
-                            </Grid>
-                        </Grid>
+                    <Tabs value={value} onChange={handleChange}>
+                        <Tab label="過去の投稿" sx={{ minWidth: "50%" }} />
+                        <Tab label="ブックマーク" sx={{ minWidth: "50%" }} />
+                    </Tabs>
+                    <Box>
+                        {value === 0 && myQuestions.map((value, index) => <CardDetail key={index} value={value} />)}
+                        {value === 1 && "unti"}
                     </Box>
                 </Box>
-            </Container>
-        </ThemeProvider>
+            </div>
+        </div>
     )
 }

@@ -20,8 +20,8 @@ export default function ForgetPassword() {
     const submitPasswordResetEmail = () => {
         sendPasswordResetEmail(auth, email)
             .then(() => {
-                toast.success("送信が完了しました。ご確認ください。")
-                router.push("/")
+                toast.success("送信完了")
+                // router.push("/")
             })
             .catch((error) => {
                 toast.error("登録されたメールアドレスを入力してください")
@@ -73,7 +73,7 @@ export default function ForgetPassword() {
                     </Box>
                 </Box>
             </Container>
-            <ToastContainer position="bottom-center" closeOnClick autoClose={2000} />
+            <ToastContainer position="bottom-center" pauseOnHover={false} closeOnClick autoClose={3000} />
         </ThemeProvider>
     )
 }

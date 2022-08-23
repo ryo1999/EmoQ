@@ -22,13 +22,13 @@ export default function SignUp() {
 
     const handleSignUp = () => {
         createUserWithEmailAndPassword(auth, email, password)
-            .then(async(data) => {
-                toast.update("登録が完了しました")
+            .then((data) => {
+                toast.success("登録が完了しました")
                 singUp(data.user.uid,accountName)
                 router.push("/")
             })
             .catch((error) => {
-                toast.update("登録できませんでした")
+                toast.error("登録できませんでした")
             })
     }
 
@@ -102,6 +102,7 @@ export default function SignUp() {
             </Container>
             <ToastContainer
                 position="bottom-center"
+                pauseOnHover={false}
                 closeOnClick
                 autoClose={2000}
             />
