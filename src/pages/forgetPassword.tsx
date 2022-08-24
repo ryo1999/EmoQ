@@ -1,5 +1,4 @@
 import React from "react"
-import router from "next/router"
 import Button from "@mui/material/Button"
 import CssBaseline from "@mui/material/CssBaseline"
 import TextField from "@mui/material/TextField"
@@ -21,7 +20,6 @@ export default function ForgetPassword() {
         sendPasswordResetEmail(auth, email)
             .then(() => {
                 toast.success("送信完了")
-                // router.push("/")
             })
             .catch((error) => {
                 toast.error("登録されたメールアドレスを入力してください")

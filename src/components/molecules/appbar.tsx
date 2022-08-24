@@ -54,7 +54,7 @@ export default function Appbar() {
 
     return (
         <Box>
-            <AppBar position="fixed">
+            <AppBar sx={{bgcolor:"#24292f"}} position="fixed">
                 <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
                     <Typography variant="h6" component="div">
                         EmoCha

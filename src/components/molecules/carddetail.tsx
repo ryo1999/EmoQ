@@ -26,7 +26,9 @@ const CardDetail = React.memo((props: CardContentProps) => {
     const { value } = props
     const [bookMark, setBookMark] = React.useState(false)
     const [commentLength, setCommentLength] = React.useState(0)
-    const date = format(value.time, "yyyy/MM/dd HH:mm:ss")
+    const today = new Date()
+    console.log(today)
+    const date = format(value.time, "MM/dd HH:mm")
 
     React.useEffect(() => {
         getComment(value.question_id)
@@ -44,45 +46,56 @@ const CardDetail = React.memo((props: CardContentProps) => {
                 width: "100%",
                 mt: "10px",
                 borderRadius: "10px",
-                bgcolor: ReturnEmotionColor(value.emotion),
                 color: ReturnEmotionFontColor(value.emotion),
             }}
         >
             <Box sx={{ display: "flex", marginLeft: "5px" }}>
                 {value.tag.map((v, i) => (
-                    <Chip key={i} label={v} sx={{ marginTop: "10px", marginRight: "5px", bgcolor: "white" }} />
+                    <Chip
+                        key={i}
+                        label={v}
+                        sx={{ marginTop: "10px", marginRight: "5px", bgcolor: "#24292f", color: "white" }}
+                    />
                 ))}
             </Box>
             <Box sx={{ display: "flex", justifyContent: "right", alignItems: "center" }}>
-                {(value.emotion == "焦り" || value.emotion == "絶望") && (
-                    <>
-                        <Slider
-                            key={value.parameter}
-                            defaultValue={value.parameter}
-                            marks
-                            step={10}
-                            min={0}
-                            max={100}
-                            sx={{ width: "200px", marginRight: "30px" }}
-                            disabled
-                        />
-                        <Box
-                            sx={{
-                                width: "30px",
-                                marginRight: "20px",
-                                borderBottom: "solid 1px",
-                            }}
-                        >
-                            {value.parameter}
-                        </Box>
-                    </>
-                )}
-                <IconButton disabled sx={{ marginRight: "10px", marginTop: "3px", color: "white" }}>
+                <Slider
+                    key={value.parameter}
+                    defaultValue={value.parameter}
+                    marks
+                    step={10}
+                    min={0}
+                    max={100}
+                    sx={{ width: "200px", marginRight: "30px" }}
+                    disabled
+                />
+                <Box
+                    sx={{
+                        width: "30px",
+                        marginRight: "20px",
+                        borderBottom: "solid 1px",
+                    }}
+                >
+                    {value.parameter}
+                </Box>
+                <IconButton
+                    disableRipple
+                    sx={{
+                        bgcolor: ReturnEmotionColor(value.emotion),
+                        marginRight: "10px",
+                        marginTop: "3px",
+                        color: "white",
+                    }}
+                >
                     {ReturnIcon(value.emotion)}
                 </IconButton>
             </Box>
             <CardHeader
-                avatar={<Avatar sx={{ bgcolor: "white", color: "black" }}>{value.contributor_name[0]}</Avatar>}
+                avatar={
+                    <Avatar sx={{ border: "solid 1px #24292f", bgcolor: "white", color: "black" }}>
+                        {value.contributor_name[0]}
+                    </Avatar>
+                }
                 title={value.contributor_name}
                 subheader={
                     <Typography variant="caption" sx={{ color: ReturnEmotionFontColor(value.emotion) }}>

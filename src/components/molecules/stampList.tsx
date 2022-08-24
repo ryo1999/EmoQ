@@ -10,7 +10,6 @@ type StampList = {
 }
 
 const EmotionIcon:{[name:string]:string} = {
-    "普通": "fa6-regular:face-meh",
     "悲しみ": "fa6-regular:face-sad-tear",
     "イライラ": "fa6-regular:face-angry",
     "焦り": "fa6-regular:face-grin-beam-sweat",

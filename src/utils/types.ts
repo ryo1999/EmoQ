@@ -1,5 +1,5 @@
 //感情の種類
-export type Emotion = "普通" | "悲しみ" | "イライラ" | "焦り" | "絶望" | "どや" | "喜び" | "お願い" | "ホッ"
+export type Emotion = "悲しみ" | "イライラ" | "焦り" | "絶望" | "どや" | "喜び" | "お願い" | "ホッ"
 
 //質問のデータを取得する時の型
 export type QuestionsCollectionData = {

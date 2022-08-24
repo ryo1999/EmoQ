@@ -27,10 +27,10 @@ export default function Home() {
     }
 
     return (
-        <div style={{ marginBottom: "60px" }}>
+        <div style={{ marginBottom: "80px" }}>
             <Appbar />
             <Toolbar />
-            <div style={{ margin: "0 auto", maxWidth: "800px" }}>
+            <div style={{ margin: "0 auto", maxWidth: "500px" }}>
                 <TagFilter />
                 <Box>
                     {questions.map((value, index) => (
@@ -47,6 +47,7 @@ export default function Home() {
                             bottom: "10px",
                             right: " 10px",
                         },
+                        fontSize:"40px",
                         bottom: "10px",
                         right: "200px",
                         ":hover": { bgcolor: "#444444" },

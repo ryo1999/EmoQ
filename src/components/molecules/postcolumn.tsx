@@ -59,7 +59,7 @@ export default function PostColumn(props: PostColumnProps) {
     const [parameter, setParameter] = React.useState<number | number[] | string>(50)
     const [question, setQuestion] = React.useState("")
     const [tag, setTag] = React.useState<string[]>([])
-    const [emotion, setEmotion] = React.useState("普通")
+    const [emotion, setEmotion] = React.useState("焦り")
     const [tagList, setTagList] = React.useState<string[]>([])
     const [questionValidation, setQuestionValidation] = React.useState(true)
     const [questionErrorMesseage, setQuestionErrorMesseage] = React.useState("必ず記入してください")
@@ -104,7 +104,7 @@ export default function PostColumn(props: PostColumnProps) {
         setParameter(50)
         setQuestion("")
         setTag([])
-        setEmotion("普通")
+        setEmotion("焦り")
     }
 
     const getStyles = (name: string, tag: string | string[], theme: Theme) => {
@@ -198,29 +198,6 @@ export default function PostColumn(props: PostColumnProps) {
                     </Toolbar>
                 </AppBar>
                 <DialogContent sx={{ maxWidth: "350px", textAlign: "center", margin: "0 auto", padding: "0px" }}>
-                    <Box
-                        component="form"
-                        sx={{
-                            "& > :not(style)": { width: "300px" },
-                            marginBottom: "20px",
-                            maxHeight: "360px",
-                            overflowY: "auto",
-                        }}
-                        noValidate
-                        autoComplete="off"
-                    >
-                        <TextField
-                            id="outlined-basic"
-                            multiline
-                            required
-                            value={question}
-                            label="質問内容"
-                            helperText={questionValidation ? questionErrorMesseage : ""}
-                            onChange={(e) => setQuestion(e.target.value)}
-                            variant="outlined"
-                            sx={{ marginTop: "20px" }}
-                        />
-                    </Box>
                     <Typography variant="caption" sx={{ marginLeft: "5px" }}>
                         焦り、絶望にはパラメータが存在します
                     </Typography>
@@ -253,6 +230,29 @@ export default function PostColumn(props: PostColumnProps) {
                                 />
                             </>
                         )}
+                    </Box>
+                    <Box
+                        component="form"
+                        sx={{
+                            "& > :not(style)": { width: "300px" },
+                            marginBottom: "20px",
+                            maxHeight: "360px",
+                            overflowY: "auto",
+                        }}
+                        noValidate
+                        autoComplete="off"
+                    >
+                        <TextField
+                            id="outlined-basic"
+                            multiline
+                            required
+                            value={question}
+                            label="質問内容"
+                            helperText={questionValidation ? questionErrorMesseage : ""}
+                            onChange={(e) => setQuestion(e.target.value)}
+                            variant="outlined"
+                            sx={{ marginTop: "20px" }}
+                        />
                     </Box>
                     <Typography variant="caption">タグは3つまで選択可能</Typography>
                     <Box sx={{ margin: "10px 0px 10px 0px" }}>
