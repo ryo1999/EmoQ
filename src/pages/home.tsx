@@ -46,7 +46,7 @@ export default function Home() {
             <Box sx={{ display: "flex", justifyContent: "space-around", width: "100%" }}>
                 <div style={{ width: "40%", height: "720px", overflowY: "scroll" }}>
                     <div style={{ display: "flex", justifyContent: "space-between" }}>
-                        <Typography variant="h5" sx={{ marginTop: "7px" }}>
+                        <Typography variant="h5" sx={{ mt: "7px" }}>
                             未解決の質問
                         </Typography>
                         <TagFilter />
@@ -65,7 +65,7 @@ export default function Home() {
                 </div>
                 <div style={{ width: "40%", height: "720px", overflowY: "scroll" }}>
                     <div style={{ display: "flex", justifyContent: "space-between" }}>
-                        <Typography variant="h5" sx={{ marginTop: "7px" }}>
+                        <Typography variant="h5" sx={{ mt: "7px" }}>
                             解決済みの質問
                         </Typography>
                         <TagFilter />

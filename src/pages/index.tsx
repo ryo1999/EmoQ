@@ -2,7 +2,7 @@ import React from "react"
 import { ToastContainer, toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 import router from "next/router"
-import Button from "@mui/material/Button"
+import LoadingButton from "@mui/lab/LoadingButton"
 import CssBaseline from "@mui/material/CssBaseline"
 import TextField from "@mui/material/TextField"
 // import FormControlLabel from "@mui/material/FormControlLabel"
@@ -21,13 +21,14 @@ const theme = createTheme()
 
 export default function SignIn() {
     const setUserInfo = useSetRecoilState(userInfo)
+    const [loading, setLoading] = React.useState(false)
     const [email, setEmail] = React.useState("")
     const [password, setPassword] = React.useState("")
 
     const handleSignIn = () => {
+        setLoading(true)
         signInWithEmailAndPassword(auth, email, password)
             .then((data) => {
-                toast.loading("ログイン中")
                 if (data.user.uid) {
                     getUserName(data.user.uid).then((userdata) => {
                         if (userdata) {
@@ -38,6 +39,7 @@ export default function SignIn() {
                 }
             })
             .catch((error) => {
+                setLoading(false)
                 toast.error("ログイン失敗")
             })
     }
@@ -48,14 +50,14 @@ export default function SignIn() {
                 <CssBaseline />
                 <Box
                     sx={{
-                        marginTop: "30px",
+                        mt: "30px",
                         display: "flex",
                         flexDirection: "column",
                         alignItems: "center",
                     }}
                 >
-                    <Typography variant="h2" sx={{ marginBottom: "50px" }}>
-                        EmoQue
+                    <Typography variant="h2" sx={{ mb: "50px" }}>
+                        EmoQ
                     </Typography>
                     <Box sx={{ mt: 1, width: "100%" }}>
                         <Typography variant="h6">メールアドレス*</Typography>
@@ -67,7 +69,7 @@ export default function SignIn() {
                             name="email"
                             autoComplete="email"
                             autoFocus
-                            sx={{ marginBottom: "30px" }}
+                            sx={{ mb: "30px" }}
                             onChange={(e) => setEmail(e.target.value)}
                         />
                         <Typography variant="h6">パスワード*</Typography>
@@ -75,23 +77,24 @@ export default function SignIn() {
                             margin="normal"
                             fullWidth
                             name="password"
-                            placeholder="ローマ字と数字を必ず含めてください"
+                            placeholder="英数字6文字以上"
                             type="password"
                             id="password"
                             autoComplete="current-password"
                             onChange={(e) => setPassword(e.target.value)}
                         />
                         {/* <FormControlLabel control={<Checkbox value="remember" color="primary" />} label="Remember me" /> */}
-                        <Button
+                        <LoadingButton
                             type="submit"
                             onClick={handleSignIn}
                             fullWidth
+                            loading={loading}
                             variant="contained"
                             sx={{ mt: 3, mb: 2 }}
                         >
                             ログイン
-                        </Button>
-                        <Box sx={{ margin: "20px 0px" }}>
+                        </LoadingButton>
+                        <Box sx={{ m: "20px 0px" }}>
                             <Link href="/signUp" variant="body2">
                                 アカウントをお持ちでない方はこちら
                             </Link>

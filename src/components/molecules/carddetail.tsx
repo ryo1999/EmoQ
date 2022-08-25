@@ -90,7 +90,7 @@ const CardDetail = React.memo((props: CardContentProps) => {
                 color: ReturnEmotionFontColor(value.emotion),
             }}
         >
-            <Box sx={{ display: "flex", marginLeft: "5px" }}>
+            <Box sx={{ display: "flex", ml: "5px" }}>
                 {value.tag.map((v, i) => (
                     <Tooltip key={v} title={v} placement="top">
                         <Chip
@@ -98,8 +98,8 @@ const CardDetail = React.memo((props: CardContentProps) => {
                             label={v}
                             sx={{
                                 cursor: "pointer",
-                                marginTop: "10px",
-                                marginRight: "5px",
+                                mt: "10px",
+                                mr: "5px",
                                 bgcolor: "#24292f",
                                 color: "white",
                                 maxWidth: "150px",
@@ -108,8 +108,8 @@ const CardDetail = React.memo((props: CardContentProps) => {
                     </Tooltip>
                 ))}
             </Box>
-            <Box sx={{ display: "flex", justifyContent: "right", alignItems: "center", marginTop: "10px" }}>
-                <Typography variant="caption" sx={{ marginRight: "20px" }}>
+            <Box sx={{ display: "flex", justifyContent: "right", alignItems: "center", mt: "10px" }}>
+                <Typography variant="caption" sx={{ mr: "20px" }}>
                     緊急度
                 </Typography>
                 <Slider
@@ -119,13 +119,13 @@ const CardDetail = React.memo((props: CardContentProps) => {
                     step={10}
                     min={0}
                     max={100}
-                    sx={{ width: "200px", marginRight: "30px" }}
+                    sx={{ width: "200px", mr: "30px" }}
                     disabled
                 />
                 <Box
                     sx={{
                         width: "30px",
-                        marginRight: "20px",
+                        mr: "20px",
                         borderBottom: "solid 1px",
                     }}
                 >
@@ -136,8 +136,8 @@ const CardDetail = React.memo((props: CardContentProps) => {
                         disableRipple
                         sx={{
                             bgcolor: ReturnEmotionColor(value.emotion),
-                            marginRight: "10px",
-                            marginTop: "3px",
+                            mr: "10px",
+                            mt: "3px",
                             color: "white",
                         }}
                     >
@@ -158,7 +158,7 @@ const CardDetail = React.memo((props: CardContentProps) => {
                     </Typography>
                 }
             />
-            <CardContent sx={{ marginLeft: "55px", maxWidth: "650px" }}>
+            <CardContent sx={{ ml: "55px", maxWidth: "650px" }}>
                 <Typography variant="body2">{value.question}</Typography>
             </CardContent>
             <CardActions sx={{ justifyContent: "space-between" }}>

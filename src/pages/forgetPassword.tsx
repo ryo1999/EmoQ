@@ -1,5 +1,5 @@
 import React from "react"
-import Button from "@mui/material/Button"
+import LoadingButton from "@mui/lab/LoadingButton"
 import CssBaseline from "@mui/material/CssBaseline"
 import TextField from "@mui/material/TextField"
 import Link from "@mui/material/Link"
@@ -14,14 +14,18 @@ import { auth, sendPasswordResetEmail } from "@/firebase"
 const theme = createTheme()
 
 export default function ForgetPassword() {
+    const [loading, setLoading] = React.useState(false)
     const [email, setEmail] = React.useState("")
 
     const submitPasswordResetEmail = () => {
+        setLoading(true)
         sendPasswordResetEmail(auth, email)
             .then(() => {
                 toast.success("送信完了")
+                setLoading(false)
             })
             .catch((error) => {
+                setLoading(false)
                 toast.error("登録されたメールアドレスを入力してください")
             })
     }
@@ -32,13 +36,13 @@ export default function ForgetPassword() {
                 <CssBaseline />
                 <Box
                     sx={{
-                        marginTop: "30px",
+                        mt: "30px",
                         display: "flex",
                         flexDirection: "column",
                         alignItems: "center",
                     }}
                 >
-                    <Typography variant="h5" sx={{ marginBottom: "50px" }}>
+                    <Typography variant="h5" sx={{ mb: "50px" }}>
                         パスワード再設定用メール送信
                     </Typography>
                     <Box sx={{ mt: 1, width: "100%" }}>
@@ -51,19 +55,20 @@ export default function ForgetPassword() {
                             name="email"
                             autoComplete="email"
                             autoFocus
-                            sx={{ marginBottom: "30px" }}
+                            sx={{ mb: "30px" }}
                             onChange={(e) => setEmail(e.target.value)}
                         />
-                        <Button
+                        <LoadingButton
                             type="submit"
                             onClick={submitPasswordResetEmail}
                             fullWidth
+                            loading={loading}
                             variant="contained"
                             sx={{ mt: 3, mb: 2 }}
                         >
                             送信
-                        </Button>
-                        <Box sx={{ margin: "20px 0px" }}>
+                        </LoadingButton>
+                        <Box sx={{ m: "20px 0px" }}>
                             <Link href="/" variant="body2">
                                 ログイン画面へ
                             </Link>

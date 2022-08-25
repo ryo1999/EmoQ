@@ -179,7 +179,7 @@ export default function PostColumn(props: PostColumnProps) {
                         <IconButton edge="start" color="inherit" onClick={handleCancelClick} aria-label="close">
                             <CloseIcon />
                         </IconButton>
-                        <Typography sx={{ marginLeft: "10px", flex: 1 }} variant="h6" component="div">
+                        <Typography sx={{ ml: "10px", flex: 1 }} variant="h6" component="div">
                             投稿フォーム
                         </Typography>
                         <Button
@@ -192,13 +192,11 @@ export default function PostColumn(props: PostColumnProps) {
                         </Button>
                     </Toolbar>
                 </AppBar>
-                <DialogContent
-                    sx={{ maxWidth: "350px", textAlign: "center", margin: "20px auto 0 auto", padding: "0px" }}
-                >
+                <DialogContent sx={{ maxWidth: "350px", textAlign: "center", m: "20px auto 0 auto", p: "0px" }}>
                     <Typography variant="caption">今の感情は？</Typography>
                     <StampList emotion={emotion} setEmotion={setEmotion} setParameter={setParameter} />
-                    <Box sx={{ display: "flex", justifyContent: "center", marginBottom: "20px" }}>
-                        <Typography variant="caption" sx={{ marginTop: "5px", marginRight: "20px" }}>
+                    <Box sx={{ display: "flex", justifyContent: "center", mb: "20px" }}>
+                        <Typography variant="caption" sx={{ mt: "5px", mr: "20px" }}>
                             緊急度
                         </Typography>
                         <Slider
@@ -209,7 +207,7 @@ export default function PostColumn(props: PostColumnProps) {
                             step={10}
                             min={0}
                             max={100}
-                            sx={{ width: "200px", marginRight: "20px" }}
+                            sx={{ width: "200px", mr: "20px" }}
                         />
                         <Input
                             value={parameter}
@@ -229,7 +227,7 @@ export default function PostColumn(props: PostColumnProps) {
                         component="form"
                         sx={{
                             "& > :not(style)": { width: "300px" },
-                            marginBottom: "20px",
+                            mb: "20px",
                             maxHeight: "360px",
                             overflowY: "auto",
                         }}
@@ -245,11 +243,11 @@ export default function PostColumn(props: PostColumnProps) {
                             helperText={questionValidation ? questionErrorMesseage : ""}
                             onChange={(e) => setQuestion(e.target.value)}
                             variant="outlined"
-                            sx={{ marginTop: "20px" }}
+                            sx={{ mt: "20px" }}
                         />
                     </Box>
                     <Typography variant="caption">タグは3つまで選択可能</Typography>
-                    <Box sx={{ margin: "10px 0px 10px 0px" }}>
+                    <Box sx={{ m: "10px 0px 10px 0px" }}>
                         <FormControl required sx={{ minWidth: "80px" }} size="small">
                             <InputLabel id="simple-select-label">タグ</InputLabel>
                             <Select

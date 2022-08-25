@@ -53,7 +53,7 @@ export default function MyPage() {
             <Toolbar />
             <div style={{ margin: "0 auto", maxWidth: "800px" }}>
                 <Box>
-                    <IconButton onClick={() => router.push("/home")} sx={{ marginTop: "5px" }}>
+                    <IconButton onClick={() => router.push("/home")} sx={{ mt: "5px" }}>
                         <ArrowBackIcon sx={{ color: "black", fontSize: "20px" }} />
                         <Typography variant="subtitle1" sx={{ color: "black" }}>
                             {"ホームへ"}
@@ -63,7 +63,7 @@ export default function MyPage() {
                 <Box>
                     <Avatar
                         sx={{
-                            margin: "0 auto",
+                            m: "0 auto",
                             fontSize: "40px",
                             width: "80px",
                             height: "80px",

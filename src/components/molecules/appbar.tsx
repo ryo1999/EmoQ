@@ -14,7 +14,6 @@ import Badge from "@mui/material/Badge"
 import Divider from "@mui/material/Divider"
 import PersonIcon from "@mui/icons-material/Person"
 import LogoutIcon from "@mui/icons-material/Logout"
-import CachedIcon from "@mui/icons-material/Cached"
 import MailIcon from "@mui/icons-material/Mail"
 import { useRecoilValue } from "recoil"
 import { auth, signOut } from "@/firebase"
@@ -23,18 +22,18 @@ import { userInfo } from "@/store/userInfo"
 export default function Appbar() {
     const userState = useRecoilValue(userInfo)
     const [avatarAnchorEl, setAvatarAnchorEl] = React.useState<null | HTMLElement>(null)
-    const [mailAnchorEl, setMailAnchorEl] = React.useState<null | HTMLElement>(null)
+    // const [mailAnchorEl, setMailAnchorEl] = React.useState<null | HTMLElement>(null)
 
     const handleClickAvatar = (event: React.MouseEvent<HTMLElement>) => {
         setAvatarAnchorEl(event.currentTarget)
     }
-    const handleClickMail = (event: React.MouseEvent<HTMLElement>) => {
-        setMailAnchorEl(event.currentTarget)
-    }
+    // const handleClickMail = (event: React.MouseEvent<HTMLElement>) => {
+    //     setMailAnchorEl(event.currentTarget)
+    // }
 
     const handleClose = () => {
         setAvatarAnchorEl(null)
-        setMailAnchorEl(null)
+        // setMailAnchorEl(null)
     }
 
     const handleClickLogOut = () => {
@@ -49,15 +48,16 @@ export default function Appbar() {
     }
 
     const handleMenuClick = (url: string) => {
+        handleClose()
         router.push(url)
     }
 
     return (
         <Box>
-            <AppBar sx={{bgcolor:"#24292f"}} position="fixed">
+            <AppBar sx={{ bgcolor: "#24292f" }} position="fixed">
                 <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
                     <Typography variant="h6" component="div">
-                        EmoQue
+                        EmoQ
                     </Typography>
                     <div>
                         {/* <IconButton onClick={handleClickMail} color="inherit">
@@ -72,7 +72,15 @@ export default function Appbar() {
                             onClick={handleClickAvatar}
                             color="inherit"
                         >
-                            <Avatar sx={{bgcolor:"white", color:"black", width: "30px", height: "30px", marginLeft: "10px" }}>
+                            <Avatar
+                                sx={{
+                                    bgcolor: "white",
+                                    color: "black",
+                                    width: "30px",
+                                    height: "30px",
+                                    ml: "10px",
+                                }}
+                            >
                                 {userState.userName[0]}
                             </Avatar>
                         </IconButton>
@@ -92,16 +100,16 @@ export default function Appbar() {
                             onClose={handleClose}
                         >
                             <MenuItem onClick={() => handleMenuClick("/mypage")}>
-                                <PersonIcon sx={{ marginRight: "20px" }} />
+                                <PersonIcon sx={{ mr: "20px" }} />
                                 マイページ
                             </MenuItem>
                             <Divider />
                             <MenuItem onClick={handleClickLogOut}>
-                                <LogoutIcon sx={{ marginRight: "20px" }} />
+                                <LogoutIcon sx={{ mr: "20px" }} />
                                 ログアウト
                             </MenuItem>
                         </Menu>
-                        <Menu
+                        {/* <Menu
                             id="mail-appbar"
                             anchorEl={mailAnchorEl}
                             anchorOrigin={{
@@ -117,7 +125,7 @@ export default function Appbar() {
                             onClose={handleClose}
                         >
                             <MenuItem onClick={router.reload}>〜件の通知があります</MenuItem>
-                        </Menu>
+                        </Menu> */}
                     </div>
                 </Toolbar>
             </AppBar>

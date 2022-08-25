@@ -9,15 +9,15 @@ type StampList = {
     setParameter: React.Dispatch<number>
 }
 
-const EmotionIcon:{[name:string]:string} = {
-    "悲しみ": "fa6-regular:face-sad-tear",
-    "イライラ": "fa6-regular:face-angry",
-    "焦り": "fa6-regular:face-grin-beam-sweat",
-    "絶望": "fa6-regular:face-rolling-eyes",
-    "どや": "fa6-regular:face-smile-wink",
-    "喜び": "fa6-regular:face-laugh-squint",
-    "お願い": "emojione-monotone:folded-hands",
-    "ホッ": "fa-regular:handshake",
+const EmotionIcon: { [name: string]: string } = {
+    悲しみ: "fa6-regular:face-sad-tear",
+    イライラ: "fa6-regular:face-angry",
+    焦り: "fa6-regular:face-grin-beam-sweat",
+    絶望: "fa6-regular:face-rolling-eyes",
+    どや: "fa6-regular:face-smile-wink",
+    喜び: "fa6-regular:face-laugh-squint",
+    お願い: "emojione-monotone:folded-hands",
+    ホッ: "fa-regular:handshake",
 }
 
 const StampList = React.memo((props: StampList) => {
@@ -36,13 +36,17 @@ const StampList = React.memo((props: StampList) => {
                     justifyContent: "center",
                 }}
             >
-                {Object.keys(EmotionIcon).map((emo: string) => 
-                    <IconButton key={emo} size={emotion == emo ? "medium" : "small"} onClick={() => handleClickStamp(emo)}>
+                {Object.keys(EmotionIcon).map((emo: string) => (
+                    <IconButton
+                        key={emo}
+                        size={emotion == emo ? "medium" : "small"}
+                        onClick={() => handleClickStamp(emo)}
+                    >
                         <Icon icon={EmotionIcon[emo]} />
                     </IconButton>
-                )}
+                ))}
             </Box>
-            <Box sx={{ textAlign: "center", marginBottom: "30px" }}>{emotion}</Box>
+            <Box sx={{ textAlign: "center", mb: "30px" }}>{emotion}</Box>
         </>
     )
 })
