@@ -1,7 +1,7 @@
 //感情の種類
 export type Emotion = "悲しみ" | "イライラ" | "焦り" | "絶望" | "どや" | "喜び" | "お願い" | "ホッ"
 
-//質問のデータを取得する時の型
+//質問のデータを扱う時の型
 export type QuestionsCollectionData = {
     contributor_id: string
     contributor_name: string
@@ -12,6 +12,8 @@ export type QuestionsCollectionData = {
     emotion: Emotion
     parameter: number
     solution:boolean
+    bookmark_user_id:string[]
+    replied_user_id:string[]
 }
 
 //コメントを取得するときの型
@@ -21,5 +23,4 @@ export type CommentsCollectionData = {
     comment:string
     time: Date
     emotion: Emotion
-    parameter: number
 }

@@ -6,7 +6,6 @@ import IconButton from "@mui/material/IconButton"
 type StampList = {
     emotion: string
     setEmotion: React.Dispatch<string>
-    setParameter: React.Dispatch<number>
 }
 
 const EmotionIcon: { [name: string]: string } = {
@@ -21,11 +20,10 @@ const EmotionIcon: { [name: string]: string } = {
 }
 
 const StampList = React.memo((props: StampList) => {
-    const { emotion, setEmotion, setParameter } = props
+    const { emotion, setEmotion } = props
 
     const handleClickStamp = (currentEmotion: string) => {
         setEmotion(currentEmotion)
-        setParameter(0)
     }
 
     return (

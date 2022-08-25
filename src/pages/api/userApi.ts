@@ -10,9 +10,6 @@ export const singUp = async (user_id:string, name:string) => {
     await setDoc(doc(db,"users",user_id),{
         name:name,
     })
-    //登録されたユーザーidにサブコレクションbookmarksを追加し、ダミーを作成
-    await setDoc(doc(db,"users",user_id,"bookmarks","dummy"),{
-    })
 }
 
 export const getUserName = async(uid:string)=>{

@@ -9,28 +9,23 @@ import IconButton from "@mui/material/IconButton"
 import Typography from "@mui/material/Typography"
 import { Icon } from "@iconify/react"
 import { useRecoilValue } from "recoil"
-import { userInfo } from "@/store/userInfo"
+import { useSetRecoilState } from "recoil"
+import { solvedQuestions} from "@/store/solvedQuestions"
+import { unSolvedQuestions } from "@/store/unSolvedQuestions"
 import { getQuestion } from "./api/questionApi"
-import { QuestionsCollectionData } from "@/utils/types"
-import { getBookMarkQuestionId } from "./api/bookmarkApi"
 
 export default function Home() {
-    const userState = useRecoilValue(userInfo)
-    const [unSolvedQuestions, setUnSolvedQuestions] = React.useState<QuestionsCollectionData[]>([])
-    const [solvedQuestions, setSolvedQuestions] = React.useState<QuestionsCollectionData[]>([])
+    const unSolvedQuestionList = useRecoilValue(unSolvedQuestions)
+    const setUnSolvedQuestions = useSetRecoilState(unSolvedQuestions)
+    const solvedQuestionList = useRecoilValue(solvedQuestions)
+    const setSolvedQuestions = useSetRecoilState(solvedQuestions)
     const [isOpenFormDialog, setOpenFormDialog] = React.useState(false)
-    const [bookMarkId, setBookMarkId] = React.useState<string[]>([])
 
     React.useEffect(() => {
         getQuestion()
             .then((question) => {
                 setUnSolvedQuestions(question[0])
                 setSolvedQuestions(question[1])
-            })
-            .catch((error) => console.log(error))
-        getBookMarkQuestionId(userState.userId)
-            .then((idList) => {
-                setBookMarkId(idList)
             })
             .catch((error) => console.log(error))
     }, [])
@@ -52,13 +47,10 @@ export default function Home() {
                         <TagFilter />
                     </div>
                     <Box>
-                        {unSolvedQuestions.map((value, index) => (
+                        {unSolvedQuestionList.map((value, index) => (
                             <CardDetail
                                 key={index}
                                 value={value}
-                                bookMarkId={bookMarkId}
-                                setUnSolvedQuestions={setUnSolvedQuestions}
-                                setSolvedQuestions={setSolvedQuestions}
                             />
                         ))}
                     </Box>
@@ -71,13 +63,10 @@ export default function Home() {
                         <TagFilter />
                     </div>
                     <Box>
-                        {solvedQuestions.map((value, index) => (
+                        {solvedQuestionList.map((value, index) => (
                             <CardDetail
                                 key={index}
                                 value={value}
-                                bookMarkId={bookMarkId}
-                                setUnSolvedQuestions={setUnSolvedQuestions}
-                                setSolvedQuestions={setSolvedQuestions}
                             />
                         ))}
                     </Box>

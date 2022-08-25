@@ -19,6 +19,8 @@ export const getQuestion = async () => {
                 emotion: doc.data().emotion,
                 parameter: doc.data().parameter,
                 solution: doc.data().solution,
+                bookmark_user_id: doc.data().bookmark_user_id,
+                replied_user_id: doc.data().replied_user_id,
             }
             questionList[0].push(questionField)
         } else {
@@ -32,6 +34,8 @@ export const getQuestion = async () => {
                 emotion: doc.data().emotion,
                 parameter: doc.data().parameter,
                 solution: doc.data().solution,
+                bookmark_user_id: doc.data().bookmark_user_id,
+                replied_user_id: doc.data().replied_user_id,
             }
             questionList[1].push(questionField)
         }
@@ -59,6 +63,8 @@ export const addQuestion = async (
         emotion: emotion,
         parameter: parameter,
         solution: solution,
+        bookmark_user_id: [],
+        replied_user_id: [],
     })
 }
 
@@ -79,6 +85,8 @@ export const getMyQuestion = async (uid: string) => {
                 emotion: doc.data().emotion,
                 parameter: doc.data().parameter,
                 solution: doc.data().solution,
+                bookmark_user_id: doc.data().bookmark_user_id,
+                replied_user_id: doc.data().replied_user_id,
             }
             myQuestionList.push(questionField)
         }
@@ -87,8 +95,23 @@ export const getMyQuestion = async (uid: string) => {
 }
 
 //解決された質問のsolutionをtrueにしたり、未解決に戻された質問をfalseにしたりする
-export const setQuestionField = async (question_id: string, solution: boolean) => {
+export const upDateQuestionSolution = async (question_id: string, solution: boolean) => {
     await updateDoc(doc(db, "questions", question_id), {
         solution: solution,
+    })
+}
+
+//ブックマークされた質問のbookmark_user_idにブックマークした人のuidを追加する
+export const upDateQuestionBookmark = async (question_id: string, bookmark_user_id:string[], uid: string) => {
+    await updateDoc(doc(db, "questions", question_id), {
+        bookmark_user_id: [...bookmark_user_id,uid],
+    })
+}
+
+//ブックマークが解除された時に質問のbookmark_user_idからその人のuidを削除
+export const deleteQuestionBookmark = async (question_id: string, bookmark_user_id:string[], uid: string) => {
+    const users = bookmark_user_id.filter(users=>(users.match(uid))==null)
+    await updateDoc(doc(db, "questions", question_id), {
+        bookmark_user_id: users,
     })
 }

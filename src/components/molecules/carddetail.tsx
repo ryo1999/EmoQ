@@ -1,7 +1,7 @@
 import React from "react"
 import { format } from "date-fns"
 import ReturnIcon from "../atoms/returnIcon"
-import { ReturnEmotionColor, ReturnEmotionFontColor } from "@/utils/commonFunctions/returnEmotionColor"
+import { ReturnEmotionColor } from "@/utils/commonFunctions/returnEmotionColor"
 import { Box, Tooltip } from "@mui/material"
 import Card from "@mui/material/Card"
 import CardActions from "@mui/material/CardActions"
@@ -18,29 +18,37 @@ import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline"
 import CheckCircleIcon from "@mui/icons-material/CheckCircle"
 import CommentIcon from "@mui/icons-material/Comment"
 import { useRecoilValue } from "recoil"
+import { useSetRecoilState } from "recoil"
+import { solvedQuestions } from "@/store/solvedQuestions"
+import { unSolvedQuestions } from "@/store/unSolvedQuestions"
 import { userInfo } from "@/store/userInfo"
 import { getComment } from "@/pages/api/commentApi"
-import { addBookMark } from "@/pages/api/bookmarkApi"
-import { setQuestionField, getQuestion } from "@/pages/api/questionApi"
+import { addBookMark, deleteBookMark } from "@/pages/api/bookmarkApi"
+import {
+    upDateQuestionSolution,
+    upDateQuestionBookmark,
+    getQuestion,
+    deleteQuestionBookmark,
+} from "@/pages/api/questionApi"
 import { QuestionsCollectionData } from "@/utils/types"
 
 type CardContentProps = {
     value: QuestionsCollectionData
-    bookMarkId: string[]
-    setUnSolvedQuestions?: React.Dispatch<QuestionsCollectionData[]>
-    setSolvedQuestions?: React.Dispatch<QuestionsCollectionData[]>
 }
 
 const CardDetail = React.memo((props: CardContentProps) => {
-    const { value, setUnSolvedQuestions, setSolvedQuestions, bookMarkId } = props
+    const { value } = props
     const userState = useRecoilValue(userInfo)
+    const setUnSolvedQuestions = useSetRecoilState(unSolvedQuestions)
+    const setSolvedQuestions = useSetRecoilState(solvedQuestions)
     const [bookMark, setBookMark] = React.useState(false)
-    const [checkMark, setCheckMark] = React.useState(value.solution)
+    const [checkMark, setCheckMark] = React.useState(false)
     const [commentLength, setCommentLength] = React.useState(0)
 
-    // const today = new Date()
-    // console.log(today)
-    const date = format(value.time, "MM/dd HH:mm")
+    const today = format(new Date(), "MM/dd HH:mm")
+    const dateString = value.time.toLocaleString()
+    const dateToDate = Date.parse(dateString)
+    const date = format(dateToDate, "MM/dd HH:mm")
 
     React.useEffect(() => {
         getComment(value.question_id)
@@ -48,38 +56,68 @@ const CardDetail = React.memo((props: CardContentProps) => {
                 setCommentLength(comment.length)
             })
             .catch((error) => console.log(error))
-        bookMarkId.includes(value.question_id) ? setBookMark(true) : null
     }, [])
 
-    const handleClickCheckMark = async () => {
-        await setQuestionField(value.question_id, !checkMark)
-        if (setUnSolvedQuestions && setSolvedQuestions) {
-            await getQuestion()
-                .then((Q) => {
-                    setSolvedQuestions(Q[1])
-                    setUnSolvedQuestions(Q[0])
-                })
-                .catch((error) => console.log(error))
+    React.useEffect(()=>{
+        if (value.bookmark_user_id.indexOf(userState.userId)!==-1){
+            setBookMark(true)
+        }else{
+            setBookMark(false)
         }
+    },[value.bookmark_user_id])
+
+    React.useEffect(()=>{
+        if (value.solution==true){
+            setCheckMark(true)
+        }else{
+            setCheckMark(false)
+        }
+    },[value.solution])
+
+    const handleClickCheckMark = async () => {
+        await upDateQuestionSolution(value.question_id, !checkMark)
+        await getQuestion()
+            .then((Q) => {
+                setSolvedQuestions(Q[1])
+                setUnSolvedQuestions(Q[0])
+            })
+            .catch((error) => console.log(error))
     }
 
     const handleClickBookMark = async () => {
-        setBookMark(!bookMark)
-        addBookMark(
-            userState.userId,
-            value.contributor_id,
-            value.contributor_name,
-            value.question_id,
-            value.question,
-            value.tag,
-            value.time,
-            value.emotion,
-            value.parameter,
-            value.solution
-        )
+        if (value.bookmark_user_id.includes(userState.userId)) {
+            await deleteBookMark(userState.userId, value.question_id)
+            await deleteQuestionBookmark(value.question_id, value.bookmark_user_id, userState.userId)
+            await getQuestion()
+            .then((Q) => {
+                setSolvedQuestions(Q[1])
+                setUnSolvedQuestions(Q[0])
+            })
+            .catch((error) => console.log(error))
+        } else {
+            await addBookMark(
+                userState.userId,
+                value.contributor_id,
+                value.contributor_name,
+                value.question_id,
+                value.question,
+                value.tag,
+                value.time,
+                value.emotion,
+                value.parameter,
+                value.solution,
+                value.bookmark_user_id,
+                value.replied_user_id
+            )
+            await upDateQuestionBookmark(value.question_id, value.bookmark_user_id, userState.userId)
+            await getQuestion()
+            .then((Q) => {
+                setSolvedQuestions(Q[1])
+                setUnSolvedQuestions(Q[0])
+            })
+            .catch((error) => console.log(error))
+        }
     }
-
-    // console.log(value.emotion)
 
     return (
         <Card
@@ -87,7 +125,6 @@ const CardDetail = React.memo((props: CardContentProps) => {
                 width: "100%",
                 mt: "10px",
                 borderRadius: "10px",
-                color: ReturnEmotionFontColor(value.emotion),
             }}
         >
             <Box sx={{ display: "flex", ml: "5px" }}>
@@ -153,9 +190,7 @@ const CardDetail = React.memo((props: CardContentProps) => {
                 }
                 title={value.contributor_name}
                 subheader={
-                    <Typography variant="caption" sx={{ color: ReturnEmotionFontColor(value.emotion) }}>
-                        {date}
-                    </Typography>
+                    <Typography variant="caption">{today.slice(3, 5) === date.slice(3, 5) ? "今日" : date}</Typography>
                 }
             />
             <CardContent sx={{ ml: "55px", maxWidth: "650px" }}>

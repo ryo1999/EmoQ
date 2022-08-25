@@ -194,7 +194,7 @@ export default function PostColumn(props: PostColumnProps) {
                 </AppBar>
                 <DialogContent sx={{ maxWidth: "350px", textAlign: "center", m: "20px auto 0 auto", p: "0px" }}>
                     <Typography variant="caption">今の感情は？</Typography>
-                    <StampList emotion={emotion} setEmotion={setEmotion} setParameter={setParameter} />
+                    <StampList emotion={emotion} setEmotion={setEmotion} />
                     <Box sx={{ display: "flex", justifyContent: "center", mb: "20px" }}>
                         <Typography variant="caption" sx={{ mt: "5px", mr: "20px" }}>
                             緊急度
