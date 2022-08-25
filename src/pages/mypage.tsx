@@ -13,19 +13,34 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack"
 import { useRecoilValue } from "recoil"
 import { userInfo } from "@/store/userInfo"
 import { getMyQuestion } from "./api/questionApi"
+import { getBookMark, getBookMarkQuestionId } from "./api/bookmarkApi"
 import { QuestionsCollectionData } from "@/utils/types"
 
 export default function MyPage() {
     const userState = useRecoilValue(userInfo)
     const [value, setValue] = React.useState(0)
     const [myQuestions, setMyQuestions] = React.useState<QuestionsCollectionData[]>([])
+    const [bookMarkQuestions, setBookMarkQuestions] = React.useState<QuestionsCollectionData[]>([])
+    const [bookMarkId, setBookMarkId] = React.useState<string[]>([])
 
     React.useEffect(() => {
         getMyQuestion(userState.userId)
             .then((question) => {
                 setMyQuestions(question)
             })
-            .catch((e) => console.log(e))
+            .catch((error) => console.log(error))
+        getBookMark(userState.userId)
+            .then((question) => {
+                setBookMarkQuestions(question)
+            })
+            .catch((error) => {
+                console.log(error)
+            })
+        getBookMarkQuestionId(userState.userId)
+            .then((idList) => {
+                setBookMarkId(idList)
+            })
+            .catch((error) => console.log(error))
     }, [])
 
     const handleChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -67,8 +82,14 @@ export default function MyPage() {
                         <Tab label="ブックマーク" sx={{ minWidth: "50%" }} />
                     </Tabs>
                     <Box>
-                        {value === 0 && myQuestions.map((value, index) => <CardDetail key={index} value={value} />)}
-                        {value === 1 && "unti"}
+                        {value === 0 &&
+                            myQuestions.map((value, index) => (
+                                <CardDetail key={index} value={value} bookMarkId={bookMarkId} />
+                            ))}
+                        {value === 1 &&
+                            bookMarkQuestions.map((value, index) => (
+                                <CardDetail key={index} value={value} bookMarkId={bookMarkId} />
+                            ))}
                     </Box>
                 </Box>
             </div>

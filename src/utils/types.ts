@@ -10,7 +10,8 @@ export type QuestionsCollectionData = {
     tag: string[]
     time: Date
     emotion: Emotion
-    parameter?: number
+    parameter: number
+    solution:boolean
 }
 
 //コメントを取得するときの型
@@ -20,5 +21,5 @@ export type CommentsCollectionData = {
     comment:string
     time: Date
     emotion: Emotion
-    parameter?: number
+    parameter: number
 }

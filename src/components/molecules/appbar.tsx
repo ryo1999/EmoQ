@@ -57,14 +57,14 @@ export default function Appbar() {
             <AppBar sx={{bgcolor:"#24292f"}} position="fixed">
                 <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
                     <Typography variant="h6" component="div">
-                        EmoCha
+                        EmoQue
                     </Typography>
                     <div>
-                        <IconButton onClick={handleClickMail} color="inherit">
-                            {/* <Badge badgeContent={4} color="success"> */}
+                        {/* <IconButton onClick={handleClickMail} color="inherit">
+                            <Badge badgeContent={4} color="success">
                                 <MailIcon sx={{ width: "30px", height: "30px" }} />
-                            {/* </Badge> */}
-                        </IconButton>
+                            </Badge>
+                        </IconButton> */}
                         <IconButton
                             aria-label="account of current user"
                             aria-controls="menu-appbar"
@@ -91,11 +91,6 @@ export default function Appbar() {
                             open={Boolean(avatarAnchorEl)}
                             onClose={handleClose}
                         >
-                            <MenuItem onClick={router.reload}>
-                                <CachedIcon sx={{ marginRight: "20px" }} />
-                                更新
-                            </MenuItem>
-                            <Divider />
                             <MenuItem onClick={() => handleMenuClick("/mypage")}>
                                 <PersonIcon sx={{ marginRight: "20px" }} />
                                 マイページ

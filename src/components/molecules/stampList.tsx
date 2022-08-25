@@ -25,7 +25,7 @@ const StampList = React.memo((props: StampList) => {
 
     const handleClickStamp = (currentEmotion: string) => {
         setEmotion(currentEmotion)
-        setParameter(50)
+        setParameter(0)
     }
 
     return (
@@ -34,7 +34,6 @@ const StampList = React.memo((props: StampList) => {
                 sx={{
                     display: "flex",
                     justifyContent: "center",
-                    marginBottom: "20px",
                 }}
             >
                 {Object.keys(EmotionIcon).map((emo: string) => 
@@ -43,7 +42,7 @@ const StampList = React.memo((props: StampList) => {
                     </IconButton>
                 )}
             </Box>
-            <Box sx={{ textAlign: "center", marginBottom: "10px" }}>{emotion}</Box>
+            <Box sx={{ textAlign: "center", marginBottom: "30px" }}>{emotion}</Box>
         </>
     )
 })

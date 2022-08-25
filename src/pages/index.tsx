@@ -55,7 +55,7 @@ export default function SignIn() {
                     }}
                 >
                     <Typography variant="h2" sx={{ marginBottom: "50px" }}>
-                        EmoCha
+                        EmoQue
                     </Typography>
                     <Box sx={{ mt: 1, width: "100%" }}>
                         <Typography variant="h6">メールアドレス*</Typography>

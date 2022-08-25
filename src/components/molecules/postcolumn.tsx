@@ -23,15 +23,15 @@ import AppBar from "@mui/material/AppBar"
 import Toolbar from "@mui/material/Toolbar"
 import IconButton from "@mui/material/IconButton"
 import { useRecoilValue } from "recoil"
+import { userInfo } from "@/store/userInfo"
 import { getTag } from "@/pages/api/tagApi"
 import { addQuestion, getQuestion } from "@/pages/api/questionApi"
-import { userInfo } from "@/store/userInfo"
 import { QuestionsCollectionData } from "@/utils/types"
 
 type PostColumnProps = {
     isOpenFormDialog: boolean
     setOpenFormDialog: React.Dispatch<boolean>
-    setQuestions: React.Dispatch<QuestionsCollectionData[]>
+    setUnSolvedQuestions: React.Dispatch<QuestionsCollectionData[]>
 }
 
 const MenuProps = {
@@ -52,11 +52,11 @@ const Transition = React.forwardRef(function Transition(
 })
 
 export default function PostColumn(props: PostColumnProps) {
-    const { isOpenFormDialog, setOpenFormDialog, setQuestions } = props
+    const { isOpenFormDialog, setOpenFormDialog, setUnSolvedQuestions } = props
     const theme = useTheme()
     const userState = useRecoilValue(userInfo)
     const [isOpenTagDialog, setOpenTagDialog] = React.useState(false)
-    const [parameter, setParameter] = React.useState<number | number[] | string>(50)
+    const [parameter, setParameter] = React.useState<number | number[] | string>(0)
     const [question, setQuestion] = React.useState("")
     const [tag, setTag] = React.useState<string[]>([])
     const [emotion, setEmotion] = React.useState("焦り")
@@ -71,8 +71,8 @@ export default function PostColumn(props: PostColumnProps) {
             .then((data) => {
                 setTagList(data)
             })
-            .catch((e) => {
-                console.log(e)
+            .catch((error) => {
+                console.log(error)
             })
     }, [])
 
@@ -101,7 +101,7 @@ export default function PostColumn(props: PostColumnProps) {
         })
     }
     const initializeState = () => {
-        setParameter(50)
+        setParameter(0)
         setQuestion("")
         setTag([])
         setEmotion("焦り")
@@ -146,17 +146,12 @@ export default function PostColumn(props: PostColumnProps) {
 
     const handleSubmitClick = async () => {
         setOpenFormDialog(false)
-        //データベースに保存する(ユーザーidと名前が必要)
-        if (emotion === "焦り" || emotion === "絶望") {
-            await addQuestion(userState.userId, userState.userName, question, tag, new Date(), emotion, parameter)
-        } else {
-            await addQuestion(userState.userId, userState.userName, question, tag, new Date(), emotion, "")
-        }
+        await addQuestion(userState.userId, userState.userName, question, tag, new Date(), emotion, parameter, false)
         getQuestion()
             .then((Q) => {
-                setQuestions(Q)
+                setUnSolvedQuestions(Q[0])
             })
-            .catch((e) => console.log(e))
+            .catch((error) => console.log(error))
         initializeState()
         returnTop()
     }
@@ -197,39 +192,38 @@ export default function PostColumn(props: PostColumnProps) {
                         </Button>
                     </Toolbar>
                 </AppBar>
-                <DialogContent sx={{ maxWidth: "350px", textAlign: "center", margin: "0 auto", padding: "0px" }}>
-                    <Typography variant="caption" sx={{ marginLeft: "5px" }}>
-                        焦り、絶望にはパラメータが存在します
-                    </Typography>
+                <DialogContent
+                    sx={{ maxWidth: "350px", textAlign: "center", margin: "20px auto 0 auto", padding: "0px" }}
+                >
+                    <Typography variant="caption">今の感情は？</Typography>
                     <StampList emotion={emotion} setEmotion={setEmotion} setParameter={setParameter} />
                     <Box sx={{ display: "flex", justifyContent: "center", marginBottom: "20px" }}>
-                        {(emotion == "焦り" || emotion == "絶望") && (
-                            <>
-                                <Slider
-                                    value={typeof parameter === "number" ? parameter : 0}
-                                    valueLabelDisplay="auto"
-                                    marks
-                                    onChange={handleSliderChange}
-                                    step={10}
-                                    min={0}
-                                    max={100}
-                                    sx={{ width: "200px", marginRight: "20px" }}
-                                />
-                                <Input
-                                    value={parameter}
-                                    size="small"
-                                    onChange={(e) => setParameter(e.target.value === "" ? "" : Number(e.target.value))}
-                                    onBlur={handleBlur}
-                                    inputProps={{
-                                        step: 10,
-                                        min: 0,
-                                        max: 100,
-                                        type: "number",
-                                    }}
-                                    sx={{ width: "50px" }}
-                                />
-                            </>
-                        )}
+                        <Typography variant="caption" sx={{ marginTop: "5px", marginRight: "20px" }}>
+                            緊急度
+                        </Typography>
+                        <Slider
+                            value={typeof parameter === "number" ? parameter : 0}
+                            valueLabelDisplay="auto"
+                            marks
+                            onChange={handleSliderChange}
+                            step={10}
+                            min={0}
+                            max={100}
+                            sx={{ width: "200px", marginRight: "20px" }}
+                        />
+                        <Input
+                            value={parameter}
+                            size="small"
+                            onChange={(e) => setParameter(e.target.value === "" ? "" : Number(e.target.value))}
+                            onBlur={handleBlur}
+                            inputProps={{
+                                step: 10,
+                                min: 0,
+                                max: 100,
+                                type: "number",
+                            }}
+                            sx={{ width: "50px" }}
+                        />
                     </Box>
                     <Box
                         component="form"

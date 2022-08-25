@@ -2,7 +2,7 @@ import React from "react"
 import { format } from "date-fns"
 import ReturnIcon from "../atoms/returnIcon"
 import { ReturnEmotionColor, ReturnEmotionFontColor } from "@/utils/commonFunctions/returnEmotionColor"
-import { Box } from "@mui/material"
+import { Box, Tooltip } from "@mui/material"
 import Card from "@mui/material/Card"
 import CardActions from "@mui/material/CardActions"
 import CardContent from "@mui/material/CardContent"
@@ -14,20 +14,32 @@ import Slider from "@mui/material/Slider"
 import Chip from "@mui/material/Chip"
 import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder"
 import BookmarkIcon from "@mui/icons-material/Bookmark"
+import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline"
+import CheckCircleIcon from "@mui/icons-material/CheckCircle"
 import CommentIcon from "@mui/icons-material/Comment"
+import { useRecoilValue } from "recoil"
+import { userInfo } from "@/store/userInfo"
 import { getComment } from "@/pages/api/commentApi"
+import { addBookMark } from "@/pages/api/bookmarkApi"
+import { setQuestionField, getQuestion } from "@/pages/api/questionApi"
 import { QuestionsCollectionData } from "@/utils/types"
 
 type CardContentProps = {
     value: QuestionsCollectionData
+    bookMarkId: string[]
+    setUnSolvedQuestions?: React.Dispatch<QuestionsCollectionData[]>
+    setSolvedQuestions?: React.Dispatch<QuestionsCollectionData[]>
 }
 
 const CardDetail = React.memo((props: CardContentProps) => {
-    const { value } = props
+    const { value, setUnSolvedQuestions, setSolvedQuestions, bookMarkId } = props
+    const userState = useRecoilValue(userInfo)
     const [bookMark, setBookMark] = React.useState(false)
+    const [checkMark, setCheckMark] = React.useState(value.solution)
     const [commentLength, setCommentLength] = React.useState(0)
-    const today = new Date()
-    console.log(today)
+
+    // const today = new Date()
+    // console.log(today)
     const date = format(value.time, "MM/dd HH:mm")
 
     React.useEffect(() => {
@@ -35,8 +47,37 @@ const CardDetail = React.memo((props: CardContentProps) => {
             .then((comment) => {
                 setCommentLength(comment.length)
             })
-            .catch((e) => console.log(e))
+            .catch((error) => console.log(error))
+        bookMarkId.includes(value.question_id) ? setBookMark(true) : null
     }, [])
+
+    const handleClickCheckMark = async () => {
+        await setQuestionField(value.question_id, !checkMark)
+        if (setUnSolvedQuestions && setSolvedQuestions) {
+            await getQuestion()
+                .then((Q) => {
+                    setSolvedQuestions(Q[1])
+                    setUnSolvedQuestions(Q[0])
+                })
+                .catch((error) => console.log(error))
+        }
+    }
+
+    const handleClickBookMark = async () => {
+        setBookMark(!bookMark)
+        addBookMark(
+            userState.userId,
+            value.contributor_id,
+            value.contributor_name,
+            value.question_id,
+            value.question,
+            value.tag,
+            value.time,
+            value.emotion,
+            value.parameter,
+            value.solution
+        )
+    }
 
     // console.log(value.emotion)
 
@@ -51,14 +92,26 @@ const CardDetail = React.memo((props: CardContentProps) => {
         >
             <Box sx={{ display: "flex", marginLeft: "5px" }}>
                 {value.tag.map((v, i) => (
-                    <Chip
-                        key={i}
-                        label={v}
-                        sx={{ marginTop: "10px", marginRight: "5px", bgcolor: "#24292f", color: "white" }}
-                    />
+                    <Tooltip key={v} title={v} placement="top">
+                        <Chip
+                            key={i}
+                            label={v}
+                            sx={{
+                                cursor: "pointer",
+                                marginTop: "10px",
+                                marginRight: "5px",
+                                bgcolor: "#24292f",
+                                color: "white",
+                                maxWidth: "150px",
+                            }}
+                        />
+                    </Tooltip>
                 ))}
             </Box>
-            <Box sx={{ display: "flex", justifyContent: "right", alignItems: "center" }}>
+            <Box sx={{ display: "flex", justifyContent: "right", alignItems: "center", marginTop: "10px" }}>
+                <Typography variant="caption" sx={{ marginRight: "20px" }}>
+                    緊急度
+                </Typography>
                 <Slider
                     key={value.parameter}
                     defaultValue={value.parameter}
@@ -78,17 +131,19 @@ const CardDetail = React.memo((props: CardContentProps) => {
                 >
                     {value.parameter}
                 </Box>
-                <IconButton
-                    disableRipple
-                    sx={{
-                        bgcolor: ReturnEmotionColor(value.emotion),
-                        marginRight: "10px",
-                        marginTop: "3px",
-                        color: "white",
-                    }}
-                >
-                    {ReturnIcon(value.emotion)}
-                </IconButton>
+                <Tooltip title={value.emotion} placement="top">
+                    <IconButton
+                        disableRipple
+                        sx={{
+                            bgcolor: ReturnEmotionColor(value.emotion),
+                            marginRight: "10px",
+                            marginTop: "3px",
+                            color: "white",
+                        }}
+                    >
+                        {ReturnIcon(value.emotion)}
+                    </IconButton>
+                </Tooltip>
             </Box>
             <CardHeader
                 avatar={
@@ -106,20 +161,27 @@ const CardDetail = React.memo((props: CardContentProps) => {
             <CardContent sx={{ marginLeft: "55px", maxWidth: "650px" }}>
                 <Typography variant="body2">{value.question}</Typography>
             </CardContent>
-            <CardActions sx={{ justifyContent: "right" }}>
-                <IconButton onClick={() => setBookMark(!bookMark)}>
-                    {bookMark ? (
-                        <BookmarkIcon sx={{ color: "black" }} />
-                    ) : (
-                        <BookmarkBorderIcon sx={{ color: "black" }} />
-                    )}
-                </IconButton>
-                <IconButton sx={{ fontSize: "15px" }}>
-                    <CommentIcon sx={{ color: "black" }} />
-                    <Typography variant="button" sx={{ color: "black" }}>
-                        {commentLength}
-                    </Typography>
-                </IconButton>
+            <CardActions sx={{ justifyContent: "space-between" }}>
+                <Box>
+                    <IconButton onClick={handleClickCheckMark}>
+                        {checkMark ? <CheckCircleIcon sx={{ color: "red" }} /> : <CheckCircleOutlineIcon />}
+                    </IconButton>
+                </Box>
+                <Box>
+                    <IconButton onClick={handleClickBookMark}>
+                        {bookMark ? (
+                            <BookmarkIcon sx={{ color: "black" }} />
+                        ) : (
+                            <BookmarkBorderIcon sx={{ color: "black" }} />
+                        )}
+                    </IconButton>
+                    <IconButton sx={{ fontSize: "15px" }}>
+                        <CommentIcon sx={{ color: "black" }} />
+                        <Typography variant="button" sx={{ color: "black" }}>
+                            {commentLength}
+                        </Typography>
+                    </IconButton>
+                </Box>
             </CardActions>
         </Card>
     )
