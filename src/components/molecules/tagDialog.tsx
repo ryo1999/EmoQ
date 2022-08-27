@@ -20,11 +20,11 @@ const TagDialog = React.memo((props: TagDialogProps) => {
     const { tagList, isOpenTagDialog, setOpenTagDialog, setTagList } = props
     const [newTag, setNewTag] = React.useState("")
     const [tagValidation, setTagValidation] = React.useState(true)
-    const [errorMesseage, setErrorMeeseage] = React.useState("必ず入力してください")
+    const [errorMesseage, setErrorMeeseage] = React.useState("")
 
     React.useEffect(() => {
         if (newTag === "") {
-            setErrorMeeseage("必ず入力してください")
+            setErrorMeeseage("")
             setTagValidation(true)
         }else if(tagList.includes(newTag)){
             setErrorMeeseage("すでに存在します")
@@ -41,7 +41,7 @@ const TagDialog = React.memo((props: TagDialogProps) => {
     const handleTagClose = () => {
         setOpenTagDialog(false)
         setTimeout(() => {
-            setErrorMeeseage("必ず入力してください")
+            setErrorMeeseage("")
             setTagValidation(true)
         },500)
     }
@@ -66,7 +66,6 @@ const TagDialog = React.memo((props: TagDialogProps) => {
                     autoComplete="name"
                 >
                     <TextField
-                        required
                         id="outlined-basic"
                         variant="outlined"
                         multiline

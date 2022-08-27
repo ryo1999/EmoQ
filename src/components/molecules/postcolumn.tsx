@@ -17,6 +17,8 @@ import Chip from "@mui/material/Chip"
 import Dialog from "@mui/material/Dialog"
 import DialogContent from "@mui/material/DialogContent"
 import CloseIcon from "@mui/icons-material/Close"
+import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp"
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown"
 import Slide from "@mui/material/Slide"
 import { TransitionProps } from "@mui/material/transitions"
 import AppBar from "@mui/material/AppBar"
@@ -37,7 +39,7 @@ type PostColumnProps = {
 const MenuProps = {
     PaperProps: {
         style: {
-            maxHeight: "200px",
+            maxHeight: "1000px",
             overflow: "auto",
         },
     },
@@ -56,7 +58,7 @@ export default function PostColumn(props: PostColumnProps) {
     const theme = useTheme()
     const userState = useRecoilValue(userInfo)
     const [isOpenTagDialog, setOpenTagDialog] = React.useState(false)
-    const [parameter, setParameter] = React.useState<number | number[] | string>(0)
+    const [parameter, setParameter] = React.useState<number | number[]>(0)
     const [question, setQuestion] = React.useState("")
     const [tag, setTag] = React.useState<string[]>([])
     const [emotion, setEmotion] = React.useState("焦り")
@@ -86,7 +88,8 @@ export default function PostColumn(props: PostColumnProps) {
     }, [tag])
 
     React.useEffect(() => {
-        if (question === "") {
+        console.log(question)
+        if (question === "" || !question.match(/\S/g)) {
             setQuestionErrorMesseage("必ず記入してください")
             setQuestionValidation(true)
         } else if (questionValidation === true) {
@@ -118,11 +121,23 @@ export default function PostColumn(props: PostColumnProps) {
         setParameter(value)
     }
 
-    const handleBlur = () => {
-        if (parameter < 0) {
-            setParameter(0)
-        } else if (parameter > 100) {
-            setParameter(100)
+    const handleClickUp = () => {
+        if (typeof parameter == "number") {
+            if (parameter + 10 > 100) {
+                setParameter(100)
+            } else {
+                setParameter(parameter + 10)
+            }
+        }
+    }
+
+    const handleClickDown = () => {
+        if (typeof parameter == "number") {
+            if (parameter - 10 < 0) {
+                setParameter(0)
+            } else {
+                setParameter(parameter - 10)
+            }
         }
     }
 
@@ -174,7 +189,7 @@ export default function PostColumn(props: PostColumnProps) {
                 open={isOpenFormDialog}
                 onClose={() => setOpenFormDialog(false)}
             >
-                <AppBar sx={{ position: "relative" }}>
+                <AppBar sx={{ position: "relative", bgcolor: "#24292f" }}>
                     <Toolbar>
                         <IconButton edge="start" color="inherit" onClick={handleCancelClick} aria-label="close">
                             <CloseIcon />
@@ -186,100 +201,125 @@ export default function PostColumn(props: PostColumnProps) {
                             disabled={questionValidation || tagExist}
                             color="inherit"
                             onClick={handleSubmitClick}
-                            sx={{ fontSize: "17px" }}
+                            sx={{ fontSize: "18px", "&:disabled": { color: "#747474" } }}
                         >
                             投稿
                         </Button>
                     </Toolbar>
                 </AppBar>
-                <DialogContent sx={{ maxWidth: "350px", textAlign: "center", m: "20px auto 0 auto", p: "0px" }}>
-                    <Typography variant="caption">今の感情は？</Typography>
-                    <StampList emotion={emotion} setEmotion={setEmotion} />
-                    <Box sx={{ display: "flex", justifyContent: "center", mb: "20px" }}>
-                        <Typography variant="caption" sx={{ mt: "5px", mr: "20px" }}>
-                            緊急度
+                <DialogContent
+                    sx={{ display: "flex", justifyContent: "space-around", textAlign: "center", mt: "80px" }}
+                >
+                    <div style={{ marginRight: "-100px" }}>
+                        <Typography variant="h6">今の感情は？</Typography>
+                        <StampList emotion={emotion} setEmotion={setEmotion} />
+                        <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", mb: "40px" }}>
+                            <Typography variant="h6" sx={{ mr: "30px" }}>
+                                緊急度
+                            </Typography>
+                            <Slider
+                                value={typeof parameter === "number" ? parameter : 0}
+                                valueLabelDisplay="auto"
+                                marks
+                                onChange={handleSliderChange}
+                                step={10}
+                                min={0}
+                                max={100}
+                                sx={{ width: "200px" }}
+                            />
+                            <Box sx={{ width: "40px", ml: "20px" }}>
+                                <IconButton onClick={handleClickUp} sx={{mb:"-10px",p: "0px" }}>
+                                    <ArrowDropUpIcon sx={{ fontSize: "40px" }} />
+                                </IconButton>
+                                {parameter}
+                                <IconButton onClick={handleClickDown} sx={{ mt:"-10px", p: "0px" }}>
+                                    <ArrowDropDownIcon sx={{ fontSize: "40px" }} />
+                                </IconButton>
+                            </Box>
+                            {/* <Input
+                                disabled
+                                value={parameter}
+                                onChange={(e) => setParameter(Number(e.target.value))}
+                                sx={{
+                                    width: "40px",
+                                    fontSize: "20px",
+                                    "&:disabled": { color: "black" },
+                                    m: "-5px 0px 10px 20px",
+                                }}
+                            /> */}
+                        </Box>
+                        <Typography variant="h6" sx={{ display: "inline" }}>
+                            タグを選択
                         </Typography>
-                        <Slider
-                            value={typeof parameter === "number" ? parameter : 0}
-                            valueLabelDisplay="auto"
-                            marks
-                            onChange={handleSliderChange}
-                            step={10}
-                            min={0}
-                            max={100}
-                            sx={{ width: "200px", mr: "20px" }}
-                        />
-                        <Input
-                            value={parameter}
-                            size="small"
-                            onChange={(e) => setParameter(e.target.value === "" ? "" : Number(e.target.value))}
-                            onBlur={handleBlur}
-                            inputProps={{
-                                step: 10,
-                                min: 0,
-                                max: 100,
-                                type: "number",
+                        <Typography variant="caption">(最大3個)</Typography>
+                        <Box sx={{ m: "10px 0px 10px 0px" }}>
+                            <FormControl required sx={{ maxWidth: "400px" }} size="small">
+                                <InputLabel id="simple-select-label">タグ</InputLabel>
+                                <Select
+                                    labelId="simple-select-label"
+                                    id="simple-select"
+                                    value={tag}
+                                    label="タグ"
+                                    onChange={handleTagChange}
+                                    multiple
+                                    MenuProps={MenuProps}
+                                    renderValue={(selected) => (
+                                        <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1.0 }}>
+                                            {selected.map((value: string) => (
+                                                <Chip
+                                                    key={value}
+                                                    label={value}
+                                                    sx={{
+                                                        fontSize: "18px",
+                                                        color: "white",
+                                                        bgcolor: "#24292f",
+                                                        maxWidth: "250px",
+                                                    }}
+                                                />
+                                            ))}
+                                        </Box>
+                                    )}
+                                >
+                                    {tagList.map((tagValue) => (
+                                        <MenuItem
+                                            style={getStyles(tagValue, tag, theme)}
+                                            value={tagValue}
+                                            key={tagValue}
+                                        >
+                                            {tagValue}
+                                        </MenuItem>
+                                    ))}
+                                    <MenuItem onClick={handleClickTagOpen}>新しく作る</MenuItem>
+                                </Select>
+                                <FormHelperText>{tagExist ? tagErrorMesseage : ""}</FormHelperText>
+                            </FormControl>
+                        </Box>
+                    </div>
+                    <div style={{ marginLeft: "-100px" }}>
+                        <Box
+                            component="form"
+                            sx={{
+                                "& > :not(style)": { width: "500px" },
+                                mb: "20px",
+                                maxHeight: "500px",
+                                overflowY: "auto",
                             }}
-                            sx={{ width: "50px" }}
-                        />
-                    </Box>
-                    <Box
-                        component="form"
-                        sx={{
-                            "& > :not(style)": { width: "300px" },
-                            mb: "20px",
-                            maxHeight: "360px",
-                            overflowY: "auto",
-                        }}
-                        noValidate
-                        autoComplete="off"
-                    >
-                        <TextField
-                            id="outlined-basic"
-                            multiline
-                            required
-                            value={question}
-                            label="質問内容"
-                            helperText={questionValidation ? questionErrorMesseage : ""}
-                            onChange={(e) => setQuestion(e.target.value)}
-                            variant="outlined"
-                            sx={{ mt: "20px" }}
-                        />
-                    </Box>
-                    <Typography variant="caption">タグは3つまで選択可能</Typography>
-                    <Box sx={{ m: "10px 0px 10px 0px" }}>
-                        <FormControl required sx={{ minWidth: "80px" }} size="small">
-                            <InputLabel id="simple-select-label">タグ</InputLabel>
-                            <Select
-                                labelId="simple-select-label"
-                                id="simple-select"
-                                value={tag}
-                                label="タグ"
-                                onChange={handleTagChange}
-                                multiple
-                                MenuProps={MenuProps}
-                                renderValue={(selected) => (
-                                    <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
-                                        {selected.map((value: string) => (
-                                            <Chip
-                                                key={value}
-                                                label={value}
-                                                sx={{ bgcolor: "aqua", maxWidth: "250px" }}
-                                            />
-                                        ))}
-                                    </Box>
-                                )}
-                            >
-                                {tagList.map((tagValue) => (
-                                    <MenuItem style={getStyles(tagValue, tag, theme)} value={tagValue} key={tagValue}>
-                                        {tagValue}
-                                    </MenuItem>
-                                ))}
-                                <MenuItem onClick={handleClickTagOpen}>新しく作る</MenuItem>
-                            </Select>
-                            <FormHelperText>{tagExist ? tagErrorMesseage : ""}</FormHelperText>
-                        </FormControl>
-                    </Box>
+                            autoComplete="off"
+                        >
+                            <TextField
+                                required
+                                id="outlined-basic"
+                                multiline
+                                value={question}
+                                InputProps={{ style: { fontSize: "20px" } }}
+                                label="質問内容"
+                                helperText={questionValidation ? questionErrorMesseage : ""}
+                                onChange={(e) => setQuestion(e.target.value)}
+                                variant="outlined"
+                                sx={{ mt: "20px" }}
+                            />
+                        </Box>
+                    </div>
                 </DialogContent>
             </Dialog>
         </>

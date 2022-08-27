@@ -1,7 +1,9 @@
 import React from "react"
+import { ReturnEmotionColor } from "@/utils/commonFunctions/returnEmotionColor"
 import Box from "@mui/material/Box"
 import { Icon } from "@iconify/react"
 import IconButton from "@mui/material/IconButton"
+import Typography from "@mui/material/Typography"
 
 type StampList = {
     emotion: string
@@ -27,25 +29,27 @@ const StampList = React.memo((props: StampList) => {
     }
 
     return (
-        <>
-            <Box
-                sx={{
-                    display: "flex",
-                    justifyContent: "center",
-                }}
-            >
+        <Box sx={{ mb: "50px" }}>
+            <Box sx={{ mb: "10px" }}>
                 {Object.keys(EmotionIcon).map((emo: string) => (
                     <IconButton
                         key={emo}
-                        size={emotion == emo ? "medium" : "small"}
+                        size="medium"
                         onClick={() => handleClickStamp(emo)}
+                        sx={{
+                            "&:hover": {
+                                background: emotion == emo ? ReturnEmotionColor(emotion) : "",
+                            },
+                            bgcolor: emotion == emo ? ReturnEmotionColor(emotion) : "",
+                            color: emotion == emo ? "white" : "",
+                        }}
                     >
                         <Icon icon={EmotionIcon[emo]} />
                     </IconButton>
                 ))}
             </Box>
-            <Box sx={{ textAlign: "center", mb: "30px" }}>{emotion}</Box>
-        </>
+            <Typography variant="h5">{emotion}</Typography>
+        </Box>
     )
 })
 

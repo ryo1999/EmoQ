@@ -77,7 +77,7 @@ export default function SignIn() {
                             margin="normal"
                             fullWidth
                             name="password"
-                            placeholder="英数字6文字以上"
+                            placeholder="6文字以上の英数字"
                             type="password"
                             id="password"
                             autoComplete="current-password"
