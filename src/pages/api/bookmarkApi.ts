@@ -1,6 +1,6 @@
 import { db } from "@/firebase"
 import { QuestionsCollectionData } from "@/utils/types"
-import { collection, addDoc, deleteDoc, doc, query, getDocs, setDoc } from "firebase/firestore/lite"
+import { collection, addDoc, deleteDoc, doc, query, getDocs, setDoc, updateDoc } from "firebase/firestore/lite"
 
 //ブックマークされた時ブックマークのデータベースに追加
 export const addBookMark = async (
@@ -14,7 +14,6 @@ export const addBookMark = async (
     emotion: string,
     parameter: string | number | number[],
     solution: boolean,
-    bookmark_user_id: string[],
     replied_user_id: string[]
 ) => {
     const docRef = doc(db, "users", user_id, "bookmarks", question_id)
@@ -27,7 +26,7 @@ export const addBookMark = async (
         emotion: emotion,
         parameter: parameter,
         solution: solution,
-        bookmark_user_id: bookmark_user_id,
+        bookmark_user_id: [user_id],
         replied_user_id: replied_user_id,
     }
     await setDoc(docRef, data)
@@ -72,3 +71,10 @@ export const getBookMarkQuestionId = async (user_id: string) => {
     })
     return bookmarkIdList
 }
+
+//bookmarks内のbookmark_idのフィールドのbookmark_user_idにブックマークした人のuidを追加する
+// export const upDateBookmarkField = async(user_id:string, question_id:string)=>{
+//     await updateDoc(doc(db,"users",user_id,"bookmarks",question_id),{
+//         bookmark_user_id:[user_id]
+//     })
+// }

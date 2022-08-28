@@ -107,7 +107,6 @@ const CardDetail = React.memo((props: CardContentProps) => {
                 value.emotion,
                 value.parameter,
                 value.solution,
-                value.bookmark_user_id,
                 value.replied_user_id
             )
             await upDateQuestionBookmark(value.question_id, value.bookmark_user_id, userState.userId)

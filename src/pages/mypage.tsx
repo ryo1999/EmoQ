@@ -15,6 +15,7 @@ import { solvedQuestions } from "@/store/solvedQuestions"
 import { unSolvedQuestions } from "@/store/unSolvedQuestions"
 import { userInfo } from "@/store/userInfo"
 import { getMyQuestion } from "./api/questionApi"
+import { getBookMark } from "./api/bookmarkApi"
 import { QuestionsCollectionData } from "@/utils/types"
 
 export default function MyPage() {
@@ -31,7 +32,12 @@ export default function MyPage() {
                 setMyQuestions(question)
             })
             .catch((error) => console.log(error))
-    }, [unSolvedQuestionList,solvedQuestionList])
+        getBookMark(userState.userId)
+            .then((bookmark) => {
+                setBookMarkQuestions(bookmark)
+            })
+            .catch((error) => console.log(error))
+    }, [unSolvedQuestionList, solvedQuestionList])
 
     const handleChange = (event: React.SyntheticEvent, newValue: number) => {
         setValue(newValue)
@@ -41,7 +47,7 @@ export default function MyPage() {
         <div>
             <Appbar />
             <Toolbar />
-            <div style={{ margin: "0 auto", maxWidth: "800px" }}>
+            <div>
                 <Box>
                     <IconButton onClick={() => router.push("/home")} sx={{ mt: "5px" }}>
                         <ArrowBackIcon sx={{ color: "black", fontSize: "20px" }} />
@@ -72,14 +78,9 @@ export default function MyPage() {
                         <Tab label="ブックマーク" sx={{ minWidth: "50%" }} />
                     </Tabs>
                     <Box>
-                        {value === 0 &&
-                            myQuestions.map((value, index) => (
-                                <CardDetail key={index} value={value} />
-                            ))}
+                        {value === 0 && myQuestions.map((value, index) => <CardDetail key={index} value={value} />)}
                         {value === 1 &&
-                            bookMarkQuestions.map((value, index) => (
-                                <CardDetail key={index} value={value} />
-                            ))}
+                            bookMarkQuestions.map((value, index) => <CardDetail key={index} value={value} />)}
                     </Box>
                 </Box>
             </div>
