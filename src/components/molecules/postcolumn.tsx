@@ -88,7 +88,6 @@ export default function PostColumn(props: PostColumnProps) {
     }, [tag])
 
     React.useEffect(() => {
-        console.log(question)
         if (question === "" || !question.match(/\S/g)) {
             setQuestionErrorMesseage("必ず記入してください")
             setQuestionValidation(true)

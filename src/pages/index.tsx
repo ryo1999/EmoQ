@@ -56,8 +56,11 @@ export default function SignIn() {
                         alignItems: "center",
                     }}
                 >
-                    <Typography variant="h2" sx={{ mb: "50px" }}>
+                    <Typography variant="h2" sx={{ mb: "20px" }}>
                         EmoQ
+                    </Typography>
+                    <Typography variant="h4" sx={{ mb: "50px" }}>
+                        ログイン
                     </Typography>
                     <Box sx={{ mt: 1, width: "100%" }}>
                         <Typography variant="h6">メールアドレス*</Typography>
@@ -91,6 +94,7 @@ export default function SignIn() {
                             loading={loading}
                             variant="contained"
                             sx={{ mt: 3, mb: 2 }}
+                            disabled={email=="" || password==""}
                         >
                             ログイン
                         </LoadingButton>

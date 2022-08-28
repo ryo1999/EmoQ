@@ -49,6 +49,7 @@ const CardDetail = React.memo((props: CardContentProps) => {
     const dateString = value.time.toLocaleString()
     const dateToDate = Date.parse(dateString)
     const date = format(dateToDate, "MM/dd HH:mm")
+    const dateTime = format(dateToDate, "HH:mm")
 
     React.useEffect(() => {
         getComment(value.question_id)
@@ -190,10 +191,10 @@ const CardDetail = React.memo((props: CardContentProps) => {
                 }
                 title={value.contributor_name}
                 subheader={
-                    <Typography variant="caption">{today.slice(3, 5) === date.slice(3, 5) ? "今日" : date}</Typography>
+                    <Typography variant="caption">{today.slice(3, 5) === date.slice(3, 5) ? `今日：${dateTime}` : date}</Typography>
                 }
             />
-            <CardContent sx={{ ml: "55px", maxWidth: "650px" }}>
+            <CardContent sx={{ ml: "55px", maxWidth: "460px" }}>
                 <Typography variant="body2">{value.question}</Typography>
             </CardContent>
             <CardActions sx={{ justifyContent: "space-between" }}>
