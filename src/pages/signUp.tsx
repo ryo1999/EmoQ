@@ -21,24 +21,27 @@ export default function SignUp() {
     const [email, setEmail] = React.useState("")
     const [password, setPassword] = React.useState("")
     const [nameValidation, setNameValidation] = React.useState(0)
-    const [nameErrorMesseage, setNameErrorMesseage] = React.useState("")
+    const [nameErrorMessage, setNameErrorMessage] = React.useState("")
     const [emailValidation, setEmailValidation] = React.useState(0)
-    const [emailErrorMesseage, setEmailErrorMesseage] = React.useState("")
+    const [emailErrorMessage, setEmailErrorMessage] = React.useState("")
     const [passwordValidation, setPasswordValidation] = React.useState(0)
-    const [passwordErrorMesseage, setPasswordErrorMesseage] = React.useState("")
+    const [passwordErrorMessage, setPasswordErrorMessage] = React.useState("")
 
-    //0なら初期状態、1オッケー、2ならエラー
+    //0初期レンダリング時、1初期状態、2エラー、3異常なし
     React.useEffect(() => {
         if (nameValidation === 0) {
             setNameValidation(1)
         } else if (accountName === "" || !accountName.match(/\S/g)) {
-            setNameErrorMesseage("必須項目です")
+            setNameErrorMessage("必須項目です")
             setNameValidation(2)
-        } else if (accountName[0] === " " || accountName[accountName.length - 1] === " ") {
-            setNameErrorMesseage("空白が含まれています")
+        } else if (accountName[0] === " " || accountName[0] === "　") {
+            setNameErrorMessage("空白で始めることはできません")
             setNameValidation(2)
-        } else if (nameValidation === 2) {
-            setNameValidation(1)
+        } else if (accountName[accountName.length - 1] === " " || accountName[accountName.length - 1] === "　") {
+            setNameErrorMessage("空白で終わることはできません")
+            setNameValidation(2)
+        } else if (nameValidation === 1 || nameValidation === 2) {
+            setNameValidation(3)
         }
     }, [accountName])
 
@@ -46,10 +49,10 @@ export default function SignUp() {
         if (emailValidation === 0) {
             setEmailValidation(1)
         } else if (email === "" || !email.match(/\S/g)) {
-            setEmailErrorMesseage("必須項目です")
+            setEmailErrorMessage("必須項目です")
             setEmailValidation(2)
         } else if (email.indexOf(" ") !== -1) {
-            setEmailErrorMesseage("空白が含まれています")
+            setEmailErrorMessage("空白が含まれています")
             setEmailValidation(2)
         } else if (
             email.indexOf("@") === -1 ||
@@ -58,10 +61,10 @@ export default function SignUp() {
             email[0] === "@" ||
             (email.indexOf("@") > email.indexOf(".com") && email.indexOf("@") > email.indexOf(".jp"))
         ) {
-            setEmailErrorMesseage("メールアドレスの形式として正しくありません")
+            setEmailErrorMessage("メールアドレスの形式として正しくありません")
             setEmailValidation(2)
-        } else if (emailValidation === 2) {
-            setEmailValidation(1)
+        } else if (emailValidation === 1 || emailValidation === 2) {
+            setEmailValidation(3)
         }
     }, [email])
 
@@ -69,16 +72,16 @@ export default function SignUp() {
         if (passwordValidation === 0) {
             setPasswordValidation(1)
         } else if (password === "" || !password.match(/\S/g)) {
-            setPasswordErrorMesseage("必須項目です")
+            setPasswordErrorMessage("必須項目です")
             setPasswordValidation(2)
         } else if (password.indexOf(" ") !== -1) {
-            setPasswordErrorMesseage("空白が含まれています")
+            setPasswordErrorMessage("空白が含まれています")
             setPasswordValidation(2)
         } else if (password.length < 6) {
-            setPasswordErrorMesseage("文字数が足りていません")
+            setPasswordErrorMessage("文字数が足りていません")
             setPasswordValidation(2)
-        } else if (passwordValidation === 2) {
-            setPasswordValidation(1)
+        } else if (passwordValidation === 1 || passwordValidation === 2) {
+            setPasswordValidation(3)
         }
     }, [password])
 
@@ -92,7 +95,7 @@ export default function SignUp() {
             })
             .catch((error) => {
                 setLoading(false)
-                toast.error("登録できませんでした")
+                toast.error("登録に失敗しました")
             })
     }
 
@@ -114,6 +117,7 @@ export default function SignUp() {
                     <Box sx={{ mt: 1, width: "100%" }}>
                         <Typography variant="h6">アカウント名*</Typography>
                         <TextField
+                            error={nameValidation === 2}
                             margin="normal"
                             fullWidth
                             id="account"
@@ -121,12 +125,13 @@ export default function SignUp() {
                             name="account"
                             autoComplete="account"
                             autoFocus
-                            helperText={nameValidation === 2 ? nameErrorMesseage : ""}
+                            helperText={nameValidation === 2 ? nameErrorMessage : ""}
                             sx={{ mb: "30px" }}
                             onChange={(e) => setAccountName(e.target.value)}
                         />
                         <Typography variant="h6">メールアドレス*</Typography>
                         <TextField
+                            error={emailValidation === 2}
                             margin="normal"
                             fullWidth
                             id="email"
@@ -134,12 +139,13 @@ export default function SignUp() {
                             name="email"
                             autoComplete="email"
                             autoFocus
-                            helperText={emailValidation === 2 ? emailErrorMesseage : ""}
+                            helperText={emailValidation === 2 ? emailErrorMessage : ""}
                             sx={{ mb: "30px" }}
                             onChange={(e) => setEmail(e.target.value)}
                         />
                         <Typography variant="h6">パスワード*</Typography>
                         <TextField
+                            error={passwordValidation === 2}
                             margin="normal"
                             fullWidth
                             name="password"
@@ -147,7 +153,7 @@ export default function SignUp() {
                             type="password"
                             id="password"
                             autoComplete="current-password"
-                            helperText={passwordValidation === 2 ? passwordErrorMesseage : ""}
+                            helperText={passwordValidation === 2 ? passwordErrorMessage : ""}
                             onChange={(e) => setPassword(e.target.value)}
                         />
                         <LoadingButton
@@ -157,7 +163,7 @@ export default function SignUp() {
                             loading={loading}
                             variant="contained"
                             sx={{ mt: 3, mb: 2 }}
-                            disabled={nameValidation == 2 || emailValidation == 2 || passwordValidation == 2}
+                            disabled={nameValidation !== 3 || emailValidation !== 3 || passwordValidation !== 3}
                         >
                             登録
                         </LoadingButton>

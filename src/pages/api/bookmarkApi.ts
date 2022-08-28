@@ -72,9 +72,9 @@ export const getBookMarkQuestionId = async (user_id: string) => {
     return bookmarkIdList
 }
 
-//bookmarks内のbookmark_idのフィールドのbookmark_user_idにブックマークした人のuidを追加する
-// export const upDateBookmarkField = async(user_id:string, question_id:string)=>{
-//     await updateDoc(doc(db,"users",user_id,"bookmarks",question_id),{
-//         bookmark_user_id:[user_id]
-//     })
-// }
+//質問を削除した時全員のブックマークから削除
+export const deleteBookMarkQuestion = async(question_id:string,bookmark_user_id:string[])=>{
+    bookmark_user_id.forEach(user_id=>{
+        deleteDoc(doc(db,"users",user_id,"bookmarks",question_id))
+    })
+}

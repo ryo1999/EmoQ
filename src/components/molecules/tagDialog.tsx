@@ -19,18 +19,26 @@ type TagDialogProps = {
 const TagDialog = React.memo((props: TagDialogProps) => {
     const { tagList, isOpenTagDialog, setOpenTagDialog, setTagList } = props
     const [newTag, setNewTag] = React.useState("")
-    const [tagValidation, setTagValidation] = React.useState(true)
-    const [errorMesseage, setErrorMeeseage] = React.useState("")
+    const [tagValidation, setTagValidation] = React.useState(0)
+    const [errorMessage, setErrorMessage] = React.useState("")
 
     React.useEffect(() => {
-        if (newTag === "") {
-            setErrorMeeseage("")
-            setTagValidation(true)
-        }else if(tagList.includes(newTag)){
-            setErrorMeeseage("すでに存在します")
-            setTagValidation(true)
-        }else{
-            setTagValidation(false)
+        if (tagValidation === 0) {
+            setTagValidation(1)
+        } else if (newTag === "" || !newTag.match(/\S/g)) {
+            setErrorMessage("必須項目です")
+            setTagValidation(2)
+        } else if (tagList.includes(newTag)) {
+            setErrorMessage("すでに存在します")
+            setTagValidation(2)
+        } else if (newTag[0] === " " || newTag[0] === "　") {
+            setErrorMessage("空白で始めることはできません")
+            setTagValidation(2)
+        } else if (newTag[newTag.length - 1] === " " || newTag[newTag.length - 1] === "　") {
+            setErrorMessage("空白で終わることはできません")
+            setTagValidation(2)
+        } else if (tagValidation === 1 || tagValidation === 2) {
+            setTagValidation(3)
         }
     }, [newTag])
 
@@ -41,9 +49,9 @@ const TagDialog = React.memo((props: TagDialogProps) => {
     const handleTagClose = () => {
         setOpenTagDialog(false)
         setTimeout(() => {
-            setErrorMeeseage("")
-            setTagValidation(true)
-        },500)
+            setErrorMessage("")
+            setTagValidation(0)
+        }, 500)
     }
 
     const handleTagSave = async () => {
@@ -59,25 +67,27 @@ const TagDialog = React.memo((props: TagDialogProps) => {
                 <Box
                     component="form"
                     sx={{
+                        "& > :not(style)": { width: "400px" },
                         maxHeight: "300px",
-                        paddingTop:"10px",
+                        paddingTop: "10px",
                     }}
                     noValidate
                     autoComplete="name"
                 >
                     <TextField
+                        error={tagValidation === 2}
                         id="outlined-basic"
                         variant="outlined"
                         multiline
                         label="タグ名"
-                        helperText={tagValidation ? errorMesseage : ""}
+                        helperText={tagValidation === 2 ? errorMessage : ""}
                         onChange={(e) => handleCreateTag(e.target.value)}
                     />
                 </Box>
             </DialogContent>
             <DialogActions>
                 <Button onClick={handleTagClose}>キャンセル</Button>
-                <Button disabled={tagValidation} onClick={handleTagSave}>
+                <Button disabled={tagValidation !== 3} onClick={handleTagSave}>
                     保存
                 </Button>
             </DialogActions>

@@ -1,5 +1,5 @@
 import { db } from "@/firebase"
-import { collection, getDocs, query, addDoc, orderBy, updateDoc, doc } from "firebase/firestore/lite"
+import { collection, getDocs, query, addDoc, orderBy, updateDoc, doc, deleteDoc } from "firebase/firestore/lite"
 import { QuestionsCollectionData } from "@/utils/types"
 
 //質問全部を取ってくる
@@ -102,16 +102,21 @@ export const upDateQuestionSolution = async (question_id: string, solution: bool
 }
 
 //ブックマークされた質問のbookmark_user_idにブックマークした人のuidを追加する
-export const upDateQuestionBookmark = async (question_id: string, bookmark_user_id:string[], uid: string) => {
+export const upDateQuestionBookmark = async (question_id: string, bookmark_user_id: string[], uid: string) => {
     await updateDoc(doc(db, "questions", question_id), {
-        bookmark_user_id: [...bookmark_user_id,uid],
+        bookmark_user_id: [...bookmark_user_id, uid],
     })
 }
 
 //ブックマークが解除された時に質問のbookmark_user_idからその人のuidを削除
-export const deleteQuestionBookmark = async (question_id: string, bookmark_user_id:string[], uid: string) => {
-    const users = bookmark_user_id.filter(users=>(users.match(uid))==null)
+export const deleteQuestionBookmark = async (question_id: string, bookmark_user_id: string[], uid: string) => {
+    const users = bookmark_user_id.filter((users) => users.match(uid) == null)
     await updateDoc(doc(db, "questions", question_id), {
         bookmark_user_id: users,
     })
+}
+
+//質問を削除した時、questionsコレクションから削除
+export const deleteQuestion = async (question_id: string) => {
+    await deleteDoc(doc(db, "questions", question_id))
 }

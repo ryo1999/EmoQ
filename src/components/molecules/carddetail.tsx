@@ -2,7 +2,7 @@ import React from "react"
 import { format } from "date-fns"
 import ReturnIcon from "../atoms/returnIcon"
 import { ReturnEmotionColor } from "@/utils/commonFunctions/returnEmotionColor"
-import { Box, Tooltip } from "@mui/material"
+import { Box, Menu, MenuItem, Tooltip } from "@mui/material"
 import Card from "@mui/material/Card"
 import CardActions from "@mui/material/CardActions"
 import CardContent from "@mui/material/CardContent"
@@ -17,18 +17,21 @@ import BookmarkIcon from "@mui/icons-material/Bookmark"
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline"
 import CheckCircleIcon from "@mui/icons-material/CheckCircle"
 import CommentIcon from "@mui/icons-material/Comment"
+import MoreHorizIcon from "@mui/icons-material/MoreHoriz"
+import DeleteIcon from "@mui/icons-material/Delete"
 import { useRecoilValue } from "recoil"
 import { useSetRecoilState } from "recoil"
 import { solvedQuestions } from "@/store/solvedQuestions"
 import { unSolvedQuestions } from "@/store/unSolvedQuestions"
 import { userInfo } from "@/store/userInfo"
 import { getComment } from "@/pages/api/commentApi"
-import { addBookMark, deleteBookMark } from "@/pages/api/bookmarkApi"
+import { addBookMark, deleteBookMark, deleteBookMarkQuestion } from "@/pages/api/bookmarkApi"
 import {
     upDateQuestionSolution,
     upDateQuestionBookmark,
     getQuestion,
     deleteQuestionBookmark,
+    deleteQuestion
 } from "@/pages/api/questionApi"
 import { QuestionsCollectionData } from "@/utils/types"
 
@@ -44,6 +47,7 @@ const CardDetail = React.memo((props: CardContentProps) => {
     const [bookMark, setBookMark] = React.useState(false)
     const [checkMark, setCheckMark] = React.useState(false)
     const [commentLength, setCommentLength] = React.useState(0)
+    const [menuAnchorEl, setMenuAnchorEl] = React.useState<null | HTMLElement>(null)
 
     const today = format(new Date(), "MM/dd HH:mm")
     const dateString = value.time.toLocaleString()
@@ -59,21 +63,21 @@ const CardDetail = React.memo((props: CardContentProps) => {
             .catch((error) => console.log(error))
     }, [])
 
-    React.useEffect(()=>{
-        if (value.bookmark_user_id.indexOf(userState.userId)!==-1){
+    React.useEffect(() => {
+        if (value.bookmark_user_id.indexOf(userState.userId) !== -1) {
             setBookMark(true)
-        }else{
+        } else {
             setBookMark(false)
         }
-    },[value.bookmark_user_id])
+    }, [value.bookmark_user_id])
 
-    React.useEffect(()=>{
-        if (value.solution==true){
+    React.useEffect(() => {
+        if (value.solution == true) {
             setCheckMark(true)
-        }else{
+        } else {
             setCheckMark(false)
         }
-    },[value.solution])
+    }, [value.solution])
 
     const handleClickCheckMark = async () => {
         await upDateQuestionSolution(value.question_id, !checkMark)
@@ -90,11 +94,11 @@ const CardDetail = React.memo((props: CardContentProps) => {
             await deleteBookMark(userState.userId, value.question_id)
             await deleteQuestionBookmark(value.question_id, value.bookmark_user_id, userState.userId)
             await getQuestion()
-            .then((Q) => {
-                setSolvedQuestions(Q[1])
-                setUnSolvedQuestions(Q[0])
-            })
-            .catch((error) => console.log(error))
+                .then((Q) => {
+                    setSolvedQuestions(Q[1])
+                    setUnSolvedQuestions(Q[0])
+                })
+                .catch((error) => console.log(error))
         } else {
             await addBookMark(
                 userState.userId,
@@ -111,12 +115,30 @@ const CardDetail = React.memo((props: CardContentProps) => {
             )
             await upDateQuestionBookmark(value.question_id, value.bookmark_user_id, userState.userId)
             await getQuestion()
+                .then((Q) => {
+                    setSolvedQuestions(Q[1])
+                    setUnSolvedQuestions(Q[0])
+                })
+                .catch((error) => console.log(error))
+        }
+    }
+
+    const handleClickMenu = (event: React.MouseEvent<HTMLElement>) => {
+        setMenuAnchorEl(event.currentTarget)
+    }
+    const handleCloseMenu = () => {
+        setMenuAnchorEl(null)
+    }
+    const handleClickDelete = async () => {
+        setMenuAnchorEl(null)
+        // deleteBookMarkQuestion(value.question_id,value.bookmark_user_id)
+        await deleteQuestion(value.question_id)
+        await getQuestion()
             .then((Q) => {
                 setSolvedQuestions(Q[1])
                 setUnSolvedQuestions(Q[0])
             })
             .catch((error) => console.log(error))
-        }
     }
 
     return (
@@ -127,23 +149,50 @@ const CardDetail = React.memo((props: CardContentProps) => {
                 borderRadius: "10px",
             }}
         >
-            <Box sx={{ display: "flex", ml: "5px" }}>
-                {value.tag.map((v, i) => (
-                    <Tooltip key={v} title={v} placement="top">
-                        <Chip
-                            key={i}
-                            label={v}
-                            sx={{
-                                cursor: "pointer",
-                                mt: "10px",
-                                mr: "5px",
-                                bgcolor: "#24292f",
-                                color: "white",
-                                maxWidth: "150px",
-                            }}
-                        />
-                    </Tooltip>
-                ))}
+            <Box sx={{ display: "flex", m: "0px 5px", justifyContent: "space-between" }}>
+                <Box>
+                    {value.tag.map((v, i) => (
+                        <Tooltip key={v} title={v} placement="top">
+                            <Chip
+                                key={i}
+                                label={v}
+                                sx={{
+                                    cursor: "pointer",
+                                    mt: "10px",
+                                    mr: "5px",
+                                    bgcolor: "#24292f",
+                                    color: "white",
+                                    maxWidth: "150px",
+                                }}
+                            />
+                        </Tooltip>
+                    ))}
+                </Box>
+                {value.contributor_id===userState.userId ? (
+                <IconButton onClick={handleClickMenu} sx={{ mt: "5px" }}>
+                    <MoreHorizIcon />
+                </IconButton>
+                ) : <></>}
+                <Menu
+                    id="menu-appbar"
+                    anchorEl={menuAnchorEl}
+                    anchorOrigin={{
+                        vertical: "bottom",
+                        horizontal: "right",
+                    }}
+                    keepMounted
+                    transformOrigin={{
+                        vertical: "top",
+                        horizontal: "right",
+                    }}
+                    open={Boolean(menuAnchorEl)}
+                    onClose={handleCloseMenu}
+                >
+                    <MenuItem onClick={handleClickDelete}>
+                        <DeleteIcon sx={{ mr: "20px" }} />
+                        削除
+                    </MenuItem>
+                </Menu>
             </Box>
             <Box sx={{ display: "flex", justifyContent: "right", alignItems: "center", mt: "10px" }}>
                 <Typography variant="caption" sx={{ mr: "20px" }}>
@@ -168,7 +217,7 @@ const CardDetail = React.memo((props: CardContentProps) => {
                 >
                     {value.parameter}
                 </Box>
-                <Tooltip title={value.emotion} placement="top">
+                <Tooltip title={value.emotion} placement="bottom">
                     <IconButton
                         disableRipple
                         sx={{
@@ -190,7 +239,9 @@ const CardDetail = React.memo((props: CardContentProps) => {
                 }
                 title={value.contributor_name}
                 subheader={
-                    <Typography variant="caption">{today.slice(3, 5) === date.slice(3, 5) ? `今日：${dateTime}` : date}</Typography>
+                    <Typography variant="caption">
+                        {today.slice(3, 5) === date.slice(3, 5) ? `今日：${dateTime}` : date}
+                    </Typography>
                 }
             />
             <CardContent sx={{ ml: "55px", maxWidth: "460px" }}>

@@ -9,9 +9,8 @@ import FormControl from "@mui/material/FormControl"
 import Select, { SelectChangeEvent } from "@mui/material/Select"
 import Slider from "@mui/material/Slider"
 import Button from "@mui/material/Button"
-import Input from "@mui/material/Input"
 import TextField from "@mui/material/TextField"
-import { FormHelperText } from "@mui/material"
+import { FormHelperText, Tooltip } from "@mui/material"
 import Typography from "@mui/material/Typography"
 import Chip from "@mui/material/Chip"
 import Dialog from "@mui/material/Dialog"
@@ -39,7 +38,7 @@ type PostColumnProps = {
 const MenuProps = {
     PaperProps: {
         style: {
-            maxHeight: "1000px",
+            maxHeight: "250px",
             overflow: "auto",
         },
     },
@@ -63,10 +62,10 @@ export default function PostColumn(props: PostColumnProps) {
     const [tag, setTag] = React.useState<string[]>([])
     const [emotion, setEmotion] = React.useState("焦り")
     const [tagList, setTagList] = React.useState<string[]>([])
-    const [questionValidation, setQuestionValidation] = React.useState(true)
-    const [questionErrorMesseage, setQuestionErrorMesseage] = React.useState("必ず記入してください")
-    const [tagExist, setTagExist] = React.useState(true)
-    const [tagErrorMesseage, setTagErrorMesseage] = React.useState("最低1つは選択してください")
+    const [questionValidation, setQuestionValidation] = React.useState(0)
+    const [questionErrorMessage, setQuestionErrorMessage] = React.useState("")
+    const [tagExist, setTagExist] = React.useState(0)
+    const [tagErrorMessage, setTagErrorMessage] = React.useState("")
 
     React.useEffect(() => {
         getTag()
@@ -79,34 +78,42 @@ export default function PostColumn(props: PostColumnProps) {
     }, [])
 
     React.useEffect(() => {
-        if (tag.length == 0) {
-            setTagErrorMesseage("最低1つは選択してください")
-            setTagExist(true)
-        } else {
-            setTagExist(false)
+        if (tagExist === 0) {
+            setTagExist(1)
+        } else if (tag.length === 0) {
+            setTagErrorMessage("最低1つは選択してください")
+            setTagExist(2)
+        } else if (tagExist === 1 || tagExist === 2) {
+            setTagExist(3)
         }
     }, [tag])
 
     React.useEffect(() => {
-        if (question === "" || !question.match(/\S/g)) {
-            setQuestionErrorMesseage("必ず記入してください")
-            setQuestionValidation(true)
-        } else if (questionValidation === true) {
-            setQuestionValidation(false)
+        if (questionValidation === 0) {
+            setQuestionValidation(1)
+        } else if (question === "" || !question.match(/\S/g)) {
+            setQuestionErrorMessage("必須項目です")
+            setQuestionValidation(2)
+        } else if (question[0] === " " || question[0] === "　") {
+            setQuestionErrorMessage("空白で始めることはできません")
+            setQuestionValidation(2)
+        } else if (question[question.length - 1] === " " || question[question.length - 1] === "　") {
+            setQuestionErrorMessage("空白で終わることはできません")
+            setQuestionValidation(2)
+        } else if (questionValidation === 1 || questionValidation === 2) {
+            setQuestionValidation(3)
         }
     }, [question])
 
-    const returnTop = () => {
-        window.scrollTo({
-            top: 0,
-            behavior: "smooth",
-        })
-    }
     const initializeState = () => {
         setParameter(0)
         setQuestion("")
         setTag([])
         setEmotion("焦り")
+        setQuestionValidation(0)
+        setQuestionErrorMessage("")
+        setTagExist(0)
+        setTagErrorMessage("")
     }
 
     const getStyles = (name: string, tag: string | string[], theme: Theme) => {
@@ -167,7 +174,6 @@ export default function PostColumn(props: PostColumnProps) {
             })
             .catch((error) => console.log(error))
         initializeState()
-        returnTop()
     }
     const handleCancelClick = () => {
         setOpenFormDialog(false)
@@ -187,6 +193,11 @@ export default function PostColumn(props: PostColumnProps) {
                 fullScreen
                 open={isOpenFormDialog}
                 onClose={() => setOpenFormDialog(false)}
+                PaperProps={{
+                    style: {
+                      backgroundColor: "#e2efff",
+                    },
+                }}
             >
                 <AppBar sx={{ position: "relative", bgcolor: "#24292f" }}>
                     <Toolbar>
@@ -197,7 +208,7 @@ export default function PostColumn(props: PostColumnProps) {
                             投稿フォーム
                         </Typography>
                         <Button
-                            disabled={questionValidation || tagExist}
+                            disabled={questionValidation !== 3 || tagExist !== 3}
                             color="inherit"
                             onClick={handleSubmitClick}
                             sx={{ fontSize: "18px", "&:disabled": { color: "#747474" } }}
@@ -207,7 +218,7 @@ export default function PostColumn(props: PostColumnProps) {
                     </Toolbar>
                 </AppBar>
                 <DialogContent
-                    sx={{ display: "flex", justifyContent: "space-around", textAlign: "center", mt: "80px" }}
+                    sx={{ display: "flex", justifyContent: "space-around", textAlign: "center", mt: "50px" }}
                 >
                     <div style={{ marginRight: "-100px" }}>
                         <Typography variant="h6">今の感情は？</Typography>
@@ -224,35 +235,24 @@ export default function PostColumn(props: PostColumnProps) {
                                 step={10}
                                 min={0}
                                 max={100}
-                                sx={{ width: "200px" }}
+                                sx={{ width: "200px", color:"black" }}
                             />
                             <Box sx={{ width: "40px", ml: "20px" }}>
-                                <IconButton onClick={handleClickUp} sx={{mb:"-10px",p: "0px" }}>
+                                <IconButton onClick={handleClickUp} sx={{ mb: "-10px", p: "0px" }}>
                                     <ArrowDropUpIcon sx={{ fontSize: "40px" }} />
                                 </IconButton>
                                 {parameter}
-                                <IconButton onClick={handleClickDown} sx={{ mt:"-10px", p: "0px" }}>
+                                <IconButton onClick={handleClickDown} sx={{ mt: "-10px", p: "0px" }}>
                                     <ArrowDropDownIcon sx={{ fontSize: "40px" }} />
                                 </IconButton>
                             </Box>
-                            {/* <Input
-                                disabled
-                                value={parameter}
-                                onChange={(e) => setParameter(Number(e.target.value))}
-                                sx={{
-                                    width: "40px",
-                                    fontSize: "20px",
-                                    "&:disabled": { color: "black" },
-                                    m: "-5px 0px 10px 20px",
-                                }}
-                            /> */}
                         </Box>
                         <Typography variant="h6" sx={{ display: "inline" }}>
                             タグを選択
                         </Typography>
                         <Typography variant="caption">(最大3個)</Typography>
                         <Box sx={{ m: "10px 0px 10px 0px" }}>
-                            <FormControl required sx={{ maxWidth: "400px" }} size="small">
+                            <FormControl required error={tagExist === 2} sx={{ width: "300px" }} size="small">
                                 <InputLabel id="simple-select-label">タグ</InputLabel>
                                 <Select
                                     labelId="simple-select-label"
@@ -265,16 +265,18 @@ export default function PostColumn(props: PostColumnProps) {
                                     renderValue={(selected) => (
                                         <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1.0 }}>
                                             {selected.map((value: string) => (
-                                                <Chip
-                                                    key={value}
-                                                    label={value}
-                                                    sx={{
-                                                        fontSize: "18px",
-                                                        color: "white",
-                                                        bgcolor: "#24292f",
-                                                        maxWidth: "250px",
-                                                    }}
-                                                />
+                                                <Tooltip key={value} title={value} placement="top">
+                                                    <Chip
+                                                        key={value}
+                                                        label={value}
+                                                        sx={{
+                                                            fontSize: "18px",
+                                                            color: "white",
+                                                            bgcolor: "#24292f",
+                                                            maxWidth: "250px",
+                                                        }}
+                                                    />
+                                                </Tooltip>
                                             ))}
                                         </Box>
                                     )}
@@ -290,11 +292,12 @@ export default function PostColumn(props: PostColumnProps) {
                                     ))}
                                     <MenuItem onClick={handleClickTagOpen}>新しく作る</MenuItem>
                                 </Select>
-                                <FormHelperText>{tagExist ? tagErrorMesseage : ""}</FormHelperText>
+                                <FormHelperText>{tagExist === 2 ? tagErrorMessage : ""}</FormHelperText>
                             </FormControl>
                         </Box>
                     </div>
                     <div style={{ marginLeft: "-100px" }}>
+                        <Typography variant="h6">質問内容</Typography>
                         <Box
                             component="form"
                             sx={{
@@ -306,13 +309,14 @@ export default function PostColumn(props: PostColumnProps) {
                             autoComplete="off"
                         >
                             <TextField
+                                error={questionValidation === 2}
                                 required
                                 id="outlined-basic"
                                 multiline
                                 value={question}
                                 InputProps={{ style: { fontSize: "20px" } }}
                                 label="質問内容"
-                                helperText={questionValidation ? questionErrorMesseage : ""}
+                                helperText={questionValidation === 2 ? questionErrorMessage : ""}
                                 onChange={(e) => setQuestion(e.target.value)}
                                 variant="outlined"
                                 sx={{ mt: "20px" }}
