@@ -1,6 +1,16 @@
 import { db } from "@/firebase"
 import { QuestionsCollectionData } from "@/utils/types"
-import { collection, addDoc, deleteDoc, doc, query, getDocs, setDoc, updateDoc } from "firebase/firestore/lite"
+import {
+    collection,
+    addDoc,
+    deleteDoc,
+    doc,
+    query,
+    getDocs,
+    setDoc,
+    updateDoc,
+    orderBy,
+} from "firebase/firestore/lite"
 
 //ブックマークされた時ブックマークのデータベースに追加
 export const addBookMark = async (
@@ -33,30 +43,47 @@ export const addBookMark = async (
 }
 
 //ブックマークを外された時、bookmarksコレクションのデータベースから削除
-export const deleteBookMark = async (user_id: string, question_id:string) => {
+export const deleteBookMark = async (user_id: string, question_id: string) => {
     await deleteDoc(doc(db, "users", user_id, "bookmarks", question_id))
 }
 
 //ブックマークした質問を全部取ってくる
 export const getBookMark = async (user_id: string) => {
-    const bookmarkList: QuestionsCollectionData[] = []
-    const bookmarkId = query(collection(db, "users", user_id, "bookmarks"))
+    const bookmarkList: QuestionsCollectionData[][] = [[], []]
+    const bookmarkId = query(collection(db, "users", user_id, "bookmarks"), orderBy("time", "desc"))
     const bookmarkDoc = await getDocs(bookmarkId)
     bookmarkDoc.forEach((doc) => {
-        const bookmarkField = {
-            contributor_id: doc.data().contributor_id,
-            contributor_name: doc.data().contributor_name,
-            question_id: doc.id,
-            question: doc.data().question,
-            tag: doc.data().tag,
-            time: doc.data().time.toDate(),
-            emotion: doc.data().emotion,
-            parameter: doc.data().parameter,
-            solution: doc.data().solution,
-            bookmark_user_id: doc.data().bookmark_user_id,
-            replied_user_id: doc.data().replied_user_id,
+        if (doc.data().solution === false) {
+            const bookmarkField = {
+                contributor_id: doc.data().contributor_id,
+                contributor_name: doc.data().contributor_name,
+                question_id: doc.id,
+                question: doc.data().question,
+                tag: doc.data().tag,
+                time: doc.data().time.toDate(),
+                emotion: doc.data().emotion,
+                parameter: doc.data().parameter,
+                solution: doc.data().solution,
+                bookmark_user_id: doc.data().bookmark_user_id,
+                replied_user_id: doc.data().replied_user_id,
+            }
+            bookmarkList[0].push(bookmarkField)
+        } else {
+            const bookmarkField = {
+                contributor_id: doc.data().contributor_id,
+                contributor_name: doc.data().contributor_name,
+                question_id: doc.id,
+                question: doc.data().question,
+                tag: doc.data().tag,
+                time: doc.data().time.toDate(),
+                emotion: doc.data().emotion,
+                parameter: doc.data().parameter,
+                solution: doc.data().solution,
+                bookmark_user_id: doc.data().bookmark_user_id,
+                replied_user_id: doc.data().replied_user_id,
+            }
+            bookmarkList[1].push(bookmarkField)
         }
-        bookmarkList.push(bookmarkField)
     })
     return bookmarkList
 }
@@ -73,8 +100,21 @@ export const getBookMarkQuestionId = async (user_id: string) => {
 }
 
 //質問を削除した時全員のブックマークから削除
-export const deleteBookMarkQuestion = async(question_id:string,bookmark_user_id:string[])=>{
-    bookmark_user_id.forEach(user_id=>{
-        deleteDoc(doc(db,"users",user_id,"bookmarks",question_id))
+export const deleteBookMarkQuestion = async (question_id: string, bookmark_user_id: string[]) => {
+    bookmark_user_id.forEach((user_id) => {
+        deleteDoc(doc(db, "users", user_id, "bookmarks", question_id))
+    })
+}
+
+//ブックマークしている人の解決された質問idのsolutionをtrueにしたり、未解決に戻された質問をfalseにしたりする
+export const upDateBookmarkSolution = async (
+    question_id: string,
+    bookmark_user_id: string[],
+    solution: boolean
+) => {
+    bookmark_user_id.forEach((user_id) => {
+        updateDoc(doc(db, "users", user_id, "bookmarks", question_id), {
+            solution: solution,
+        })
     })
 }

@@ -10,7 +10,7 @@ import Typography from "@mui/material/Typography"
 import { Icon } from "@iconify/react"
 import { useRecoilValue } from "recoil"
 import { useSetRecoilState } from "recoil"
-import { solvedQuestions} from "@/store/solvedQuestions"
+import { solvedQuestions } from "@/store/solvedQuestions"
 import { unSolvedQuestions } from "@/store/unSolvedQuestions"
 import { getQuestion } from "./api/questionApi"
 
@@ -38,36 +38,29 @@ export default function Home() {
         <div>
             <Appbar />
             <Toolbar />
+            <TagFilter />
             <Box sx={{ display: "flex", justifyContent: "space-around", width: "100%" }}>
                 <div style={{ width: "40%", height: "720px", overflowY: "scroll" }}>
                     <div style={{ display: "flex", justifyContent: "space-between" }}>
                         <Typography variant="h5" sx={{ mt: "7px" }}>
-                            未解決の質問
+                            未解決
                         </Typography>
-                        <TagFilter />
                     </div>
                     <Box>
                         {unSolvedQuestionList.map((value, index) => (
-                            <CardDetail
-                                key={index}
-                                value={value}
-                            />
+                            <CardDetail key={index} value={value} />
                         ))}
                     </Box>
                 </div>
                 <div style={{ width: "40%", height: "720px", overflowY: "scroll" }}>
                     <div style={{ display: "flex", justifyContent: "space-between" }}>
                         <Typography variant="h5" sx={{ mt: "7px" }}>
-                            解決済みの質問
+                            解決済み
                         </Typography>
-                        <TagFilter />
                     </div>
                     <Box>
                         {solvedQuestionList.map((value, index) => (
-                            <CardDetail
-                                key={index}
-                                value={value}
-                            />
+                            <CardDetail key={index} value={value} />
                         ))}
                     </Box>
                 </div>
@@ -86,11 +79,13 @@ export default function Home() {
             >
                 <Icon icon="clarity:note-edit-line" />
             </IconButton>
-            <PostColumn
-                isOpenFormDialog={isOpenFormDialog}
-                setOpenFormDialog={setOpenFormDialog}
-                setUnSolvedQuestions={setUnSolvedQuestions}
-            />
+            {isOpenFormDialog && (
+                <PostColumn
+                    isOpenFormDialog={isOpenFormDialog}
+                    setOpenFormDialog={setOpenFormDialog}
+                    setUnSolvedQuestions={setUnSolvedQuestions}
+                />
+            )}
         </div>
     )
 }

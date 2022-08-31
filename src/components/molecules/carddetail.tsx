@@ -25,13 +25,18 @@ import { solvedQuestions } from "@/store/solvedQuestions"
 import { unSolvedQuestions } from "@/store/unSolvedQuestions"
 import { userInfo } from "@/store/userInfo"
 import { getComment } from "@/pages/api/commentApi"
-import { addBookMark, deleteBookMark, deleteBookMarkQuestion } from "@/pages/api/bookmarkApi"
+import {
+    addBookMark,
+    deleteBookMark,
+    deleteBookMarkQuestion,
+    upDateBookmarkSolution,
+} from "@/pages/api/bookmarkApi"
 import {
     upDateQuestionSolution,
     upDateQuestionBookmark,
     getQuestion,
     deleteQuestionBookmark,
-    deleteQuestion
+    deleteQuestion,
 } from "@/pages/api/questionApi"
 import { QuestionsCollectionData } from "@/utils/types"
 
@@ -81,6 +86,7 @@ const CardDetail = React.memo((props: CardContentProps) => {
 
     const handleClickCheckMark = async () => {
         await upDateQuestionSolution(value.question_id, !checkMark)
+        await upDateBookmarkSolution(value.question_id, value.bookmark_user_id, !checkMark)
         await getQuestion()
             .then((Q) => {
                 setSolvedQuestions(Q[1])
@@ -92,7 +98,11 @@ const CardDetail = React.memo((props: CardContentProps) => {
     const handleClickBookMark = async () => {
         if (value.bookmark_user_id.includes(userState.userId)) {
             await deleteBookMark(userState.userId, value.question_id)
-            await deleteQuestionBookmark(value.question_id, value.bookmark_user_id, userState.userId)
+            await deleteQuestionBookmark(
+                value.question_id,
+                value.bookmark_user_id,
+                userState.userId
+            )
             await getQuestion()
                 .then((Q) => {
                     setSolvedQuestions(Q[1])
@@ -113,7 +123,11 @@ const CardDetail = React.memo((props: CardContentProps) => {
                 value.solution,
                 value.replied_user_id
             )
-            await upDateQuestionBookmark(value.question_id, value.bookmark_user_id, userState.userId)
+            await upDateQuestionBookmark(
+                value.question_id,
+                value.bookmark_user_id,
+                userState.userId
+            )
             await getQuestion()
                 .then((Q) => {
                     setSolvedQuestions(Q[1])
@@ -131,7 +145,7 @@ const CardDetail = React.memo((props: CardContentProps) => {
     }
     const handleClickDelete = async () => {
         setMenuAnchorEl(null)
-        // deleteBookMarkQuestion(value.question_id,value.bookmark_user_id)
+        deleteBookMarkQuestion(value.question_id, value.bookmark_user_id)
         await deleteQuestion(value.question_id)
         await getQuestion()
             .then((Q) => {
@@ -168,11 +182,13 @@ const CardDetail = React.memo((props: CardContentProps) => {
                         </Tooltip>
                     ))}
                 </Box>
-                {value.contributor_id===userState.userId ? (
-                <IconButton onClick={handleClickMenu} sx={{ mt: "5px" }}>
-                    <MoreHorizIcon />
-                </IconButton>
-                ) : <></>}
+                {value.contributor_id === userState.userId ? (
+                    <IconButton onClick={handleClickMenu} sx={{ mt: "5px" }}>
+                        <MoreHorizIcon />
+                    </IconButton>
+                ) : (
+                    <></>
+                )}
                 <Menu
                     id="menu-appbar"
                     anchorEl={menuAnchorEl}
@@ -194,7 +210,9 @@ const CardDetail = React.memo((props: CardContentProps) => {
                     </MenuItem>
                 </Menu>
             </Box>
-            <Box sx={{ display: "flex", justifyContent: "right", alignItems: "center", mt: "10px" }}>
+            <Box
+                sx={{ display: "flex", justifyContent: "right", alignItems: "center", mt: "10px" }}
+            >
                 <Typography variant="caption" sx={{ mr: "20px" }}>
                     緊急度
                 </Typography>
@@ -250,7 +268,11 @@ const CardDetail = React.memo((props: CardContentProps) => {
             <CardActions sx={{ justifyContent: "space-between" }}>
                 <Box>
                     <IconButton onClick={handleClickCheckMark}>
-                        {checkMark ? <CheckCircleIcon sx={{ color: "red" }} /> : <CheckCircleOutlineIcon />}
+                        {checkMark ? (
+                            <CheckCircleIcon sx={{ color: "red" }} />
+                        ) : (
+                            <CheckCircleOutlineIcon />
+                        )}
                     </IconButton>
                 </Box>
                 <Box>

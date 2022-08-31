@@ -105,16 +105,16 @@ export default function PostColumn(props: PostColumnProps) {
         }
     }, [question])
 
-    const initializeState = () => {
-        setParameter(0)
-        setQuestion("")
-        setTag([])
-        setEmotion("焦り")
-        setQuestionValidation(0)
-        setQuestionErrorMessage("")
-        setTagExist(0)
-        setTagErrorMessage("")
-    }
+    // const initializeState = () => {
+    //     setParameter(0)
+    //     setQuestion("")
+    //     setTag([])
+    //     setEmotion("焦り")
+    //     setQuestionValidation(0)
+    //     setQuestionErrorMessage("")
+    //     setTagExist(0)
+    //     setTagErrorMessage("")
+    // }
 
     const getStyles = (name: string, tag: string | string[], theme: Theme) => {
         return {
@@ -173,21 +173,23 @@ export default function PostColumn(props: PostColumnProps) {
                 setUnSolvedQuestions(Q[0])
             })
             .catch((error) => console.log(error))
-        initializeState()
+        // initializeState()
     }
     const handleCancelClick = () => {
         setOpenFormDialog(false)
-        initializeState()
+        // initializeState()
     }
 
     return (
         <>
-            <TagDialog
-                tagList={tagList}
-                isOpenTagDialog={isOpenTagDialog}
-                setOpenTagDialog={setOpenTagDialog}
-                setTagList={setTagList}
-            />
+            {isOpenTagDialog && (
+                <TagDialog
+                    tagList={tagList}
+                    isOpenTagDialog={isOpenTagDialog}
+                    setOpenTagDialog={setOpenTagDialog}
+                    setTagList={setTagList}
+                />
+            )}
             <Dialog
                 TransitionComponent={Transition}
                 fullScreen
@@ -195,7 +197,7 @@ export default function PostColumn(props: PostColumnProps) {
                 onClose={() => setOpenFormDialog(false)}
                 PaperProps={{
                     style: {
-                      backgroundColor: "#e2efff",
+                        backgroundColor: "#e2efff",
                     },
                 }}
             >
@@ -235,7 +237,7 @@ export default function PostColumn(props: PostColumnProps) {
                                 step={10}
                                 min={0}
                                 max={100}
-                                sx={{ width: "200px", color:"black" }}
+                                sx={{ width: "200px", color: "black" }}
                             />
                             <Box sx={{ width: "40px", ml: "20px" }}>
                                 <IconButton onClick={handleClickUp} sx={{ mb: "-10px", p: "0px" }}>

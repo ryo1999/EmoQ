@@ -70,31 +70,48 @@ export const addQuestion = async (
 
 //questionコレクションから自分の投稿したものだけを取得する
 export const getMyQuestion = async (uid: string) => {
-    const myQuestionList: QuestionsCollectionData[] = []
+    const myQuestionList: QuestionsCollectionData[][] = [[], []]
     const questionId = query(collection(db, "questions"), orderBy("time", "desc"))
     const questionDoc = await getDocs(questionId)
     questionDoc.forEach((doc) => {
         if (doc.data().contributor_id === uid) {
-            const questionField = {
-                contributor_id: doc.data().contributor_id,
-                contributor_name: doc.data().contributor_name,
-                question_id: doc.id,
-                question: doc.data().question,
-                tag: doc.data().tag,
-                time: doc.data().time.toDate(),
-                emotion: doc.data().emotion,
-                parameter: doc.data().parameter,
-                solution: doc.data().solution,
-                bookmark_user_id: doc.data().bookmark_user_id,
-                replied_user_id: doc.data().replied_user_id,
+            if (doc.data().solution === false) {
+                const questionField = {
+                    contributor_id: doc.data().contributor_id,
+                    contributor_name: doc.data().contributor_name,
+                    question_id: doc.id,
+                    question: doc.data().question,
+                    tag: doc.data().tag,
+                    time: doc.data().time.toDate(),
+                    emotion: doc.data().emotion,
+                    parameter: doc.data().parameter,
+                    solution: doc.data().solution,
+                    bookmark_user_id: doc.data().bookmark_user_id,
+                    replied_user_id: doc.data().replied_user_id,
+                }
+                myQuestionList[0].push(questionField)
+            } else {
+                const questionField = {
+                    contributor_id: doc.data().contributor_id,
+                    contributor_name: doc.data().contributor_name,
+                    question_id: doc.id,
+                    question: doc.data().question,
+                    tag: doc.data().tag,
+                    time: doc.data().time.toDate(),
+                    emotion: doc.data().emotion,
+                    parameter: doc.data().parameter,
+                    solution: doc.data().solution,
+                    bookmark_user_id: doc.data().bookmark_user_id,
+                    replied_user_id: doc.data().replied_user_id,
+                }
+                myQuestionList[1].push(questionField)
             }
-            myQuestionList.push(questionField)
         }
     })
     return myQuestionList
 }
 
-//解決された質問のsolutionをtrueにしたり、未解決に戻された質問をfalseにしたりする
+//解決された質問idのsolutionをtrueにしたり、未解決に戻された質問をfalseにしたりする
 export const upDateQuestionSolution = async (question_id: string, solution: boolean) => {
     await updateDoc(doc(db, "questions", question_id), {
         solution: solution,
