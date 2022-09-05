@@ -76,8 +76,8 @@ export default function Appbar() {
                                 sx={{
                                     bgcolor: "white",
                                     color: "black",
-                                    width: "30px",
-                                    height: "30px",
+                                    width: "35px",
+                                    height: "35px",
                                     ml: "10px",
                                 }}
                             >
