@@ -105,17 +105,6 @@ export default function PostColumn(props: PostColumnProps) {
         }
     }, [question])
 
-    // const initializeState = () => {
-    //     setParameter(0)
-    //     setQuestion("")
-    //     setTag([])
-    //     setEmotion("焦り")
-    //     setQuestionValidation(0)
-    //     setQuestionErrorMessage("")
-    //     setTagExist(0)
-    //     setTagErrorMessage("")
-    // }
-
     const getStyles = (name: string, tag: string | string[], theme: Theme) => {
         return {
             fontWeight:
@@ -167,17 +156,16 @@ export default function PostColumn(props: PostColumnProps) {
 
     const handleSubmitClick = async () => {
         setOpenFormDialog(false)
+        try{
         await addQuestion(userState.userId, userState.userName, question, tag, new Date(), emotion, parameter, false)
-        getQuestion()
-            .then((Q) => {
+        const Q = await getQuestion()
                 setUnSolvedQuestions(Q[0])
-            })
-            .catch((error) => console.log(error))
-        // initializeState()
+        }catch(error) {
+            console.error(error)
+        }
     }
     const handleCancelClick = () => {
         setOpenFormDialog(false)
-        // initializeState()
     }
 
     return (

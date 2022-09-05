@@ -2,7 +2,6 @@ import { db } from "@/firebase"
 import { QuestionsCollectionData } from "@/utils/types"
 import {
     collection,
-    addDoc,
     deleteDoc,
     doc,
     query,

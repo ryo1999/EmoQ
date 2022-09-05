@@ -8,15 +8,14 @@ import Toolbar from "@mui/material/Toolbar"
 import IconButton from "@mui/material/IconButton"
 import Typography from "@mui/material/Typography"
 import { Icon } from "@iconify/react"
-import { useRecoilValue } from "recoil"
+import { useRecoilState, useRecoilValue } from "recoil"
 import { useSetRecoilState } from "recoil"
 import { solvedQuestions } from "@/store/solvedQuestions"
 import { unSolvedQuestions } from "@/store/unSolvedQuestions"
 import { getQuestion } from "./api/questionApi"
 
 export default function Home() {
-    const unSolvedQuestionList = useRecoilValue(unSolvedQuestions)
-    const setUnSolvedQuestions = useSetRecoilState(unSolvedQuestions)
+    const [unSolvedQuestionList, setUnSolvedQuestions] = useRecoilState(unSolvedQuestions)
     const solvedQuestionList = useRecoilValue(solvedQuestions)
     const setSolvedQuestions = useSetRecoilState(solvedQuestions)
     const [isOpenFormDialog, setOpenFormDialog] = React.useState(false)
@@ -46,19 +45,19 @@ export default function Home() {
                             未解決
                         </Typography>
                     </div>
-                    <Box sx={{height: "650px", overflowY: "scroll"}}>
-                        {unSolvedQuestionList.map((value, index) => (
-                            <CardDetail key={index} value={value} />
-                        ))}
+                    <Box sx={{ height: "650px", overflowY: "scroll" }}>
+                        {unSolvedQuestionList.map((value, index) => {
+                                return <CardDetail key={index} value={value} />
+                        })}
                     </Box>
                 </div>
-                <div style={{ width: "40%"}}>
+                <div style={{ width: "40%" }}>
                     <div>
                         <Typography variant="h5" sx={{ mt: "7px" }}>
                             解決済み
                         </Typography>
                     </div>
-                    <Box sx={{height: "650px", overflowY: "scroll"}}>
+                    <Box sx={{ height: "650px", overflowY: "scroll" }}>
                         {solvedQuestionList.map((value, index) => (
                             <CardDetail key={index} value={value} />
                         ))}

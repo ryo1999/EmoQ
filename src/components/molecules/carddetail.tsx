@@ -25,12 +25,7 @@ import { solvedQuestions } from "@/store/solvedQuestions"
 import { unSolvedQuestions } from "@/store/unSolvedQuestions"
 import { userInfo } from "@/store/userInfo"
 import { getComment } from "@/pages/api/commentApi"
-import {
-    addBookMark,
-    deleteBookMark,
-    deleteBookMarkQuestion,
-    upDateBookmarkSolution,
-} from "@/pages/api/bookmarkApi"
+import { addBookMark, deleteBookMark, deleteBookMarkQuestion, upDateBookmarkSolution } from "@/pages/api/bookmarkApi"
 import {
     upDateQuestionSolution,
     upDateQuestionBookmark,
@@ -85,55 +80,50 @@ const CardDetail = React.memo((props: CardContentProps) => {
     }, [value.solution])
 
     const handleClickCheckMark = async () => {
-        await upDateQuestionSolution(value.question_id, !checkMark)
-        await upDateBookmarkSolution(value.question_id, value.bookmark_user_id, !checkMark)
-        await getQuestion()
-            .then((Q) => {
-                setSolvedQuestions(Q[1])
-                setUnSolvedQuestions(Q[0])
-            })
-            .catch((error) => console.log(error))
+        try {
+            await upDateQuestionSolution(value.question_id, !checkMark)
+            await upDateBookmarkSolution(value.question_id, value.bookmark_user_id, !checkMark)
+            const Q = await getQuestion()
+            setSolvedQuestions(Q[1])
+            setUnSolvedQuestions(Q[0])
+        } catch (error) {
+            console.error(error)
+        }
     }
 
     const handleClickBookMark = async () => {
         if (value.bookmark_user_id.includes(userState.userId)) {
-            await deleteBookMark(userState.userId, value.question_id)
-            await deleteQuestionBookmark(
-                value.question_id,
-                value.bookmark_user_id,
-                userState.userId
-            )
-            await getQuestion()
-                .then((Q) => {
-                    setSolvedQuestions(Q[1])
-                    setUnSolvedQuestions(Q[0])
-                })
-                .catch((error) => console.log(error))
+            try {
+                await deleteBookMark(userState.userId, value.question_id)
+                await deleteQuestionBookmark(value.question_id, value.bookmark_user_id, userState.userId)
+                const Q = await getQuestion()
+                setSolvedQuestions(Q[1])
+                setUnSolvedQuestions(Q[0])
+            } catch (error) {
+                console.error(error)
+            }
         } else {
-            await addBookMark(
-                userState.userId,
-                value.contributor_id,
-                value.contributor_name,
-                value.question_id,
-                value.question,
-                value.tag,
-                value.time,
-                value.emotion,
-                value.parameter,
-                value.solution,
-                value.replied_user_id
-            )
-            await upDateQuestionBookmark(
-                value.question_id,
-                value.bookmark_user_id,
-                userState.userId
-            )
-            await getQuestion()
-                .then((Q) => {
-                    setSolvedQuestions(Q[1])
-                    setUnSolvedQuestions(Q[0])
-                })
-                .catch((error) => console.log(error))
+            try {
+                await addBookMark(
+                    userState.userId,
+                    value.contributor_id,
+                    value.contributor_name,
+                    value.question_id,
+                    value.question,
+                    value.tag,
+                    value.time,
+                    value.emotion,
+                    value.parameter,
+                    value.solution,
+                    value.replied_user_id
+                )
+                await upDateQuestionBookmark(value.question_id, value.bookmark_user_id, userState.userId)
+                const Q = await getQuestion()
+                setSolvedQuestions(Q[1])
+                setUnSolvedQuestions(Q[0])
+            } catch (error) {
+                console.error(error)
+            }
         }
     }
 
@@ -146,13 +136,14 @@ const CardDetail = React.memo((props: CardContentProps) => {
     const handleClickDelete = async () => {
         setMenuAnchorEl(null)
         deleteBookMarkQuestion(value.question_id, value.bookmark_user_id)
-        await deleteQuestion(value.question_id)
-        await getQuestion()
-            .then((Q) => {
-                setSolvedQuestions(Q[1])
-                setUnSolvedQuestions(Q[0])
-            })
-            .catch((error) => console.log(error))
+        try {
+            await deleteQuestion(value.question_id)
+            const Q = await getQuestion()
+            setSolvedQuestions(Q[1])
+            setUnSolvedQuestions(Q[0])
+        } catch (error) {
+            console.error(error)
+        }
     }
 
     return (
@@ -210,9 +201,7 @@ const CardDetail = React.memo((props: CardContentProps) => {
                     </MenuItem>
                 </Menu>
             </Box>
-            <Box
-                sx={{ display: "flex", justifyContent: "right", alignItems: "center", mt: "10px" }}
-            >
+            <Box sx={{ display: "flex", justifyContent: "right", alignItems: "center", mt: "10px" }}>
                 <Typography variant="caption" sx={{ mr: "20px" }}>
                     緊急度
                 </Typography>
@@ -268,11 +257,7 @@ const CardDetail = React.memo((props: CardContentProps) => {
             <CardActions sx={{ justifyContent: "space-between" }}>
                 <Box>
                     <IconButton disabled={!(value.contributor_id === userState.userId)} onClick={handleClickCheckMark}>
-                        {checkMark ? (
-                            <CheckCircleIcon sx={{ color: "red" }} />
-                        ) : (
-                            <CheckCircleOutlineIcon />
-                        )}
+                        {checkMark ? <CheckCircleIcon sx={{ color: "red" }} /> : <CheckCircleOutlineIcon />}
                     </IconButton>
                 </Box>
                 <Box>
