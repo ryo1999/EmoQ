@@ -40,25 +40,25 @@ export default function Home() {
             <Toolbar />
             <TagFilter />
             <Box sx={{ display: "flex", justifyContent: "space-around", width: "100%" }}>
-                <div style={{ width: "40%", height: "720px", overflowY: "scroll" }}>
-                    <div style={{ display: "flex", justifyContent: "space-between" }}>
+                <div style={{ width: "40%" }}>
+                    <div>
                         <Typography variant="h5" sx={{ mt: "7px" }}>
                             未解決
                         </Typography>
                     </div>
-                    <Box>
+                    <Box sx={{height: "650px", overflowY: "scroll"}}>
                         {unSolvedQuestionList.map((value, index) => (
                             <CardDetail key={index} value={value} />
                         ))}
                     </Box>
                 </div>
-                <div style={{ width: "40%", height: "720px", overflowY: "scroll" }}>
-                    <div style={{ display: "flex", justifyContent: "space-between" }}>
+                <div style={{ width: "40%"}}>
+                    <div>
                         <Typography variant="h5" sx={{ mt: "7px" }}>
                             解決済み
                         </Typography>
                     </div>
-                    <Box>
+                    <Box sx={{height: "650px", overflowY: "scroll"}}>
                         {solvedQuestionList.map((value, index) => (
                             <CardDetail key={index} value={value} />
                         ))}

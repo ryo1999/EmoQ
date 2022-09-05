@@ -56,7 +56,7 @@ export default function Appbar() {
         <Box>
             <AppBar sx={{ bgcolor: "#24292f" }} position="fixed">
                 <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
-                    <Typography variant="h6" component="div">
+                    <Typography variant="h5" component="div" sx={{fontWeight:"bold"}}>
                         EmoQ
                     </Typography>
                     <div>
@@ -99,6 +99,23 @@ export default function Appbar() {
                             open={Boolean(avatarAnchorEl)}
                             onClose={handleClose}
                         >
+                            <MenuItem disabled>
+                            <Avatar
+                                sx={{
+                                    bgcolor: "white",
+                                    color: "black",
+                                    width: "25px",
+                                    height: "25px",
+                                    mr: "20px",
+                                    fontSize:"15px",
+                                    border:"1px solid black"
+                                }}
+                            >
+                                {userState.userName[0]}
+                            </Avatar>
+                                {userState.userName}
+                            </MenuItem>
+                            <Divider />
                             <MenuItem onClick={() => handleMenuClick("/mypage")}>
                                 <PersonIcon sx={{ mr: "20px" }} />
                                 マイページ

@@ -13,8 +13,7 @@ import Tab from "@mui/material/Tab"
 import IconButton from "@mui/material/IconButton"
 import ArrowBackIcon from "@mui/icons-material/ArrowBack"
 import { Icon } from "@iconify/react"
-import { useRecoilValue } from "recoil"
-import { useSetRecoilState } from "recoil"
+import { useRecoilState, useRecoilValue } from "recoil"
 import { solvedQuestions } from "@/store/solvedQuestions"
 import { unSolvedQuestions } from "@/store/unSolvedQuestions"
 import { userInfo } from "@/store/userInfo"
@@ -24,9 +23,8 @@ import { QuestionsCollectionData } from "@/utils/types"
 
 export default function MyPage() {
     const userState = useRecoilValue(userInfo)
-    const unSolvedQuestionList = useRecoilValue(unSolvedQuestions)
+    const [unSolvedQuestionList, setUnSolvedQuestions] = useRecoilState<QuestionsCollectionData[]>(unSolvedQuestions)
     const solvedQuestionList = useRecoilValue(solvedQuestions)
-    const setUnSolvedQuestions = useSetRecoilState(unSolvedQuestions)
     const [value, setValue] = React.useState(0)
     const [solvedMyQuestions, setSolvedMyQuestions] = React.useState<QuestionsCollectionData[]>([])
     const [unSolvedMyQuestions, setUnSolvedMyQuestions] = React.useState<QuestionsCollectionData[]>([])
@@ -62,11 +60,11 @@ export default function MyPage() {
             <Appbar />
             <Toolbar />
             <div>
-                <Box>
+                <Box sx={{display:"flex"}}>
                     <IconButton onClick={() => router.push("/home")} sx={{ mt: "5px" }}>
                         <ArrowBackIcon sx={{ color: "black", fontSize: "20px" }} />
                         <Typography variant="subtitle1" sx={{ color: "black", fontSize: "20px" }}>
-                            {"ホームへ"}
+                            ホームへ
                         </Typography>
                     </IconButton>
                 </Box>
@@ -79,21 +77,27 @@ export default function MyPage() {
                         </Tabs>
                     </Box>
                     <div style={{ display: "flex", justifyContent: "space-around", width: "100%" }}>
-                        <Box sx={{ width: "40%", height: "620px", overflowY: "scroll" }}>
+                        <Box sx={{ width: "40%" }}>
                             <Typography variant="h5">未解決</Typography>
-                            {value === 0 &&
-                                unSolvedMyQuestions.map((value, index) => <CardDetail key={index} value={value} />)}
-                            {value === 1 &&
-                                unSolvedBookMarkQuestions.map((value, index) => (
-                                    <CardDetail key={index} value={value} />
-                                ))}
+                            <Box sx={{ height: "590px", overflowY: "scroll" }}>
+                                {value === 0 &&
+                                    unSolvedMyQuestions.map((value, index) => <CardDetail key={index} value={value} />)}
+                                {value === 1 &&
+                                    unSolvedBookMarkQuestions.map((value, index) => (
+                                        <CardDetail key={index} value={value} />
+                                    ))}
+                            </Box>
                         </Box>
-                        <Box sx={{ width: "40%", height: "620px", overflowY: "scroll" }}>
+                        <Box sx={{ width: "40%" }}>
                             <Typography variant="h5">解決済み</Typography>
-                            {value === 0 &&
-                                solvedMyQuestions.map((value, index) => <CardDetail key={index} value={value} />)}
-                            {value === 1 &&
-                                solvedBookMarkQuestions.map((value, index) => <CardDetail key={index} value={value} />)}
+                            <Box sx={{ height: "590px", overflowY: "scroll" }}>
+                                {value === 0 &&
+                                    solvedMyQuestions.map((value, index) => <CardDetail key={index} value={value} />)}
+                                {value === 1 &&
+                                    solvedBookMarkQuestions.map((value, index) => (
+                                        <CardDetail key={index} value={value} />
+                                    ))}
+                            </Box>
                         </Box>
                     </div>
                 </Box>

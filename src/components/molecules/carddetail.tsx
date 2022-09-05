@@ -267,7 +267,7 @@ const CardDetail = React.memo((props: CardContentProps) => {
             </CardContent>
             <CardActions sx={{ justifyContent: "space-between" }}>
                 <Box>
-                    <IconButton onClick={handleClickCheckMark}>
+                    <IconButton disabled={!(value.contributor_id === userState.userId)} onClick={handleClickCheckMark}>
                         {checkMark ? (
                             <CheckCircleIcon sx={{ color: "red" }} />
                         ) : (
