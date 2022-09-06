@@ -1,5 +1,6 @@
 import React from "react"
 import router from "next/router"
+import { ToastContainer, toast } from "react-toastify"
 import Appbar from "@/components/molecules/appbar"
 import TagFilter from "@/components/molecules/tagFilter"
 import CardDetail from "@/components/molecules/carddetail"
@@ -20,6 +21,7 @@ import { userInfo } from "@/store/userInfo"
 import { getMyQuestion } from "./api/questionApi"
 import { getBookMark } from "./api/bookmarkApi"
 import { QuestionsCollectionData } from "@/utils/types"
+import { auth } from "@/firebase"
 
 export default function MyPage() {
     const userState = useRecoilValue(userInfo)
@@ -33,18 +35,28 @@ export default function MyPage() {
     const [isOpenFormDialog, setOpenFormDialog] = React.useState(false)
 
     React.useEffect(() => {
-        getMyQuestion(userState.userId)
-            .then((question) => {
-                setUnSolvedMyQuestions(question[0])
-                setSolvedMyQuestions(question[1])
-            })
-            .catch((error) => console.log(error))
-        getBookMark(userState.userId)
-            .then((bookmark) => {
-                setUnSolvedBookMarkQuestions(bookmark[0])
-                setSolvedBookMarkQuestions(bookmark[1])
-            })
-            .catch((error) => console.log(error))
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                getMyQuestion(userState.userId)
+                    .then((question) => {
+                        setUnSolvedMyQuestions(question[0])
+                        setSolvedMyQuestions(question[1])
+                    })
+                    .catch((error) => console.log(error))
+                getBookMark(userState.userId)
+                    .then((bookmark) => {
+                        setUnSolvedBookMarkQuestions(bookmark[0])
+                        setSolvedBookMarkQuestions(bookmark[1])
+                    })
+                    .catch((error) => console.log(error))
+            } else {
+                const f = async () => {
+                    await router.push("/")
+                    toast.error("ログインし直してください")
+                }
+                f()
+            }
+        })
     }, [unSolvedQuestionList, solvedQuestionList])
 
     const handleChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -60,7 +72,7 @@ export default function MyPage() {
             <Appbar />
             <Toolbar />
             <div>
-                <Box sx={{display:"flex"}}>
+                <Box sx={{ display: "flex" }}>
                     <IconButton onClick={() => router.push("/home")} sx={{ mt: "5px" }}>
                         <ArrowBackIcon sx={{ color: "black", fontSize: "20px" }} />
                         <Typography variant="subtitle1" sx={{ color: "black", fontSize: "20px" }}>
@@ -123,6 +135,7 @@ export default function MyPage() {
                     setUnSolvedQuestions={setUnSolvedQuestions}
                 />
             )}
+            <ToastContainer position="bottom-center" pauseOnHover={false} closeOnClick autoClose={2000} />
         </div>
     )
 }

@@ -1,4 +1,6 @@
 import React from "react"
+import { useRouter } from "next/router"
+import { ToastContainer, toast } from "react-toastify"
 import PostColumn from "@/components/molecules/postcolumn"
 import Appbar from "@/components/molecules/appbar"
 import CardDetail from "@/components/molecules/carddetail"
@@ -12,19 +14,31 @@ import { useRecoilState } from "recoil"
 import { solvedQuestions } from "@/store/solvedQuestions"
 import { unSolvedQuestions } from "@/store/unSolvedQuestions"
 import { getQuestion } from "./api/questionApi"
+import { auth } from "@/firebase"
 
 export default function Home() {
+    const router = useRouter()
     const [unSolvedQuestionList, setUnSolvedQuestions] = useRecoilState(unSolvedQuestions)
-    const [solvedQuestionList,setSolvedQuestions] = useRecoilState(solvedQuestions)
+    const [solvedQuestionList, setSolvedQuestions] = useRecoilState(solvedQuestions)
     const [isOpenFormDialog, setOpenFormDialog] = React.useState(false)
 
     React.useEffect(() => {
-        getQuestion()
-            .then((question) => {
-                setUnSolvedQuestions(question[0])
-                setSolvedQuestions(question[1])
-            })
-            .catch((error) => console.log(error))
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                getQuestion()
+                    .then((question) => {
+                        setUnSolvedQuestions(question[0])
+                        setSolvedQuestions(question[1])
+                    })
+                    .catch((error) => console.log(error))
+            } else {
+                const f = async () => {
+                    await router.push("/")
+                    toast.error("ログインし直してください")
+                }
+                f()
+            }
+        })
     }, [])
 
     const handleClickOpen = () => {
@@ -45,7 +59,7 @@ export default function Home() {
                     </div>
                     <Box sx={{ height: "650px", overflowY: "scroll" }}>
                         {unSolvedQuestionList.map((value, index) => {
-                                return <CardDetail key={index} value={value} />
+                            return <CardDetail key={index} value={value} />
                         })}
                     </Box>
                 </div>
@@ -83,6 +97,7 @@ export default function Home() {
                     setUnSolvedQuestions={setUnSolvedQuestions}
                 />
             )}
+            <ToastContainer position="bottom-center" pauseOnHover={false} closeOnClick autoClose={2000} />
         </div>
     )
 }
