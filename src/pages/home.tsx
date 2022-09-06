@@ -8,16 +8,14 @@ import Toolbar from "@mui/material/Toolbar"
 import IconButton from "@mui/material/IconButton"
 import Typography from "@mui/material/Typography"
 import { Icon } from "@iconify/react"
-import { useRecoilState, useRecoilValue } from "recoil"
-import { useSetRecoilState } from "recoil"
+import { useRecoilState } from "recoil"
 import { solvedQuestions } from "@/store/solvedQuestions"
 import { unSolvedQuestions } from "@/store/unSolvedQuestions"
 import { getQuestion } from "./api/questionApi"
 
 export default function Home() {
     const [unSolvedQuestionList, setUnSolvedQuestions] = useRecoilState(unSolvedQuestions)
-    const solvedQuestionList = useRecoilValue(solvedQuestions)
-    const setSolvedQuestions = useSetRecoilState(solvedQuestions)
+    const [solvedQuestionList,setSolvedQuestions] = useRecoilState(solvedQuestions)
     const [isOpenFormDialog, setOpenFormDialog] = React.useState(false)
 
     React.useEffect(() => {

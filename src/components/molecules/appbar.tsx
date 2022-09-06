@@ -18,10 +18,12 @@ import MailIcon from "@mui/icons-material/Mail"
 import { useRecoilValue } from "recoil"
 import { auth, signOut } from "@/firebase"
 import { userInfo } from "@/store/userInfo"
+import { useInitializeRecoilState } from "@/hooks/useInitializeRecoilState"
 
 export default function Appbar() {
     const userState = useRecoilValue(userInfo)
     const [avatarAnchorEl, setAvatarAnchorEl] = React.useState<null | HTMLElement>(null)
+    const {resetUserState,resetUnSolvedQuestions,resetSolvedQuestions} = useInitializeRecoilState()
     // const [mailAnchorEl, setMailAnchorEl] = React.useState<null | HTMLElement>(null)
 
     const handleClickAvatar = (event: React.MouseEvent<HTMLElement>) => {
@@ -36,11 +38,18 @@ export default function Appbar() {
         // setMailAnchorEl(null)
     }
 
+    const RESET = () => {
+        resetUserState()
+        resetUnSolvedQuestions()
+        resetSolvedQuestions()
+    }
+
     const handleClickLogOut = () => {
         signOut(auth)
             .then(() => {
                 toast.loading("ログアウト")
                 router.push("/")
+                RESET()
             })
             .catch((error) => {
                 toast.error("ログアウトできませんでした")

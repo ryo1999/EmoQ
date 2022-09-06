@@ -12,7 +12,7 @@ import { auth, createUserWithEmailAndPassword } from "@/firebase"
 import { ToastContainer, toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 import { singUp } from "@/pages/api/userApi"
-import { useSample } from "@/utils/useSample"
+import { useValidation } from "@/utils/useValidation"
 
 const theme = createTheme()
 
@@ -27,7 +27,7 @@ export default function SignUp() {
     const [emailErrorMessage, setEmailErrorMessage] = React.useState("")
     const [passwordValidation, setPasswordValidation] = React.useState(0)
     const [passwordErrorMessage, setPasswordErrorMessage] = React.useState("")
-    const { valueText, setValueText, isValidated, errorMessage, isButton } = useSample()
+    const { valueText, setValueText, isValidated, errorMessage, isButton } = useValidation()
 
     //0初期レンダリング時、1初期状態、2エラー、3異常なし
     React.useEffect(() => {

@@ -1,6 +1,6 @@
 import React from "react"
 
-export const useSample = (tagList?: string[]) => {
+export const useValidation = (tagList?: string[]) => {
     const [valueText, setValueText] = React.useState("")
     const [errorMessage, setErrorMessage] = React.useState("")
     const [isInputStart, setIsInputStart] = React.useState(false)

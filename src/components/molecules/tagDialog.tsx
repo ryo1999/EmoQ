@@ -8,7 +8,7 @@ import Button from "@mui/material/Button"
 import TextField from "@mui/material/TextField"
 import { addTag } from "@/pages/api/tagApi"
 import { getTag } from "@/pages/api/tagApi"
-import { useSample }from "@/utils/useSample"
+import { useValidation } from "@/hooks/useValidation"
 
 type TagDialogProps = {
     tagList: string[]
@@ -19,7 +19,7 @@ type TagDialogProps = {
 
 const TagDialog = React.memo((props: TagDialogProps) => {
     const { tagList, isOpenTagDialog, setOpenTagDialog, setTagList } = props
-    const { valueText, setValueText, isValidated, errorMessage, isButton } = useSample(tagList)
+    const { valueText, setValueText, isValidated, errorMessage, isButton } = useValidation(tagList)
 
     const handleCreateTag = (value: string) => {
         setValueText(value)
