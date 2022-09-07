@@ -12,7 +12,7 @@ import { auth, createUserWithEmailAndPassword } from "@/firebase"
 import { ToastContainer, toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 import { singUp } from "@/pages/api/userApi"
-import { useValidation } from "@/utils/useValidation"
+import { useValidation } from "@/hooks/useValidation"
 
 const theme = createTheme()
 
