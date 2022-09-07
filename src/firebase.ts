@@ -3,12 +3,12 @@ import { getAuth, signOut, createUserWithEmailAndPassword, signInWithEmailAndPas
 import { getFirestore } from "firebase/firestore/lite"
 
 const firebaseConfig = {
-    apiKey: "AIzaSyDZ9oyxunguv2Vpuh5Ee-b93Ojoo9gWIcM",
-    authDomain: "emocha-278e0.firebaseapp.com",
-    projectId: "emocha-278e0",
-    storageBucket: "emocha-278e0.appspot.com",
-    messagingSenderId: "993055280250",
-    appId: "1:993055280250:web:4899c4ca09a7a6e7373fc3",
+    apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+    authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+    projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+    storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+    messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+    appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
 }
 
 initializeApp(firebaseConfig)
