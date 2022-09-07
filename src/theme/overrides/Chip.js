@@ -1,6 +1,6 @@
 // ----------------------------------------------------------------------
 
-export default function Chip(theme) {
+export default function Chip() {
   return {
     MuiChip: {
       styleOverrides: {

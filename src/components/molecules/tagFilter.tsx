@@ -3,11 +3,9 @@ import Button from "@mui/material/Button"
 import { Box } from "@mui/material"
 import SortIcon from "@mui/icons-material/Sort"
 import Typography from "@mui/material/Typography"
-import InputLabel from "@mui/material/InputLabel"
 import MenuItem from "@mui/material/MenuItem"
 import FormControl from "@mui/material/FormControl"
 import Select, { SelectChangeEvent } from "@mui/material/Select"
-import IconButton from "@mui/material/IconButton"
 
 export default function TagFilter() {
     const [conditions, setConditions] = React.useState("")

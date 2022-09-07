@@ -144,6 +144,7 @@ export default function PostColumn(props: PostColumnProps) {
             setTag(typeof value === "string" ? value.split(",") : value)
         } else {
             if (event.target.value.length > tag.length) {
+                //何もしない
             } else {
                 setTag(typeof value === "string" ? value.split(",") : value)
             }

@@ -10,11 +10,11 @@ import IconButton from "@mui/material/IconButton"
 import MenuItem from "@mui/material/MenuItem"
 import Menu from "@mui/material/Menu"
 import Avatar from "@mui/material/Avatar"
-import Badge from "@mui/material/Badge"
+// import Badge from "@mui/material/Badge"
 import Divider from "@mui/material/Divider"
 import PersonIcon from "@mui/icons-material/Person"
 import LogoutIcon from "@mui/icons-material/Logout"
-import MailIcon from "@mui/icons-material/Mail"
+// import MailIcon from "@mui/icons-material/Mail"
 import { useRecoilValue } from "recoil"
 import { auth, signOut } from "@/firebase"
 import { userInfo } from "@/store/userInfo"
@@ -51,7 +51,7 @@ export default function Appbar() {
                 RESET()
                 router.push("/")
             })
-            .catch((error) => {
+            .catch(() => {
                 toast.error("ログアウトできませんでした")
             })
     }

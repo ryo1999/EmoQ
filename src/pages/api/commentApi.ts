@@ -1,5 +1,5 @@
 import { db } from "@/firebase"
-import { collection, getDocs, query, addDoc } from "firebase/firestore/lite"
+import { collection, getDocs, query } from "firebase/firestore/lite"
 import { CommentsCollectionData } from "@/utils/types"
 
 //指定されたquestion_idのコメントをとってくる

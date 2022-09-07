@@ -1,6 +1,5 @@
 import React from "react"
 import { useRouter } from "next/router"
-import { ToastContainer, toast } from "react-toastify"
 import PostColumn from "@/components/molecules/postcolumn"
 import Appbar from "@/components/molecules/appbar"
 import CardDetail from "@/components/molecules/carddetail"
@@ -93,7 +92,6 @@ export default function Home() {
                     setUnSolvedQuestions={setUnSolvedQuestions}
                 />
             )}
-            <ToastContainer position="bottom-center" pauseOnHover={false} closeOnClick autoClose={2000} />
         </div>
     )
 }
