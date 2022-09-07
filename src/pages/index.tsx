@@ -15,7 +15,6 @@ import { createTheme, ThemeProvider } from "@mui/material/styles"
 import { auth, signInWithEmailAndPassword } from "@/firebase"
 import { getUserName } from "@/pages/api/userApi"
 import { userInfo } from "@/store/userInfo"
-import { useRecoilState } from "recoil"
 import { useSetRecoilState } from "recoil"
 
 const theme = createTheme()
