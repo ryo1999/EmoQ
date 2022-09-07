@@ -19,7 +19,7 @@ type TagDialogProps = {
 
 const TagDialog = React.memo((props: TagDialogProps) => {
     const { tagList, isOpenTagDialog, setOpenTagDialog, setTagList } = props
-    const { valueText, setValueText, isValidated, errorMessage, isButton } = useValidation(tagList)
+    const { valueText, setValueText, isValidated, errorMessage, textValidation } = useValidation(tagList)
 
     const handleCreateTag = (value: string) => {
         setValueText(value)
@@ -62,7 +62,7 @@ const TagDialog = React.memo((props: TagDialogProps) => {
             </DialogContent>
             <DialogActions>
                 <Button onClick={handleTagClose}>キャンセル</Button>
-                <Button disabled={!isButton} onClick={handleTagSave}>
+                <Button disabled={!textValidation} onClick={handleTagSave}>
                     保存
                 </Button>
             </DialogActions>

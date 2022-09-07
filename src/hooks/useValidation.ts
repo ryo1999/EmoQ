@@ -1,5 +1,6 @@
 import React from "react"
 
+//アカウント名とタグ名を新しく作る時のバリデーション
 export const useValidation = (tagList?: string[]) => {
     const [valueText, setValueText] = React.useState("")
     const [errorMessage, setErrorMessage] = React.useState("")
@@ -64,6 +65,133 @@ export const useValidation = (tagList?: string[]) => {
         setValueText,
         isValidated,
         errorMessage,
-        isButton: isValidated && isInputStart,
+        textValidation: isValidated && isInputStart,
     }
 }
+
+
+//新規登録のメールアドレスの欄のバリデーション
+export const useMailValidation = () => {
+    const [emailValueText, setEmailValueText] = React.useState("")
+    const [errorEmailMessage, setErrorEmailMessage] = React.useState("")
+    const [isInputEmailStart, setIsInputEmailStart] = React.useState(false)
+    const [isEmailValidated, setIsEmailValidated] = React.useState(true)
+
+    const require = () => {
+        return emailValueText === "" || !emailValueText.match(/\S/g)
+    }
+
+    const spaceCheck = () => {
+        return emailValueText.indexOf(" ") !== -1
+    }
+
+    const emailForm = () => {
+        return (
+            emailValueText.indexOf("@") === -1 ||
+            (emailValueText.indexOf(".com") === -1 && emailValueText.indexOf(".jp") === -1) ||
+            emailValueText[0] === "." ||
+            emailValueText[0] === "@" ||
+            (emailValueText.indexOf("@") > emailValueText.indexOf(".com") &&
+                emailValueText.indexOf("@") > emailValueText.indexOf(".jp"))
+        )
+    }
+
+    const validate = () => {
+        if (require()) {
+            setErrorEmailMessage("必須項目です")
+            setIsEmailValidated(false)
+            return
+        }
+        if(spaceCheck()){
+            setErrorEmailMessage("空白が含まれています")
+            setIsEmailValidated(false)
+            return
+        }
+        if(emailForm()){
+            setErrorEmailMessage("メールアドレスの形式として正しくありません")
+            setIsEmailValidated(false)
+            return
+        }
+        setIsEmailValidated(true)
+        setErrorEmailMessage("")
+    }
+
+    React.useEffect(() => {
+        if (emailValueText.length === 0 && isInputEmailStart) {
+            setIsInputEmailStart(false)
+            validate()
+        } else if (emailValueText.length > 0) {
+            setIsInputEmailStart(true)
+            validate()
+        }
+    }, [emailValueText])
+
+    return {
+        emailValueText,
+        setEmailValueText,
+        isEmailValidated,
+        errorEmailMessage,
+        emailValidation: isEmailValidated && isInputEmailStart,
+    }
+}
+
+
+//新規登録のパスワードの欄のバリデーション
+export const usePasswordValidation = () => {
+    const [passwordValueText, setPasswordValueText] = React.useState("")
+    const [errorPasswordMessage, setErrorPasswordMessage] = React.useState("")
+    const [isInputPasswordStart, setIsInputPasswordStart] = React.useState(false)
+    const [isPasswordValidated, setIsPasswordValidated] = React.useState(true)
+
+    const require = () => {
+        return passwordValueText === "" || !passwordValueText.match(/\S/g)
+    }
+
+    const spaceCheck = () => {
+        return passwordValueText.indexOf(" ") !== -1
+    }
+
+    const passwordLength = () => {
+        return passwordValueText.length < 6
+    }
+
+    const validate = () => {
+        if (require()) {
+            setErrorPasswordMessage("必須項目です")
+            setIsPasswordValidated(false)
+            return
+        }
+        if(spaceCheck()){
+            setErrorPasswordMessage("空白が含まれています")
+            setIsPasswordValidated(false)
+            return
+        }
+        if(passwordLength()){
+            setErrorPasswordMessage("文字数が足りていません")
+            setIsPasswordValidated(false)
+            return
+        }
+        setIsPasswordValidated(true)
+        setErrorPasswordMessage("")
+    }
+
+    React.useEffect(() => {
+        if (passwordValueText.length === 0 && isInputPasswordStart) {
+            setIsInputPasswordStart(false)
+            validate()
+        } else if (passwordValueText.length > 0) {
+            setIsInputPasswordStart(true)
+            validate()
+        }
+    }, [passwordValueText])
+
+    return {
+        passwordValueText,
+        setPasswordValueText,
+        isPasswordValidated,
+        errorPasswordMessage,
+        passwordValidation: isPasswordValidated && isInputPasswordStart,
+    }
+}
+
+//投稿フォームのタグ欄のバリデーション

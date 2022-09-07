@@ -12,87 +12,22 @@ import { auth, createUserWithEmailAndPassword } from "@/firebase"
 import { ToastContainer, toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 import { singUp } from "@/pages/api/userApi"
-import { useValidation } from "@/hooks/useValidation"
+import { useValidation, useMailValidation, usePasswordValidation } from "@/hooks/useValidation"
 
 const theme = createTheme()
 
 export default function SignUp() {
     const [loading, setLoading] = React.useState(false)
-    const [accountName, setAccountName] = React.useState("")
-    const [email, setEmail] = React.useState("")
-    const [password, setPassword] = React.useState("")
-    const [nameValidation, setNameValidation] = React.useState(0)
-    const [nameErrorMessage, setNameErrorMessage] = React.useState("")
-    const [emailValidation, setEmailValidation] = React.useState(0)
-    const [emailErrorMessage, setEmailErrorMessage] = React.useState("")
-    const [passwordValidation, setPasswordValidation] = React.useState(0)
-    const [passwordErrorMessage, setPasswordErrorMessage] = React.useState("")
-    const { valueText, setValueText, isValidated, errorMessage, isButton } = useValidation()
-
-    //0初期レンダリング時、1初期状態、2エラー、3異常なし
-    React.useEffect(() => {
-        if (nameValidation === 0) {
-            setNameValidation(1)
-        } else if (accountName === "" || !accountName.match(/\S/g)) {
-            setNameErrorMessage("必須項目です")
-            setNameValidation(2)
-        } else if (accountName[0] === " " || accountName[0] === "　") {
-            setNameErrorMessage("空白で始めることはできません")
-            setNameValidation(2)
-        } else if (accountName[accountName.length - 1] === " " || accountName[accountName.length - 1] === "　") {
-            setNameErrorMessage("空白で終わることはできません")
-            setNameValidation(2)
-        } else if (nameValidation === 1 || nameValidation === 2) {
-            setNameValidation(3)
-        }
-    }, [accountName])
-
-    React.useEffect(() => {
-        if (emailValidation === 0) {
-            setEmailValidation(1)
-        } else if (email === "" || !email.match(/\S/g)) {
-            setEmailErrorMessage("必須項目です")
-            setEmailValidation(2)
-        } else if (email.indexOf(" ") !== -1) {
-            setEmailErrorMessage("空白が含まれています")
-            setEmailValidation(2)
-        } else if (
-            email.indexOf("@") === -1 ||
-            (email.indexOf(".com") === -1 && email.indexOf(".jp") === -1) ||
-            email[0] === "." ||
-            email[0] === "@" ||
-            (email.indexOf("@") > email.indexOf(".com") && email.indexOf("@") > email.indexOf(".jp"))
-        ) {
-            setEmailErrorMessage("メールアドレスの形式として正しくありません")
-            setEmailValidation(2)
-        } else if (emailValidation === 1 || emailValidation === 2) {
-            setEmailValidation(3)
-        }
-    }, [email])
-
-    React.useEffect(() => {
-        if (passwordValidation === 0) {
-            setPasswordValidation(1)
-        } else if (password === "" || !password.match(/\S/g)) {
-            setPasswordErrorMessage("必須項目です")
-            setPasswordValidation(2)
-        } else if (password.indexOf(" ") !== -1) {
-            setPasswordErrorMessage("空白が含まれています")
-            setPasswordValidation(2)
-        } else if (password.length < 6) {
-            setPasswordErrorMessage("文字数が足りていません")
-            setPasswordValidation(2)
-        } else if (passwordValidation === 1 || passwordValidation === 2) {
-            setPasswordValidation(3)
-        }
-    }, [password])
+    const { valueText, setValueText, isValidated, errorMessage, textValidation } = useValidation()
+    const { emailValueText, setEmailValueText, isEmailValidated, errorEmailMessage, emailValidation } = useMailValidation()
+    const { passwordValueText, setPasswordValueText, isPasswordValidated, errorPasswordMessage, passwordValidation } = usePasswordValidation()
 
     const handleSignUp = () => {
         setLoading(true)
-        createUserWithEmailAndPassword(auth, email, password)
+        createUserWithEmailAndPassword(auth, emailValueText, passwordValueText)
             .then((data) => {
                 toast.success("登録が完了しました")
-                singUp(data.user.uid, accountName)
+                singUp(data.user.uid, valueText)
                 router.push("/")
             })
             .catch((error) => {
@@ -119,7 +54,7 @@ export default function SignUp() {
                     <Box sx={{ mt: 1, width: "100%" }}>
                         <Typography variant="h6">アカウント名*</Typography>
                         <TextField
-                            error={nameValidation === 2}
+                            error={!isValidated}
                             margin="normal"
                             fullWidth
                             id="account"
@@ -127,13 +62,13 @@ export default function SignUp() {
                             name="account"
                             autoComplete="account"
                             autoFocus
-                            helperText={nameValidation === 2 ? nameErrorMessage : ""}
+                            helperText={isValidated ? "" : errorMessage}
                             sx={{ mb: "30px" }}
-                            onChange={(e) => setAccountName(e.target.value)}
+                            onChange={(e) => setValueText(e.target.value)}
                         />
                         <Typography variant="h6">メールアドレス*</Typography>
                         <TextField
-                            error={emailValidation === 2}
+                            error={!isEmailValidated}
                             margin="normal"
                             fullWidth
                             id="email"
@@ -141,13 +76,13 @@ export default function SignUp() {
                             name="email"
                             autoComplete="email"
                             autoFocus
-                            helperText={emailValidation === 2 ? emailErrorMessage : ""}
+                            helperText={isEmailValidated ? "" : errorEmailMessage}
                             sx={{ mb: "30px" }}
-                            onChange={(e) => setEmail(e.target.value)}
+                            onChange={(e) => setEmailValueText(e.target.value)}
                         />
                         <Typography variant="h6">パスワード*</Typography>
                         <TextField
-                            error={passwordValidation === 2}
+                            error={!isPasswordValidated}
                             margin="normal"
                             fullWidth
                             name="password"
@@ -155,8 +90,8 @@ export default function SignUp() {
                             type="password"
                             id="password"
                             autoComplete="current-password"
-                            helperText={passwordValidation === 2 ? passwordErrorMessage : ""}
-                            onChange={(e) => setPassword(e.target.value)}
+                            helperText={isPasswordValidated ? "" : errorPasswordMessage}
+                            onChange={(e) => setPasswordValueText(e.target.value)}
                         />
                         <LoadingButton
                             type="submit"
@@ -165,7 +100,7 @@ export default function SignUp() {
                             loading={loading}
                             variant="contained"
                             sx={{ mt: 3, mb: 2 }}
-                            disabled={nameValidation !== 3 || emailValidation !== 3 || passwordValidation !== 3}
+                            disabled={!(textValidation && emailValidation && passwordValidation)}
                         >
                             登録
                         </LoadingButton>

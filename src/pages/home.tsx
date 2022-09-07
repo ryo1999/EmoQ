@@ -49,11 +49,11 @@ export default function Home() {
             <Box sx={{ display: "flex", justifyContent: "space-around", width: "100%" }}>
                 <div style={{ width: "40%" }}>
                     <div>
-                        <Typography variant="h5" sx={{ mt: "7px" }}>
+                        <Typography variant="h5">
                             未解決
                         </Typography>
                     </div>
-                    <Box sx={{ height: "650px", overflowY: "scroll" }}>
+                    <Box sx={{ height: "635px", overflowY: "scroll" }}>
                         {unSolvedQuestionList.map((value, index) => {
                             return <CardDetail key={index} value={value} />
                         })}
@@ -61,11 +61,11 @@ export default function Home() {
                 </div>
                 <div style={{ width: "40%" }}>
                     <div>
-                        <Typography variant="h5" sx={{ mt: "7px" }}>
+                        <Typography variant="h5">
                             解決済み
                         </Typography>
                     </div>
-                    <Box sx={{ height: "650px", overflowY: "scroll" }}>
+                    <Box sx={{ height: "635px", overflowY: "scroll" }}>
                         {solvedQuestionList.map((value, index) => (
                             <CardDetail key={index} value={value} />
                         ))}
