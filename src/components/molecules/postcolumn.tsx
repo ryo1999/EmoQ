@@ -156,11 +156,20 @@ export default function PostColumn(props: PostColumnProps) {
 
     const handleSubmitClick = async () => {
         setOpenFormDialog(false)
-        try{
-        await addQuestion(userState.userId, userState.userName, question, tag, new Date(), emotion, parameter, false)
-        const Q = await getQuestion()
-                setUnSolvedQuestions(Q[0])
-        }catch(error) {
+        try {
+            await addQuestion(
+                userState.userId,
+                userState.userName,
+                question,
+                tag,
+                new Date(),
+                emotion,
+                parameter,
+                false
+            )
+            const Q = await getQuestion()
+            setUnSolvedQuestions(Q[0])
+        } catch (error) {
             console.error(error)
         }
     }
