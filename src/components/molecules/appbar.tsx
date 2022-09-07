@@ -23,7 +23,7 @@ import { useInitializeRecoilState } from "@/hooks/useInitializeRecoilState"
 export default function Appbar() {
     const userState = useRecoilValue(userInfo)
     const [avatarAnchorEl, setAvatarAnchorEl] = React.useState<null | HTMLElement>(null)
-    const {resetUserState,resetUnSolvedQuestions,resetSolvedQuestions} = useInitializeRecoilState()
+    const { resetUserState, resetUnSolvedQuestions, resetSolvedQuestions } = useInitializeRecoilState()
     // const [mailAnchorEl, setMailAnchorEl] = React.useState<null | HTMLElement>(null)
 
     const handleClickAvatar = (event: React.MouseEvent<HTMLElement>) => {
@@ -44,12 +44,12 @@ export default function Appbar() {
         resetSolvedQuestions()
     }
 
-    const handleClickLogOut = () => {
-        signOut(auth)
+    const handleClickLogOut = async () => {
+        await signOut(auth)
             .then(() => {
                 toast.loading("ログアウト")
-                router.push("/")
                 RESET()
+                router.push("/")
             })
             .catch((error) => {
                 toast.error("ログアウトできませんでした")
@@ -65,7 +65,7 @@ export default function Appbar() {
         <Box>
             <AppBar sx={{ bgcolor: "#24292f" }} position="fixed">
                 <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
-                    <Typography variant="h5" component="div" sx={{fontWeight:"bold"}}>
+                    <Typography variant="h5" component="div" sx={{ fontWeight: "bold" }}>
                         EmoQ
                     </Typography>
                     <div>
@@ -109,19 +109,19 @@ export default function Appbar() {
                             onClose={handleClose}
                         >
                             <MenuItem disabled>
-                            <Avatar
-                                sx={{
-                                    bgcolor: "white",
-                                    color: "black",
-                                    width: "25px",
-                                    height: "25px",
-                                    mr: "20px",
-                                    fontSize:"15px",
-                                    border:"1px solid black"
-                                }}
-                            >
-                                {userState.userName[0]}
-                            </Avatar>
+                                <Avatar
+                                    sx={{
+                                        bgcolor: "white",
+                                        color: "black",
+                                        width: "25px",
+                                        height: "25px",
+                                        mr: "20px",
+                                        fontSize: "15px",
+                                        border: "1px solid black",
+                                    }}
+                                >
+                                    {userState.userName[0]}
+                                </Avatar>
                                 {userState.userName}
                             </MenuItem>
                             <Divider />

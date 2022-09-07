@@ -1,7 +1,7 @@
 import React from "react"
 import { ToastContainer, toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
-import router from "next/router"
+import {useRouter} from "next/router"
 import LoadingButton from "@mui/lab/LoadingButton"
 import CssBaseline from "@mui/material/CssBaseline"
 import TextField from "@mui/material/TextField"
@@ -12,15 +12,16 @@ import Box from "@mui/material/Box"
 import Typography from "@mui/material/Typography"
 import Container from "@mui/material/Container"
 import { createTheme, ThemeProvider } from "@mui/material/styles"
-import { useSetRecoilState } from "recoil"
 import { auth, signInWithEmailAndPassword } from "@/firebase"
 import { getUserName } from "@/pages/api/userApi"
 import { userInfo } from "@/store/userInfo"
+import { useRecoilState } from "recoil"
 
 const theme = createTheme()
 
 export default function SignIn() {
-    const setUserInfo = useSetRecoilState(userInfo)
+    const router = useRouter()
+    const [userState, setUserState] = useRecoilState(userInfo)
     const [loading, setLoading] = React.useState(false)
     const [email, setEmail] = React.useState("")
     const [password, setPassword] = React.useState("")
@@ -32,7 +33,7 @@ export default function SignIn() {
                 if (data.user.uid) {
                     getUserName(data.user.uid).then((userdata) => {
                         if (userdata) {
-                            setUserInfo(userdata)
+                            setUserState(userdata)
                         }
                     })
                     router.push("/home")
@@ -44,6 +45,13 @@ export default function SignIn() {
             })
     }
 
+    React.useEffect(()=>{
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                router.push("/home")
+            }
+        })
+    },[])
 
     return (
         <ThemeProvider theme={theme}>

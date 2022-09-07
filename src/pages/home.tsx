@@ -32,11 +32,7 @@ export default function Home() {
                     })
                     .catch((error) => console.log(error))
             } else {
-                const f = async () => {
-                    await router.push("/")
-                    toast.error("ログインし直してください")
-                }
-                f()
+                router.push("/")
             }
         })
     }, [])
