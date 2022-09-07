@@ -30,7 +30,7 @@ export default function SignUp() {
                 singUp(data.user.uid, valueText)
                 router.push("/")
             })
-            .catch((error) => {
+            .catch(() => {
                 setLoading(false)
                 toast.error("登録に失敗しました")
             })

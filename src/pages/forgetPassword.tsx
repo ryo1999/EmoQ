@@ -24,7 +24,7 @@ export default function ForgetPassword() {
                 toast.success("送信完了")
                 setLoading(false)
             })
-            .catch((error) => {
+            .catch(() => {
                 setLoading(false)
                 toast.error("登録されたメールアドレスを入力してください")
             })

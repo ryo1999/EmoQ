@@ -16,12 +16,13 @@ import { auth, signInWithEmailAndPassword } from "@/firebase"
 import { getUserName } from "@/pages/api/userApi"
 import { userInfo } from "@/store/userInfo"
 import { useRecoilState } from "recoil"
+import { useSetRecoilState } from "recoil"
 
 const theme = createTheme()
 
 export default function SignIn() {
     const router = useRouter()
-    const [userState, setUserState] = useRecoilState(userInfo)
+    const setUserState = useSetRecoilState(userInfo)
     const [loading, setLoading] = React.useState(false)
     const [email, setEmail] = React.useState("")
     const [password, setPassword] = React.useState("")
@@ -39,7 +40,7 @@ export default function SignIn() {
                     router.push("/home")
                 }
             })
-            .catch((error) => {
+            .catch(() => {
                 setLoading(false)
                 toast.error("ログイン失敗")
             })
