@@ -29,8 +29,8 @@ const StampList = React.memo((props: StampList) => {
     }
 
     return (
-        <Box sx={{ mb: "50px" }}>
-            <Box sx={{ mb: "10px" }}>
+        <Box sx={{ mb: "30px" }}>
+            <Box sx={{ mb: "30px" }}>
                 {Object.keys(EmotionIcon).map((emo: string) => (
                     <IconButton
                         key={emo}

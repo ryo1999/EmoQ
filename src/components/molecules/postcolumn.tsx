@@ -39,7 +39,7 @@ type PostColumnProps = {
 const MenuProps = {
     PaperProps: {
         style: {
-            maxHeight: "250px",
+            maxHeight: "200px",
             overflow: "auto",
         },
     },
@@ -176,21 +176,13 @@ export default function PostColumn(props: PostColumnProps) {
                         <Typography sx={{ ml: "10px", flex: 1 }} variant="h6" component="div">
                             投稿フォーム
                         </Typography>
-                        <Button
-                            disabled={!(textValidation && tagValidation)}
-                            color="inherit"
-                            onClick={handleSubmitClick}
-                            sx={{ fontSize: "18px", "&:disabled": { color: "#747474" } }}
-                        >
-                            投稿
-                        </Button>
                     </Toolbar>
                 </AppBar>
                 <DialogContent
                     sx={{ display: "flex", justifyContent: "space-around", textAlign: "center", mt: "50px" }}
                 >
-                    <div style={{ marginRight: "-100px" }}>
-                        <Typography variant="h6">今の感情は？</Typography>
+                    <div style={{ marginRight: "-100px", marginTop:"50px" }}>
+                        <Typography sx={{mb:"20px"}} variant="h6">今の感情は？</Typography>
                         <StampList emotion={emotion} setEmotion={setEmotion} />
                         <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", mb: "40px" }}>
                             <Typography variant="h6" sx={{ mr: "30px" }}>
@@ -221,7 +213,7 @@ export default function PostColumn(props: PostColumnProps) {
                         </Typography>
                         <Typography variant="caption">(最大3個)</Typography>
                         <Box sx={{ m: "10px 0px 10px 0px" }}>
-                            <FormControl required error={!isTagValidated} sx={{ width: "300px" }} size="small">
+                            <FormControl required error={!isTagValidated} sx={{ width: "350px" }} size="small">
                                 <InputLabel id="simple-select-label">タグ</InputLabel>
                                 <Select
                                     labelId="simple-select-label"
@@ -242,7 +234,7 @@ export default function PostColumn(props: PostColumnProps) {
                                                             fontSize: "18px",
                                                             color: "white",
                                                             bgcolor: "#24292f",
-                                                            maxWidth: "250px",
+                                                            maxWidth: "350px",
                                                         }}
                                                     />
                                                 </Tooltip>
@@ -266,30 +258,38 @@ export default function PostColumn(props: PostColumnProps) {
                         </Box>
                     </div>
                     <div style={{ marginLeft: "-100px" }}>
-                        <Typography variant="h6">質問内容</Typography>
+                        <Typography variant="h6">質問内容*</Typography>
                         <Box
                             component="form"
                             sx={{
                                 "& > :not(style)": { width: "500px" },
                                 mb: "20px",
-                                maxHeight: "500px",
-                                overflowY: "auto",
                             }}
                             autoComplete="off"
                         >
                             <TextField
                                 error={!isValidated}
-                                required
                                 id="outlined-basic"
                                 multiline
+                                rows={13}
                                 value={valueText}
                                 InputProps={{ style: { fontSize: "20px" } }}
-                                label="質問内容"
+                                label="質問"
                                 helperText={isValidated ? "" : errorMessage}
                                 onChange={(e) => setValueText(e.target.value)}
                                 variant="outlined"
                                 sx={{ mt: "20px" }}
                             />
+                        </Box>
+                        <Box>
+                        <Button
+                        variant="contained"
+                            disabled={!(textValidation && tagValidation)}
+                            onClick={handleSubmitClick}
+                            sx={{ fontSize:"18px", width:"100%", bgcolor: "#24292f", ":hover": { bgcolor: "#555555" } }}
+                        >
+                            投稿
+                        </Button>
                         </Box>
                     </div>
                 </DialogContent>
