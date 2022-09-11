@@ -16,7 +16,7 @@ const EmotionIcon: { [name: string]: string } = {
     焦り: "fa6-regular:face-grin-beam-sweat",
     絶望: "fa6-regular:face-rolling-eyes",
     どや: "fa6-regular:face-smile-wink",
-    喜び: "fa6-regular:face-laugh-squint",
+    ワクワク: "fa6-regular:face-laugh-squint",
     お願い: "emojione-monotone:folded-hands",
     ホッ: "fa-regular:handshake",
 }

@@ -1,5 +1,6 @@
 import React from "react"
 import { format } from "date-fns"
+import {useRouter} from "next/router"
 import ReturnIcon from "../atoms/returnIcon"
 import { ReturnEmotionColor } from "@/utils/commonFunctions/returnEmotionColor"
 import { Box, Menu, MenuItem, Tooltip } from "@mui/material"
@@ -24,6 +25,7 @@ import { useSetRecoilState } from "recoil"
 import { solvedQuestions } from "@/store/solvedQuestions"
 import { unSolvedQuestions } from "@/store/unSolvedQuestions"
 import { userInfo } from "@/store/userInfo"
+import { selectedQuestion } from "@/store/selectedQuestion"
 import { getComment } from "@/pages/api/commentApi"
 import { addBookMark, deleteBookMark, deleteBookMarkQuestion, upDateBookmarkSolution } from "@/pages/api/bookmarkApi"
 import {
@@ -36,27 +38,29 @@ import {
 import { QuestionsCollectionData } from "@/utils/types"
 
 type CardContentProps = {
-    value: QuestionsCollectionData
+    questionInfo: QuestionsCollectionData
 }
 
 const CardDetail = React.memo((props: CardContentProps) => {
-    const { value } = props
+    const { questionInfo } = props
+    const router = useRouter()
     const userState = useRecoilValue(userInfo)
     const setUnSolvedQuestions = useSetRecoilState(unSolvedQuestions)
     const setSolvedQuestions = useSetRecoilState(solvedQuestions)
+    const setSelectedQuestion = useSetRecoilState(selectedQuestion)
     const [bookMark, setBookMark] = React.useState(false)
     const [checkMark, setCheckMark] = React.useState(false)
     const [commentLength, setCommentLength] = React.useState(0)
     const [menuAnchorEl, setMenuAnchorEl] = React.useState<null | HTMLElement>(null)
 
     const today = format(new Date(), "MM/dd HH:mm")
-    const dateString = value.time.toLocaleString()
+    const dateString = questionInfo.time.toLocaleString()
     const dateToDate = Date.parse(dateString)
     const date = format(dateToDate, "MM/dd HH:mm")
     const dateTime = format(dateToDate, "HH:mm")
 
     React.useEffect(() => {
-        getComment(value.question_id)
+        getComment(questionInfo.question_id)
             .then((comment) => {
                 setCommentLength(comment.length)
             })
@@ -64,25 +68,35 @@ const CardDetail = React.memo((props: CardContentProps) => {
     }, [])
 
     React.useEffect(() => {
-        if (value.bookmark_user_id.indexOf(userState.userId) !== -1) {
+        if (questionInfo.bookmark_user_id.indexOf(userState.userId) !== -1) {
             setBookMark(true)
         } else {
             setBookMark(false)
         }
-    }, [value.bookmark_user_id])
+    }, [questionInfo.bookmark_user_id])
 
     React.useEffect(() => {
-        if (value.solution == true) {
+        if (questionInfo.solution == true) {
             setCheckMark(true)
         } else {
             setCheckMark(false)
         }
-    }, [value.solution])
+    }, [questionInfo.solution])
+
+    const handleClickCommentIcon = () => {
+        setSelectedQuestion(questionInfo)
+        // router.push("/comment","/comment/"+questionInfo.question_id)
+        router.push({
+            pathname:"/comment",
+            query:{qid:questionInfo.question_id}
+        })
+        // router.push("/comment")
+    }
 
     const handleClickCheckMark = async () => {
         try {
-            await upDateQuestionSolution(value.question_id, !checkMark)
-            await upDateBookmarkSolution(value.question_id, value.bookmark_user_id, !checkMark)
+            await upDateQuestionSolution(questionInfo.question_id, !checkMark)
+            await upDateBookmarkSolution(questionInfo.question_id, questionInfo.bookmark_user_id, !checkMark)
             const Q = await getQuestion()
             setSolvedQuestions(Q[1])
             setUnSolvedQuestions(Q[0])
@@ -92,10 +106,10 @@ const CardDetail = React.memo((props: CardContentProps) => {
     }
 
     const handleClickBookMark = async () => {
-        if (value.bookmark_user_id.includes(userState.userId)) {
+        if (questionInfo.bookmark_user_id.includes(userState.userId)) {
             try {
-                await deleteBookMark(userState.userId, value.question_id)
-                await deleteQuestionBookmark(value.question_id, value.bookmark_user_id, userState.userId)
+                await deleteBookMark(userState.userId, questionInfo.question_id)
+                await deleteQuestionBookmark(questionInfo.question_id, questionInfo.bookmark_user_id, userState.userId)
                 const Q = await getQuestion()
                 setSolvedQuestions(Q[1])
                 setUnSolvedQuestions(Q[0])
@@ -106,18 +120,18 @@ const CardDetail = React.memo((props: CardContentProps) => {
             try {
                 await addBookMark(
                     userState.userId,
-                    value.contributor_id,
-                    value.contributor_name,
-                    value.question_id,
-                    value.question,
-                    value.tag,
-                    value.time,
-                    value.emotion,
-                    value.parameter,
-                    value.solution,
-                    value.replied_user_id
+                    questionInfo.contributor_id,
+                    questionInfo.contributor_name,
+                    questionInfo.question_id,
+                    questionInfo.question,
+                    questionInfo.tag,
+                    questionInfo.time,
+                    questionInfo.emotion,
+                    questionInfo.parameter,
+                    questionInfo.solution,
+                    questionInfo.replied_user_id
                 )
-                await upDateQuestionBookmark(value.question_id, value.bookmark_user_id, userState.userId)
+                await upDateQuestionBookmark(questionInfo.question_id, questionInfo.bookmark_user_id, userState.userId)
                 const Q = await getQuestion()
                 setSolvedQuestions(Q[1])
                 setUnSolvedQuestions(Q[0])
@@ -135,9 +149,9 @@ const CardDetail = React.memo((props: CardContentProps) => {
     }
     const handleClickDelete = async () => {
         setMenuAnchorEl(null)
-        deleteBookMarkQuestion(value.question_id, value.bookmark_user_id)
+        deleteBookMarkQuestion(questionInfo.question_id, questionInfo.bookmark_user_id)
         try {
-            await deleteQuestion(value.question_id)
+            await deleteQuestion(questionInfo.question_id)
             const Q = await getQuestion()
             setSolvedQuestions(Q[1])
             setUnSolvedQuestions(Q[0])
@@ -150,13 +164,13 @@ const CardDetail = React.memo((props: CardContentProps) => {
         <Card
             sx={{
                 width: "100%",
-                mt: "10px",
+                mb: "10px",
                 borderRadius: "10px",
             }}
         >
             <Box sx={{ display: "flex", m: "0px 5px", justifyContent: "space-between" }}>
                 <Box>
-                    {value.tag.map((v, i) => (
+                    {questionInfo.tag.map((v, i) => (
                         <Tooltip key={v} title={v} placement="top">
                             <Chip
                                 key={i}
@@ -173,7 +187,7 @@ const CardDetail = React.memo((props: CardContentProps) => {
                         </Tooltip>
                     ))}
                 </Box>
-                {value.contributor_id === userState.userId ? (
+                {questionInfo.contributor_id === userState.userId ? (
                     <IconButton onClick={handleClickMenu} sx={{ mt: "5px" }}>
                         <MoreHorizIcon />
                     </IconButton>
@@ -206,8 +220,8 @@ const CardDetail = React.memo((props: CardContentProps) => {
                     緊急度
                 </Typography>
                 <Slider
-                    key={value.parameter}
-                    defaultValue={value.parameter}
+                    key={questionInfo.parameter}
+                    defaultValue={questionInfo.parameter}
                     marks
                     step={10}
                     min={0}
@@ -222,29 +236,29 @@ const CardDetail = React.memo((props: CardContentProps) => {
                         borderBottom: "solid 1px",
                     }}
                 >
-                    {value.parameter}
+                    {questionInfo.parameter}
                 </Box>
-                <Tooltip title={value.emotion} placement="bottom">
+                <Tooltip title={questionInfo.emotion} placement="bottom">
                     <IconButton
                         disableRipple
                         sx={{
-                            bgcolor: ReturnEmotionColor(value.emotion),
+                            bgcolor: ReturnEmotionColor(questionInfo.emotion),
                             mr: "10px",
                             mt: "3px",
                             color: "white",
                         }}
                     >
-                        {ReturnIcon(value.emotion)}
+                        {ReturnIcon(questionInfo.emotion)}
                     </IconButton>
                 </Tooltip>
             </Box>
             <CardHeader
                 avatar={
                     <Avatar sx={{ border: "solid 1px #24292f", bgcolor: "white", color: "black" }}>
-                        {value.contributor_name[0]}
+                        {questionInfo.contributor_name[0]}
                     </Avatar>
                 }
-                title={value.contributor_name}
+                title={questionInfo.contributor_name}
                 subheader={
                     <Typography variant="caption">
                         {today.slice(3, 5) === date.slice(3, 5) ? `今日：${dateTime}` : date}
@@ -252,11 +266,11 @@ const CardDetail = React.memo((props: CardContentProps) => {
                 }
             />
             <CardContent sx={{ ml: "55px", maxWidth: "460px" }}>
-                <Typography variant="body2">{value.question}</Typography>
+                <Typography variant="body2">{questionInfo.question}</Typography>
             </CardContent>
             <CardActions sx={{ justifyContent: "space-between" }}>
                 <Box>
-                    <IconButton disabled={!(value.contributor_id === userState.userId)} onClick={handleClickCheckMark}>
+                    <IconButton disabled={!(questionInfo.contributor_id === userState.userId)} onClick={handleClickCheckMark}>
                         {checkMark ? <CheckCircleIcon sx={{ color: "red" }} /> : <CheckCircleOutlineIcon />}
                     </IconButton>
                 </Box>
@@ -268,7 +282,7 @@ const CardDetail = React.memo((props: CardContentProps) => {
                             <BookmarkBorderIcon sx={{ color: "black" }} />
                         )}
                     </IconButton>
-                    <IconButton sx={{ fontSize: "15px" }}>
+                    <IconButton onClick={handleClickCommentIcon} sx={{ fontSize: "15px" }}>
                         <CommentIcon sx={{ color: "black" }} />
                         <Typography variant="button" sx={{ color: "black" }}>
                             {commentLength}

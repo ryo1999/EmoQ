@@ -1,5 +1,5 @@
 import { db } from "@/firebase"
-import { collection, getDocs, query, addDoc, orderBy, updateDoc, doc, deleteDoc } from "firebase/firestore/lite"
+import { collection, getDocs, query, addDoc, orderBy, updateDoc, doc, deleteDoc, getDoc } from "firebase/firestore/lite"
 import { QuestionsCollectionData } from "@/utils/types"
 
 //質問全部を取ってくる
@@ -136,4 +136,24 @@ export const deleteQuestionBookmark = async (question_id: string, bookmark_user_
 //質問を削除した時、questionsコレクションから削除
 export const deleteQuestion = async (question_id: string) => {
     await deleteDoc(doc(db, "questions", question_id))
+}
+
+//指定された質問だけとってくる
+export const getSelectQuestion = async (question_id: string) => {
+    const docRef = doc(db, "questions", question_id)
+    const docSnap = await getDoc(docRef)
+    const selectedQuestion = {
+        contributor_id: docSnap.data().contributor_id,
+        contributor_name: docSnap.data().contributor_name,
+        question_id: question_id,
+        question: docSnap.data().question,
+        tag: docSnap.data().tag,
+        time: docSnap.data().time.toDate(),
+        emotion: docSnap.data().emotion,
+        parameter: docSnap.data().parameter,
+        solution: docSnap.data().solution,
+        bookmark_user_id: docSnap.data().bookmark_user_id,
+        replied_user_id: docSnap.data().replied_user_id,
+    }
+    return selectedQuestion
 }

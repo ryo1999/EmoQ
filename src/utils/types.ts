@@ -15,8 +15,10 @@ export type QuestionsCollectionData = {
 
 //コメントを取得するときの型
 export type CommentsCollectionData = {
+    question_id:string
     commenter_id: string
     commenter_name: string
+    comment_id:string
     comment:string
     time: Date
     emotion: string

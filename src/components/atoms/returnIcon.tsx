@@ -13,7 +13,7 @@ export default function ReturnIcon(emotion: string) {
             return <Icon color="white" icon="fa6-regular:face-rolling-eyes" />
         case "どや":
             return <Icon color="white" icon="fa6-regular:face-smile-wink" />
-        case "喜び":
+        case "ワクワク":
             return <Icon color="white" icon="fa6-regular:face-laugh-squint" />
         case "お願い":
             return <Icon color="white" icon="emojione-monotone:folded-hands" />

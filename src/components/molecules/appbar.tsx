@@ -23,7 +23,7 @@ import { useInitializeRecoilState } from "@/hooks/useInitializeRecoilState"
 export default function Appbar() {
     const userState = useRecoilValue(userInfo)
     const [avatarAnchorEl, setAvatarAnchorEl] = React.useState<null | HTMLElement>(null)
-    const { resetUserState, resetUnSolvedQuestions, resetSolvedQuestions } = useInitializeRecoilState()
+    const { resetUserState, resetUnSolvedQuestions, resetSolvedQuestions, resetSelectedQuestion } = useInitializeRecoilState()
     // const [mailAnchorEl, setMailAnchorEl] = React.useState<null | HTMLElement>(null)
 
     const handleClickAvatar = (event: React.MouseEvent<HTMLElement>) => {
@@ -42,6 +42,7 @@ export default function Appbar() {
         resetUserState()
         resetUnSolvedQuestions()
         resetSolvedQuestions()
+        resetSelectedQuestion()
     }
 
     const handleClickLogOut = async () => {

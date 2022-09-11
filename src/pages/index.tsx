@@ -1,7 +1,7 @@
 import React from "react"
 import { ToastContainer, toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
-import {useRouter} from "next/router"
+import { useRouter } from "next/router"
 import LoadingButton from "@mui/lab/LoadingButton"
 import CssBaseline from "@mui/material/CssBaseline"
 import TextField from "@mui/material/TextField"
@@ -45,13 +45,13 @@ export default function SignIn() {
             })
     }
 
-    React.useEffect(()=>{
+    React.useEffect(() => {
         auth.onAuthStateChanged((user) => {
             if (user) {
                 router.push("/home")
             }
         })
-    },[])
+    }, [])
 
     return (
         <ThemeProvider theme={theme}>
@@ -103,7 +103,7 @@ export default function SignIn() {
                             loading={loading}
                             variant="contained"
                             sx={{ mt: 3, mb: 2 }}
-                            disabled={email=="" || password==""}
+                            disabled={email == "" || password == ""}
                         >
                             ログイン
                         </LoadingButton>

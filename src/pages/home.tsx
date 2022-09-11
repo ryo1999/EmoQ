@@ -53,8 +53,8 @@ export default function Home() {
                         </Typography>
                     </div>
                     <Box sx={{ height: "635px", overflowY: "scroll" }}>
-                        {unSolvedQuestionList.map((value, index) => {
-                            return <CardDetail key={index} value={value} />
+                        {unSolvedQuestionList.map((questionInfo, index) => {
+                            return <CardDetail key={index} questionInfo={questionInfo} />
                         })}
                     </Box>
                 </div>
@@ -65,8 +65,8 @@ export default function Home() {
                         </Typography>
                     </div>
                     <Box sx={{ height: "635px", overflowY: "scroll" }}>
-                        {solvedQuestionList.map((value, index) => (
-                            <CardDetail key={index} value={value} />
+                        {solvedQuestionList.map((questionInfo, index) => (
+                            <CardDetail key={index} questionInfo={questionInfo} />
                         ))}
                     </Box>
                 </div>
