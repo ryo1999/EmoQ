@@ -25,13 +25,13 @@ export const useValidation = (tagList?: string[]) => {
         return valueText[valueText.length - 1] === " " || valueText[valueText.length - 1] === "　"
     }
 
-    // const cannotStartNewLine = () =>{
-    //     return valueText[0].match(/\n/g)
-    // }
+    const cannotStartNewLine = () =>{
+        return valueText[0].match(/\n/g)
+    }
 
-    // const cannotEndNewLine = () =>{
-    //     return valueText[valueText.length - 1].match(/\n/g)
-    // }
+    const cannotEndNewLine = () =>{
+        return valueText[valueText.length - 1].match(/\n/g)
+    }
 
     const validate = () => {
         if (require()) {
@@ -54,6 +54,16 @@ export const useValidation = (tagList?: string[]) => {
             setIsValidated(false)
             return
         }
+        if(cannotStartNewLine()){
+            setErrorMessage("改行で始めることはできません")
+            setIsValidated(false)
+            return
+        }
+        if(cannotEndNewLine()){
+            setErrorMessage("改行で終わることはできません")
+            setIsValidated(false)
+            return
+        }
         setIsValidated(true)
         setErrorMessage("")
     }
@@ -73,6 +83,7 @@ export const useValidation = (tagList?: string[]) => {
         setValueText,
         isValidated,
         errorMessage,
+        setIsInputStart,
         textValidation: isValidated && isInputStart,
     }
 }

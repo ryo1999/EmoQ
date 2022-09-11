@@ -29,7 +29,7 @@ export default function Home() {
                         setUnSolvedQuestions(question[0])
                         setSolvedQuestions(question[1])
                     })
-                    .catch((error) => console.log(error))
+                    .catch((error) => console.error(error))
             } else {
                 router.push("/")
             }

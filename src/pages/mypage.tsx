@@ -40,13 +40,13 @@ export default function MyPage() {
                         setUnSolvedMyQuestions(question[0])
                         setSolvedMyQuestions(question[1])
                     })
-                    .catch((error) => console.log(error))
+                    .catch((error) => console.error(error))
                 getBookMark(userState.userId)
                     .then((bookmark) => {
                         setUnSolvedBookMarkQuestions(bookmark[0])
                         setSolvedBookMarkQuestions(bookmark[1])
                     })
-                    .catch((error) => console.log(error))
+                    .catch((error) => console.error(error))
             } else {
                 router.push("/")
             }
@@ -87,10 +87,10 @@ export default function MyPage() {
                             <Typography variant="h5">未解決</Typography>
                             <Box sx={{ height: "590px", overflowY: "scroll" }}>
                                 {value === 0 &&
-                                    unSolvedMyQuestions.map((value, index) => <CardDetail key={index} value={value} />)}
+                                    unSolvedMyQuestions.map((value, index) => <CardDetail key={index} questionInfo={value} />)}
                                 {value === 1 &&
                                     unSolvedBookMarkQuestions.map((value, index) => (
-                                        <CardDetail key={index} value={value} />
+                                        <CardDetail key={index} questionInfo={value} />
                                     ))}
                             </Box>
                         </Box>
@@ -98,10 +98,10 @@ export default function MyPage() {
                             <Typography variant="h5">解決済み</Typography>
                             <Box sx={{ height: "590px", overflowY: "scroll" }}>
                                 {value === 0 &&
-                                    solvedMyQuestions.map((value, index) => <CardDetail key={index} value={value} />)}
+                                    solvedMyQuestions.map((value, index) => <CardDetail key={index} questionInfo={value} />)}
                                 {value === 1 &&
                                     solvedBookMarkQuestions.map((value, index) => (
-                                        <CardDetail key={index} value={value} />
+                                        <CardDetail key={index} questionInfo={value} />
                                     ))}
                             </Box>
                         </Box>

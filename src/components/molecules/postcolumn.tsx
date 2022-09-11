@@ -70,7 +70,7 @@ export default function PostColumn(props: PostColumnProps) {
                 setTagList(data)
             })
             .catch((error) => {
-                console.log(error)
+                console.error(error)
             })
     }, [])
 
