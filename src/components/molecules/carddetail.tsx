@@ -266,7 +266,7 @@ const CardDetail = React.memo((props: CardContentProps) => {
                 }
             />
             <CardContent sx={{ ml: "55px", maxWidth: "460px" }}>
-                <Typography variant="body2">{questionInfo.question}</Typography>
+                <Typography sx={{whiteSpace:"pre-wrap"}} variant="body2">{questionInfo.question}</Typography>
             </CardContent>
             <CardActions sx={{ justifyContent: "space-between" }}>
                 <Box>

@@ -28,6 +28,7 @@ import { userInfo } from "@/store/userInfo"
 import { getTag } from "@/pages/api/tagApi"
 import { addQuestion, getQuestion } from "@/pages/api/questionApi"
 import { QuestionsCollectionData } from "@/utils/types"
+import { usePostTagValidation, useValidation } from "@/hooks/useValidation"
 
 type PostColumnProps = {
     isOpenFormDialog: boolean
@@ -58,14 +59,10 @@ export default function PostColumn(props: PostColumnProps) {
     const userState = useRecoilValue(userInfo)
     const [isOpenTagDialog, setOpenTagDialog] = React.useState(false)
     const [parameter, setParameter] = React.useState<number | number[]>(0)
-    const [question, setQuestion] = React.useState("")
-    const [tag, setTag] = React.useState<string[]>([])
     const [emotion, setEmotion] = React.useState("焦り")
     const [tagList, setTagList] = React.useState<string[]>([])
-    const [questionValidation, setQuestionValidation] = React.useState(0)
-    const [questionErrorMessage, setQuestionErrorMessage] = React.useState("")
-    const [tagExist, setTagExist] = React.useState(0)
-    const [tagErrorMessage, setTagErrorMessage] = React.useState("")
+    const { valueText, setValueText, isValidated, errorMessage, textValidation } = useValidation()
+    const { tag, setTag, isTagValidated, errorTagMessage, tagValidation } = usePostTagValidation()
 
     React.useEffect(() => {
         getTag()
@@ -76,34 +73,6 @@ export default function PostColumn(props: PostColumnProps) {
                 console.log(error)
             })
     }, [])
-
-    React.useEffect(() => {
-        if (tagExist === 0) {
-            setTagExist(1)
-        } else if (tag.length === 0) {
-            setTagErrorMessage("最低1つは選択してください")
-            setTagExist(2)
-        } else if (tagExist === 1 || tagExist === 2) {
-            setTagExist(3)
-        }
-    }, [tag])
-
-    React.useEffect(() => {
-        if (questionValidation === 0) {
-            setQuestionValidation(1)
-        } else if (question === "" || !question.match(/\S/g)) {
-            setQuestionErrorMessage("必須項目です")
-            setQuestionValidation(2)
-        } else if (question[0] === " " || question[0] === "　") {
-            setQuestionErrorMessage("空白で始めることはできません")
-            setQuestionValidation(2)
-        } else if (question[question.length - 1] === " " || question[question.length - 1] === "　") {
-            setQuestionErrorMessage("空白で終わることはできません")
-            setQuestionValidation(2)
-        } else if (questionValidation === 1 || questionValidation === 2) {
-            setQuestionValidation(3)
-        }
-    }, [question])
 
     const getStyles = (name: string, tag: string | string[], theme: Theme) => {
         return {
@@ -161,7 +130,7 @@ export default function PostColumn(props: PostColumnProps) {
             await addQuestion(
                 userState.userId,
                 userState.userName,
-                question,
+                valueText,
                 tag,
                 new Date(),
                 emotion,
@@ -208,7 +177,7 @@ export default function PostColumn(props: PostColumnProps) {
                             投稿フォーム
                         </Typography>
                         <Button
-                            disabled={questionValidation !== 3 || tagExist !== 3}
+                            disabled={!(textValidation && tagValidation)}
                             color="inherit"
                             onClick={handleSubmitClick}
                             sx={{ fontSize: "18px", "&:disabled": { color: "#747474" } }}
@@ -252,7 +221,7 @@ export default function PostColumn(props: PostColumnProps) {
                         </Typography>
                         <Typography variant="caption">(最大3個)</Typography>
                         <Box sx={{ m: "10px 0px 10px 0px" }}>
-                            <FormControl required error={tagExist === 2} sx={{ width: "300px" }} size="small">
+                            <FormControl required error={!isTagValidated} sx={{ width: "300px" }} size="small">
                                 <InputLabel id="simple-select-label">タグ</InputLabel>
                                 <Select
                                     labelId="simple-select-label"
@@ -292,7 +261,7 @@ export default function PostColumn(props: PostColumnProps) {
                                     ))}
                                     <MenuItem onClick={handleClickTagOpen}>新しく作る</MenuItem>
                                 </Select>
-                                <FormHelperText>{tagExist === 2 ? tagErrorMessage : ""}</FormHelperText>
+                                <FormHelperText>{isTagValidated ? "" : errorTagMessage}</FormHelperText>
                             </FormControl>
                         </Box>
                     </div>
@@ -309,15 +278,15 @@ export default function PostColumn(props: PostColumnProps) {
                             autoComplete="off"
                         >
                             <TextField
-                                error={questionValidation === 2}
+                                error={!isValidated}
                                 required
                                 id="outlined-basic"
                                 multiline
-                                value={question}
+                                value={valueText}
                                 InputProps={{ style: { fontSize: "20px" } }}
                                 label="質問内容"
-                                helperText={questionValidation === 2 ? questionErrorMessage : ""}
-                                onChange={(e) => setQuestion(e.target.value)}
+                                helperText={isValidated ? "" : errorMessage}
+                                onChange={(e) => setValueText(e.target.value)}
                                 variant="outlined"
                                 sx={{ mt: "20px" }}
                             />

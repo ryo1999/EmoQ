@@ -1,6 +1,6 @@
 import React from "react"
 
-//アカウント名とタグ名を新しく作る時のバリデーション
+//アカウント名とタグ名を新しく作る時のバリデーション、投稿フォームの質問内容欄のバリデーション
 export const useValidation = (tagList?: string[]) => {
     const [valueText, setValueText] = React.useState("")
     const [errorMessage, setErrorMessage] = React.useState("")
@@ -24,6 +24,14 @@ export const useValidation = (tagList?: string[]) => {
     const cannotEndSpace = () => {
         return valueText[valueText.length - 1] === " " || valueText[valueText.length - 1] === "　"
     }
+
+    // const cannotStartNewLine = () =>{
+    //     return valueText[0].match(/\n/g)
+    // }
+
+    // const cannotEndNewLine = () =>{
+    //     return valueText[valueText.length - 1].match(/\n/g)
+    // }
 
     const validate = () => {
         if (require()) {
@@ -195,3 +203,41 @@ export const usePasswordValidation = () => {
 }
 
 //投稿フォームのタグ欄のバリデーション
+export const usePostTagValidation = () => {
+    const [tag, setTag] = React.useState<string[]>([])
+    const [errorTagMessage, setErrorTagMessage] = React.useState("")
+    const [isInputTagStart, setIsInputTagStart] = React.useState(false)
+    const [isTagValidated, setIsTagValidated] = React.useState(true)
+
+    const require = () => {
+        return tag.length===0
+    }
+
+    const validate = () => {
+        if (require()) {
+            setErrorTagMessage("最低1つは選択してください")
+            setIsTagValidated(false)
+            return
+        }
+        setIsTagValidated(true)
+        setErrorTagMessage("")
+    }
+
+    React.useEffect(() => {
+        if (tag.length === 0 && isInputTagStart) {
+            setIsInputTagStart(false)
+            validate()
+        } else if (tag.length > 0) {
+            setIsInputTagStart(true)
+            validate()
+        }
+    }, [tag])
+
+    return {
+        tag,
+        setTag,
+        isTagValidated,
+        errorTagMessage,
+        tagValidation: isTagValidated && isInputTagStart,
+    }
+}
