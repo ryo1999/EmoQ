@@ -9,6 +9,8 @@ import Box from "@mui/material/Box"
 import Toolbar from "@mui/material/Toolbar"
 import TextField from "@mui/material/TextField"
 import Button from "@mui/material/Button"
+import IconButton from "@mui/material/IconButton"
+import ArrowBackIcon from "@mui/icons-material/ArrowBack"
 import { useRecoilState, useRecoilValue } from "recoil"
 import { useInitializeRecoilState } from "@/hooks/useInitializeRecoilState"
 import { userInfo } from "@/store/userInfo"
@@ -24,7 +26,7 @@ const Comment = () => {
     const userState = useRecoilValue(userInfo)
     const [questionInfo, setQuestionInfo] = useRecoilState(selectedQuestion)
     const [commentList, setCommentList] = useRecoilState(selectedComment)
-    const [emotion, setEmotion] = React.useState("焦り")
+    const [emotion, setEmotion] = React.useState("ホッ")
     const { resetSelectedQuestion, resetSelectedComment } = useInitializeRecoilState()
     const { valueText, setValueText, isValidated, errorMessage, setIsInputStart, textValidation } = useValidation()
 
@@ -51,17 +53,9 @@ const Comment = () => {
 
     const handleCommentClick = async () => {
         setValueText("")
-        setEmotion("焦り")
         setIsInputStart(false)
         try {
-            await addComment(
-                router.query.qid,
-                userState.userId,
-                userState.userName,
-                valueText,
-                emotion,
-                new Date()
-            )
+            await addComment(router.query.qid, userState.userId, userState.userName, valueText, emotion, new Date())
             const C = await getComment(router.query.qid)
             setCommentList(C)
         } catch (error) {
@@ -74,16 +68,26 @@ const Comment = () => {
             <Appbar />
             <Toolbar />
             <Box sx={{ display: "flex" }}>
-                <Box sx={{ width: "50%", mt: "10px", ml: "10px", height: "720px", overflowY: "scroll" }}>
-                    {questionInfo && (
-                        <Box>
-                            <CardDetail questionInfo={questionInfo} />
+                <Box sx={{width: "50%",}}>
+                    <Box sx={{ display: "flex" }}>
+                        <IconButton onClick={() => router.push("/home")} sx={{ mt: "5px" }}>
+                            <ArrowBackIcon sx={{ color: "black", fontSize: "20px" }} />
+                            <Typography variant="subtitle1" sx={{ color: "black", fontSize: "20px" }}>
+                                ホームへ
+                            </Typography>
+                        </IconButton>
+                    </Box>
+                    <Box sx={{ height: "720px", overflowY: "scroll" }}>
+                        {questionInfo && (
+                            <Box>
+                                <CardDetail questionInfo={questionInfo} />
+                            </Box>
+                        )}
+                        <Box sx={{ width: "90%", m: "0 auto" }}>
+                            {commentList.map((commentInfo, index) => {
+                                return <CommentCard key={index} commentInfo={commentInfo} />
+                            })}
                         </Box>
-                    )}
-                    <Box sx={{ width: "90%", m: "0 auto" }}>
-                        {commentList.map((commentInfo, index) => {
-                            return <CommentCard key={index} commentInfo={commentInfo} />
-                        })}
                     </Box>
                 </Box>
                 <Box sx={{ width: "50%", m: "0 auto" }}>
