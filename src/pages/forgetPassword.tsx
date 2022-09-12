@@ -50,7 +50,6 @@ export default function ForgetPassword() {
                         <TextField
                             margin="normal"
                             fullWidth
-                            id="email"
                             placeholder="your-email@sample.com"
                             name="email"
                             autoComplete="email"

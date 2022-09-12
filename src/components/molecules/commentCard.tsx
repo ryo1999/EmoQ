@@ -68,7 +68,6 @@ const CommentCard = React.memo((props: CardContentProps) => {
                     <div style={{height:"20px"}}></div>
                 )}
                 <Menu
-                    id="menu-appbar"
                     anchorEl={menuAnchorEl}
                     anchorOrigin={{
                         vertical: "bottom",

@@ -57,7 +57,6 @@ export default function SignUp() {
                             error={!isValidated}
                             margin="normal"
                             fullWidth
-                            id="account"
                             placeholder="太郎"
                             name="account"
                             autoComplete="account"
@@ -71,7 +70,6 @@ export default function SignUp() {
                             error={!isEmailValidated}
                             margin="normal"
                             fullWidth
-                            id="email"
                             placeholder="your-email@sample.com"
                             name="email"
                             autoComplete="email"
@@ -88,7 +86,6 @@ export default function SignUp() {
                             name="password"
                             placeholder="6文字以上の英数字"
                             type="password"
-                            id="password"
                             autoComplete="current-password"
                             helperText={isPasswordValidated ? "" : errorPasswordMessage}
                             onChange={(e) => setPasswordValueText(e.target.value)}

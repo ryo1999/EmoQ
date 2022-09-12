@@ -76,7 +76,6 @@ export default function SignIn() {
                         <TextField
                             margin="normal"
                             fullWidth
-                            id="email"
                             placeholder="your-email@sample.com"
                             name="email"
                             autoComplete="email"
@@ -91,7 +90,6 @@ export default function SignIn() {
                             name="password"
                             placeholder="6文字以上の英数字"
                             type="password"
-                            id="password"
                             autoComplete="current-password"
                             onChange={(e) => setPassword(e.target.value)}
                         />

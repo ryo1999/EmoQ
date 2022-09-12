@@ -195,7 +195,6 @@ const CardDetail = React.memo((props: CardContentProps) => {
                     <></>
                 )}
                 <Menu
-                    id="menu-appbar"
                     anchorEl={menuAnchorEl}
                     anchorOrigin={{
                         vertical: "bottom",

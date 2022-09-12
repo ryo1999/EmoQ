@@ -214,10 +214,9 @@ export default function PostColumn(props: PostColumnProps) {
                         <Typography variant="caption">(最大3個)</Typography>
                         <Box sx={{ m: "10px 0px 10px 0px" }}>
                             <FormControl required error={!isTagValidated} sx={{ width: "350px" }} size="small">
-                                <InputLabel id="simple-select-label">タグ</InputLabel>
+                                <InputLabel>タグ</InputLabel>
                                 <Select
                                     labelId="simple-select-label"
-                                    id="simple-select"
                                     value={tag}
                                     label="タグ"
                                     onChange={handleTagChange}
@@ -269,7 +268,6 @@ export default function PostColumn(props: PostColumnProps) {
                         >
                             <TextField
                                 error={!isValidated}
-                                id="outlined-basic"
                                 multiline
                                 rows={13}
                                 value={valueText}

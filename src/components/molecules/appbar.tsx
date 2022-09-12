@@ -95,7 +95,6 @@ export default function Appbar() {
                             </Avatar>
                         </IconButton>
                         <Menu
-                            id="menu-appbar"
                             anchorEl={avatarAnchorEl}
                             anchorOrigin={{
                                 vertical: "center",
@@ -137,7 +136,6 @@ export default function Appbar() {
                             </MenuItem>
                         </Menu>
                         {/* <Menu
-                            id="mail-appbar"
                             anchorEl={mailAnchorEl}
                             anchorOrigin={{
                                 vertical: "bottom",

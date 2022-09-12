@@ -51,7 +51,6 @@ const TagDialog = React.memo((props: TagDialogProps) => {
                 >
                     <TextField
                         error={!isValidated}
-                        id="outlined-basic"
                         variant="outlined"
                         multiline
                         label="タグ名"

@@ -105,7 +105,6 @@ const Comment = () => {
                     >
                         <TextField
                             error={!isValidated}
-                            id="outlined-basic"
                             multiline
                             rows={12}
                             value={valueText}

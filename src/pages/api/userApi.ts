@@ -2,7 +2,11 @@ import { db } from "@/firebase"
 import {
     setDoc,
     doc,
-    getDoc
+    getDoc,
+    collection,
+    orderBy,
+    query,
+    getDocs
 } from "firebase/firestore/lite"
 
 export const singUp = async (user_id:string, name:string) => {
@@ -21,4 +25,14 @@ export const getUserName = async(uid:string)=>{
             userName:userSnap.data().name
         }
     }
+}
+
+export const getAllUserName = async()=>{
+    const userNameList:string[] = []
+    const userRef = query(collection(db,"users"),orderBy("name"))
+    const userSnap = await getDocs(userRef)
+    userSnap.forEach((doc)=>{
+        userNameList.push(doc.data().name)
+    })
+    return userNameList
 }
