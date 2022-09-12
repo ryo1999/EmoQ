@@ -43,7 +43,7 @@ const CommentCard = React.memo((props: CardContentProps) => {
     const handleClickDelete = async () => {
         setMenuAnchorEl(null)
         try {
-            await deleteComment(commentInfo.question_id,commentInfo.comment_id)
+            await deleteComment(commentInfo.question_id, commentInfo.comment_id)
             const C = await getComment(commentInfo.question_id)
             setCommentList(C)
         } catch (error) {
@@ -59,13 +59,13 @@ const CommentCard = React.memo((props: CardContentProps) => {
                 borderRadius: "10px",
             }}
         >
-            <Box sx={{ display: "flex", m: "0px 5px", justifyContent: "space-between" }}>
+            <Box sx={{ textAlign: "right", mr: "10px" }}>
                 {commentInfo.commenter_id === userState.userId ? (
                     <IconButton onClick={handleClickMenu} sx={{ mt: "5px" }}>
                         <MoreHorizIcon />
                     </IconButton>
                 ) : (
-                    <></>
+                    <div style={{height:"20px"}}></div>
                 )}
                 <Menu
                     id="menu-appbar"
@@ -88,21 +88,6 @@ const CommentCard = React.memo((props: CardContentProps) => {
                     </MenuItem>
                 </Menu>
             </Box>
-            <Box sx={{ display: "flex", justifyContent: "right", alignItems: "center", mt: "10px" }}>
-                <Tooltip title={commentInfo.emotion} placement="bottom">
-                    <IconButton
-                        disableRipple
-                        sx={{
-                            bgcolor: ReturnEmotionColor(commentInfo.emotion),
-                            mr: "10px",
-                            mt: "3px",
-                            color: "white",
-                        }}
-                    >
-                        {ReturnIcon(commentInfo.emotion)}
-                    </IconButton>
-                </Tooltip>
-            </Box>
             <CardHeader
                 avatar={
                     <Avatar sx={{ border: "solid 1px #24292f", bgcolor: "white", color: "black" }}>
@@ -114,6 +99,21 @@ const CommentCard = React.memo((props: CardContentProps) => {
                     <Typography variant="caption">
                         {today.slice(3, 5) === date.slice(3, 5) ? `今日：${dateTime}` : date}
                     </Typography>
+                }
+                action={
+                    <Tooltip title={commentInfo.emotion} placement="bottom">
+                        <IconButton
+                            disableRipple
+                            sx={{
+                                bgcolor: ReturnEmotionColor(commentInfo.emotion),
+                                mr: "10px",
+                                mt: "3px",
+                                color: "white",
+                            }}
+                        >
+                            {ReturnIcon(commentInfo.emotion)}
+                        </IconButton>
+                    </Tooltip>
                 }
             />
             <CardContent sx={{ ml: "55px", maxWidth: "460px" }}>

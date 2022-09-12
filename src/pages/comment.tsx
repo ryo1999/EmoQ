@@ -32,11 +32,9 @@ const Comment = () => {
     React.useEffect(() => {
         auth.onAuthStateChanged((user) => {
             if (user) {
-                if (!questionInfo) {
-                    getSelectQuestion(router.asPath.substring(equalIndex)).then((question) => {
-                        setQuestionInfo(question)
-                    })
-                }
+                getSelectQuestion(router.asPath.substring(equalIndex)).then((question) => {
+                    setQuestionInfo(question)
+                })
                 getComment(router.asPath.substring(equalIndex))
                     .then((comment) => {
                         setCommentList(comment)
@@ -56,7 +54,7 @@ const Comment = () => {
         setValueText("")
         setEmotion("焦り")
         setIsInputStart(false)
-        try{
+        try {
             await addComment(
                 router.asPath.substring(equalIndex),
                 userState.userId,
@@ -65,7 +63,9 @@ const Comment = () => {
                 emotion,
                 new Date()
             )
-        }catch(error){
+            const C = await getComment(router.asPath.substring(equalIndex))
+            setCommentList(C)
+        } catch (error) {
             console.error(error)
         }
     }
