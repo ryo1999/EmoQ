@@ -4,7 +4,7 @@ import { QuestionsCollectionData } from "@/utils/types"
 
 const { persistAtom } = recoilPersist()
 
-export const selectedQuestion = atom<QuestionsCollectionData>({
+export const selectedQuestion = atom<QuestionsCollectionData | undefined>({
     key: "selectedQuestion",
     default: undefined,
     effects_UNSTABLE: [persistAtom],

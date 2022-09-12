@@ -64,7 +64,6 @@ const CardDetail = React.memo((props: CardContentProps) => {
     React.useEffect(() => {
         getComment(questionInfo.question_id)
             .then((comment) => {
-                console.log({comment})
                 setCommentLength(comment.length)
             })
             .catch((error) => console.error(error))
