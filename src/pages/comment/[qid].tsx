@@ -14,7 +14,7 @@ import { useInitializeRecoilState } from "@/hooks/useInitializeRecoilState"
 import { userInfo } from "@/store/userInfo"
 import { selectedQuestion } from "@/store/selectedQuestion"
 import { selectedComment } from "@/store/selectedComment"
-import { getSelectQuestion } from "./api/questionApi"
+import { getSelectQuestion } from "../api/questionApi"
 import { getComment, addComment } from "@/pages/api/commentApi"
 import { auth } from "@/firebase"
 import { useValidation } from "@/hooks/useValidation"
@@ -26,16 +26,15 @@ const Comment = () => {
     const [commentList, setCommentList] = useRecoilState(selectedComment)
     const [emotion, setEmotion] = React.useState("焦り")
     const { resetSelectedQuestion, resetSelectedComment } = useInitializeRecoilState()
-    const equalIndex = router.asPath.indexOf("=") + 1
     const { valueText, setValueText, isValidated, errorMessage, setIsInputStart, textValidation } = useValidation()
 
     React.useEffect(() => {
         auth.onAuthStateChanged((user) => {
             if (user) {
-                getSelectQuestion(router.asPath.substring(equalIndex)).then((question) => {
+                getSelectQuestion(router.query.qid).then((question) => {
                     setQuestionInfo(question)
                 })
-                getComment(router.asPath.substring(equalIndex))
+                getComment(router.query.qid)
                     .then((comment) => {
                         setCommentList(comment)
                     })
@@ -56,14 +55,14 @@ const Comment = () => {
         setIsInputStart(false)
         try {
             await addComment(
-                router.asPath.substring(equalIndex),
+                router.query.qid,
                 userState.userId,
                 userState.userName,
                 valueText,
                 emotion,
                 new Date()
             )
-            const C = await getComment(router.asPath.substring(equalIndex))
+            const C = await getComment(router.query.qid)
             setCommentList(C)
         } catch (error) {
             console.error(error)

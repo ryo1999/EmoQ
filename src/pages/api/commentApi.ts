@@ -3,22 +3,24 @@ import { collection, deleteDoc, getDocs, query, doc, orderBy, addDoc } from "fir
 import { CommentsCollectionData } from "@/utils/types"
 
 //指定されたquestion_idのコメントをとってくる
-export const getComment = async (question_id: string) => {
+export const getComment = async (question_id: string | string[] | undefined) => {
     const commentList: CommentsCollectionData[] = []
-    const commentId = query(collection(db, "questions", question_id, "comments"), orderBy("time", "desc"))
-    const commentDoc = await getDocs(commentId)
-    commentDoc.forEach((doc) => {
-        const commentField = {
-            question_id: question_id,
-            commenter_id: doc.data().commenter_id,
-            commenter_name: doc.data().commenter_name,
-            comment_id: doc.id,
-            comment: doc.data().comment,
-            time: doc.data().time.toDate(),
-            emotion: doc.data().emotion,
-        }
-        commentList.push(commentField)
-    })
+    if (typeof question_id === "string") {
+        const commentId = query(collection(db, "questions", question_id, "comments"), orderBy("time", "desc"))
+        const commentDoc = await getDocs(commentId)
+        commentDoc.forEach((doc) => {
+            const commentField = {
+                question_id: question_id,
+                commenter_id: doc.data().commenter_id,
+                commenter_name: doc.data().commenter_name,
+                comment_id: doc.id,
+                comment: doc.data().comment,
+                time: doc.data().time.toDate(),
+                emotion: doc.data().emotion,
+            }
+            commentList.push(commentField)
+        })
+    }
     return commentList
 }
 
@@ -29,18 +31,20 @@ export const deleteComment = async (question_id: string, comment_id: string) => 
 
 //コメント追加
 export const addComment = async (
-    question_id: string,
+    question_id: string | string[] | undefined,
     commenter_id: string,
     commenter_name: string,
-    comment:string,
+    comment: string,
     emotion: string,
     time: Date
 ) => {
-    await addDoc(collection(db, "questions", question_id, "comments"), {
-        commenter_id:commenter_id,
-        commenter_name:commenter_name,
-        comment:comment,
-        emotion:emotion,
-        time:time
-    })
+    if (typeof question_id === "string") {
+        await addDoc(collection(db, "questions", question_id, "comments"), {
+            commenter_id: commenter_id,
+            commenter_name: commenter_name,
+            comment: comment,
+            emotion: emotion,
+            time: time,
+        })
+    }
 }

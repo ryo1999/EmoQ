@@ -87,9 +87,9 @@ const CardDetail = React.memo((props: CardContentProps) => {
 
     const handleClickCommentIcon = () => {
         setSelectedQuestion(questionInfo)
-        // router.push("/comment","/comment/"+questionInfo.question_id)
+        // router.push(`/comment/${questionInfo.question_id}`,"/comment/"+questionInfo.question_id)
         router.push({
-            pathname:"/comment",
+            pathname:"/comment/[qid]",
             query:{qid:questionInfo.question_id}
         })
         // router.push("/comment")
