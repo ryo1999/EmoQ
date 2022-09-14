@@ -22,4 +22,5 @@ export type CommentsCollectionData = {
     comment:string
     time: Date
     emotion: string
+    replied_user_id:string[]
 }

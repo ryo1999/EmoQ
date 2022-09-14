@@ -15,7 +15,7 @@ import { useRecoilState, useRecoilValue } from "recoil"
 import { useInitializeRecoilState } from "@/hooks/useInitializeRecoilState"
 import { userInfo } from "@/store/userInfo"
 import { selectedQuestion } from "@/store/selectedQuestion"
-import { getSelectQuestion } from "../api/questionApi"
+import { getSelectQuestion, upDateRepliedUserId } from "../api/questionApi"
 import { getComment, addComment } from "@/pages/api/commentApi"
 import { auth } from "@/firebase"
 import { useValidation } from "@/hooks/useValidation"
@@ -33,20 +33,19 @@ const Comment = () => {
     React.useEffect(() => {
         auth.onAuthStateChanged((user) => {
             if (user) {
-                    //ここのgetを無くすと、このコンポーネントをいじった時に質問が消えるのはなぜ？リロード時はなくても消えない、recoilで永続化してるはずなのに
-                    getSelectQuestion(questionInfo.question_id).then((question) => {
-                        if (question !== undefined) {
-                            setQuestionInfo(question)
-                        }
-                    })
+                //ここのgetを無くすと、このコンポーネントをいじった時に質問が消えるのはなぜ？リロード時はなくても消えない、recoilで永続化してるはずなのに
+                getSelectQuestion(questionInfo.question_id).then((question) => {
+                    if (question !== undefined) {
+                        setQuestionInfo(question)
+                    }
+                })
                 getComment(questionInfo.question_id)
                     .then((comment) => {
                         setCommentList(comment)
                     })
                     .catch((error) => console.error(error))
-                
             } else {
-                    router.push("/")
+                router.push("/")
             }
         })
         return () => {
@@ -58,12 +57,21 @@ const Comment = () => {
         setValueText("")
         setIsInputStart(false)
         try {
-            await addComment(questionInfo.question_id, userState.userId, userState.userName, valueText, emotion, new Date())
+            await addComment(
+                questionInfo.question_id,
+                userState.userId,
+                userState.userName,
+                valueText,
+                emotion,
+                new Date(),
+                questionInfo.replied_user_id
+            )
             const C = await getComment(questionInfo.question_id)
             setCommentList(C)
         } catch (error) {
             console.error(error)
         }
+        upDateRepliedUserId(questionInfo.question_id, userState.userId, questionInfo.replied_user_id)
     }
 
     return (
@@ -81,10 +89,19 @@ const Comment = () => {
                         </IconButton>
                     </Box>
                     <Box sx={{ height: "670px", overflowY: "scroll" }}>
-                        <Box>{questionInfo && <CardDetail questionInfo={questionInfo} commentList={commentList}/>}</Box>
+                        <Box>
+                            {questionInfo && <CardDetail questionInfo={questionInfo} commentList={commentList} />}
+                        </Box>
                         <Box sx={{ width: "90%", m: "0 auto" }}>
                             {commentList.map((commentInfo, index) => {
-                                return <CommentCard key={index} commentInfo={commentInfo} setCommentList={setCommentList}/>
+                                return (
+                                    <CommentCard
+                                        key={index}
+                                        commentInfo={commentInfo}
+                                        replied_user_id={questionInfo.replied_user_id}
+                                        setCommentList={setCommentList}
+                                    />
+                                )
                             })}
                         </Box>
                     </Box>

@@ -36,6 +36,9 @@ export default function Home() {
         })
     }, [])
 
+    console.log(unSolvedQuestionList)
+    console.log(solvedQuestionList)
+
     const handleClickOpen = () => {
         setOpenFormDialog(true)
     }

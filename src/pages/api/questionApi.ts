@@ -139,25 +139,46 @@ export const deleteQuestion = async (question_id: string) => {
 }
 
 //指定された質問だけとってくる
-export const getSelectQuestion = async (question_id: string | string[]) => {
-    if (typeof question_id === "string") {
-        const docRef = doc(db, "questions", question_id)
-        const docSnap = await getDoc(docRef)
-        if (docSnap.exists()) {
-            const selectedQuestion = {
-                contributor_id: docSnap.data().contributor_id,
-                contributor_name: docSnap.data().contributor_name,
-                question_id: question_id,
-                question: docSnap.data().question,
-                tag: docSnap.data().tag,
-                time: docSnap.data().time.toDate(),
-                emotion: docSnap.data().emotion,
-                parameter: docSnap.data().parameter,
-                solution: docSnap.data().solution,
-                bookmark_user_id: docSnap.data().bookmark_user_id,
-                replied_user_id: docSnap.data().replied_user_id,
-            }
-            return selectedQuestion
+export const getSelectQuestion = async (question_id: string) => {
+    const docRef = doc(db, "questions", question_id)
+    const docSnap = await getDoc(docRef)
+    if (docSnap.exists()) {
+        const selectedQuestion = {
+            contributor_id: docSnap.data().contributor_id,
+            contributor_name: docSnap.data().contributor_name,
+            question_id: question_id,
+            question: docSnap.data().question,
+            tag: docSnap.data().tag,
+            time: docSnap.data().time.toDate(),
+            emotion: docSnap.data().emotion,
+            parameter: docSnap.data().parameter,
+            solution: docSnap.data().solution,
+            bookmark_user_id: docSnap.data().bookmark_user_id,
+            replied_user_id: docSnap.data().replied_user_id,
         }
+        return selectedQuestion
+    }
+}
+
+//コメントされたquestion_idのreplied_user_idにコメントした人を追加
+export const upDateRepliedUserId = async (question_id: string, uid: string, replied_user_id: string[]) => {
+    await updateDoc(doc(db, "questions", question_id), {
+        replied_user_id: [...replied_user_id, uid],
+    })
+}
+
+//コメントを削除した時、削除した人がその質問に対して他にコメントをしていなければreplied_user_idからその人のユーザーidを削除
+export const deleteRepliedUserId = async (question_id: string, uid: string, replied_user_id: string[]) => {
+    const commentSet = new Set()
+    const docRef = query(collection(db, "questions", question_id, "comments"))
+    const docSnap = await getDocs(docRef)
+    docSnap.forEach((doc) => {
+        commentSet.add(doc.data().commenter_id)
+    })
+    if (!commentSet.has(uid)) {
+        const users = replied_user_id.filter((users) => users.match(uid) == null)
+        await updateDoc(doc(db, "questions", question_id), {
+            replied_user_id: users,
+        })
     }
 }

@@ -14,15 +14,17 @@ import DeleteIcon from "@mui/icons-material/Delete"
 import { useRecoilValue } from "recoil"
 import { userInfo } from "@/store/userInfo"
 import { deleteComment, getComment } from "@/pages/api/commentApi"
+import { deleteRepliedUserId } from "@/pages/api/questionApi"
 import { CommentsCollectionData } from "@/utils/types"
 
 type CardContentProps = {
     commentInfo: CommentsCollectionData
+    replied_user_id:string[]
     setCommentList:React.Dispatch<CommentsCollectionData[]>
 }
 
 const CommentCard = React.memo((props: CardContentProps) => {
-    const { commentInfo, setCommentList } = props
+    const { commentInfo, replied_user_id, setCommentList } = props
     const userState = useRecoilValue(userInfo)
     const [menuAnchorEl, setMenuAnchorEl] = React.useState<null | HTMLElement>(null)
 
@@ -44,6 +46,7 @@ const CommentCard = React.memo((props: CardContentProps) => {
             await deleteComment(commentInfo.question_id, commentInfo.comment_id)
             const C = await getComment(commentInfo.question_id)
             setCommentList(C)
+            deleteRepliedUserId(commentInfo.question_id, userState.userId, replied_user_id)
         } catch (error) {
             console.error(error)
         }

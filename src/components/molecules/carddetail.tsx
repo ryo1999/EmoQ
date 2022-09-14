@@ -40,11 +40,12 @@ import { CommentsCollectionData } from "@/utils/types"
 
 type CardContentProps = {
     questionInfo: QuestionsCollectionData
-    commentList?:CommentsCollectionData[]
+    setQuestionInfo?: React.Dispatch<QuestionsCollectionData>
+    commentList?: CommentsCollectionData[]
 }
 
 const CardDetail = React.memo((props: CardContentProps) => {
-    const { questionInfo, commentList } = props
+    const { questionInfo, commentList, setQuestionInfo} = props
     const router = useRouter()
     const userState = useRecoilValue(userInfo)
     const setUnSolvedQuestions = useSetRecoilState(unSolvedQuestions)
@@ -88,8 +89,8 @@ const CardDetail = React.memo((props: CardContentProps) => {
     const handleClickCommentIcon = () => {
         setSelectedQuestion(questionInfo)
         router.push({
-            pathname:"/comment/[qid]",
-            query:{qid:questionInfo.question_id}
+            pathname: "/comment/[qid]",
+            query: { qid: questionInfo.question_id },
         })
     }
 
@@ -100,6 +101,9 @@ const CardDetail = React.memo((props: CardContentProps) => {
             const Q = await getQuestion()
             setSolvedQuestions(Q[1])
             setUnSolvedQuestions(Q[0])
+            if(router.query.qid !== undefined){
+                setCheckMark(!checkMark)
+            }
         } catch (error) {
             console.error(error)
         }
@@ -139,6 +143,9 @@ const CardDetail = React.memo((props: CardContentProps) => {
                 console.error(error)
             }
         }
+        if(router.query.qid !== undefined){
+            setBookMark(!bookMark)
+        }
     }
 
     const handleClickMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -155,6 +162,9 @@ const CardDetail = React.memo((props: CardContentProps) => {
             const Q = await getQuestion()
             setSolvedQuestions(Q[1])
             setUnSolvedQuestions(Q[0])
+            if (router.query.qid !== undefined) {
+                router.push("/home")
+            }
         } catch (error) {
             console.error(error)
         }
