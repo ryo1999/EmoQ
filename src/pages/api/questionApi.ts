@@ -3,9 +3,16 @@ import { collection, getDocs, query, addDoc, orderBy, updateDoc, doc, deleteDoc,
 import { QuestionsCollectionData } from "@/utils/types"
 
 //質問全部を取ってくる
-export const getQuestion = async () => {
+export const getQuestion = async (sortText:string) => {
     const questionList: QuestionsCollectionData[][] = [[], []]
-    const questionId = query(collection(db, "questions"), orderBy("time", "desc"))
+    let questionId
+    if(sortText==="old"){
+        questionId = query(collection(db, "questions"), orderBy("time"))
+    }else if(sortText==="emergency"){
+        questionId = query(collection(db, "questions"), orderBy("parameter","desc"))
+    }else{
+        questionId = query(collection(db, "questions"), orderBy("time","desc"))
+    }
     const questionDoc = await getDocs(questionId)
     questionDoc.forEach((doc) => {
         if (doc.data().solution === false) {
@@ -69,9 +76,16 @@ export const addQuestion = async (
 }
 
 //questionコレクションから自分の投稿したものだけを取得する
-export const getMyQuestion = async (uid: string) => {
+export const getMyQuestion = async (uid: string,sortText:string) => {
     const myQuestionList: QuestionsCollectionData[][] = [[], []]
-    const questionId = query(collection(db, "questions"), orderBy("time", "desc"))
+    let questionId
+    if(sortText==="old"){
+        questionId = query(collection(db, "questions"), orderBy("time"))
+    }else if(sortText==="emergency"){
+        questionId = query(collection(db, "questions"), orderBy("parameter","desc"))
+    }else{
+        questionId = query(collection(db, "questions"), orderBy("time","desc"))
+    }
     const questionDoc = await getDocs(questionId)
     questionDoc.forEach((doc) => {
         if (doc.data().contributor_id === uid) {

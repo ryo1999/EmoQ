@@ -1,11 +1,13 @@
 import { atom } from "recoil"
 import { recoilPersist } from "recoil-persist"
-import { CommentsCollectionData } from "@/utils/types"
 
-const { persistAtom } = recoilPersist()
+const { persistAtom } = recoilPersist({
+    key: "recoil-persist",
+    storage: typeof window === "undefined" ? undefined : sessionStorage,
+})
 
-export const selectedSort = atom<CommentsCollectionData[]>({
+export const selectedSort = atom<string>({
     key: "selectedSort",
-    default: [],
+    default: undefined,
     effects_UNSTABLE: [persistAtom],
 })

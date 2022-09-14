@@ -1,15 +1,6 @@
 import { db } from "@/firebase"
 import { QuestionsCollectionData } from "@/utils/types"
-import {
-    collection,
-    deleteDoc,
-    doc,
-    query,
-    getDocs,
-    setDoc,
-    updateDoc,
-    orderBy,
-} from "firebase/firestore/lite"
+import { collection, deleteDoc, doc, query, getDocs, setDoc, updateDoc, orderBy } from "firebase/firestore/lite"
 
 //ブックマークされた時ブックマークのデータベースに追加
 export const addBookMark = async (
@@ -47,9 +38,16 @@ export const deleteBookMark = async (user_id: string, question_id: string) => {
 }
 
 //ブックマークした質問を全部取ってくる
-export const getBookMark = async (user_id: string) => {
+export const getBookMark = async (user_id: string, sortText: string) => {
     const bookmarkList: QuestionsCollectionData[][] = [[], []]
-    const bookmarkId = query(collection(db, "users", user_id, "bookmarks"), orderBy("time", "desc"))
+    let bookmarkId
+    if (sortText === "old") {
+        bookmarkId = query(collection(db, "users", user_id, "bookmarks"), orderBy("time"))
+    } else if (sortText === "emergency") {
+        bookmarkId = query(collection(db, "users", user_id, "bookmarks"), orderBy("parameter", "desc"))
+    } else {
+        bookmarkId = query(collection(db, "users", user_id, "bookmarks"), orderBy("time", "desc"))
+    }
     const bookmarkDoc = await getDocs(bookmarkId)
     bookmarkDoc.forEach((doc) => {
         if (doc.data().solution === false) {
@@ -106,11 +104,7 @@ export const deleteBookMarkQuestion = async (question_id: string, bookmark_user_
 }
 
 //ブックマークしている人の解決された質問idのsolutionをtrueにしたり、未解決に戻された質問をfalseにしたりする
-export const upDateBookmarkSolution = async (
-    question_id: string,
-    bookmark_user_id: string[],
-    solution: boolean
-) => {
+export const upDateBookmarkSolution = async (question_id: string, bookmark_user_id: string[], solution: boolean) => {
     bookmark_user_id.forEach((user_id) => {
         updateDoc(doc(db, "users", user_id, "bookmarks", question_id), {
             solution: solution,

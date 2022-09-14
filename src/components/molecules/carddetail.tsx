@@ -15,7 +15,7 @@ import Slider from "@mui/material/Slider"
 import Chip from "@mui/material/Chip"
 import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder"
 import BookmarkIcon from "@mui/icons-material/Bookmark"
-import PublishedWithChangesIcon from '@mui/icons-material/PublishedWithChanges';
+import PublishedWithChangesIcon from "@mui/icons-material/PublishedWithChanges"
 import CommentIcon from "@mui/icons-material/Comment"
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz"
 import DeleteIcon from "@mui/icons-material/Delete"
@@ -23,6 +23,7 @@ import { useRecoilValue } from "recoil"
 import { useSetRecoilState } from "recoil"
 import { solvedQuestions } from "@/store/solvedQuestions"
 import { unSolvedQuestions } from "@/store/unSolvedQuestions"
+import { selectedSort } from "@/store/selectedSort"
 import { userInfo } from "@/store/userInfo"
 import { selectedQuestion } from "@/store/selectedQuestion"
 import { getComment } from "@/pages/api/commentApi"
@@ -46,6 +47,7 @@ type CardContentProps = {
 const CardDetail = React.memo((props: CardContentProps) => {
     const { questionInfo, commentList, setQuestionInfo } = props
     const router = useRouter()
+    const sortText = useRecoilValue(selectedSort)
     const userState = useRecoilValue(userInfo)
     const setUnSolvedQuestions = useSetRecoilState(unSolvedQuestions)
     const setSolvedQuestions = useSetRecoilState(solvedQuestions)
@@ -98,7 +100,7 @@ const CardDetail = React.memo((props: CardContentProps) => {
         try {
             await upDateQuestionSolution(questionInfo.question_id, !checkMark)
             await upDateBookmarkSolution(questionInfo.question_id, questionInfo.bookmark_user_id, !checkMark)
-            const Q = await getQuestion()
+            const Q = await getQuestion(sortText)
             setSolvedQuestions(Q[1])
             setUnSolvedQuestions(Q[0])
             if (setQuestionInfo) {
@@ -112,12 +114,17 @@ const CardDetail = React.memo((props: CardContentProps) => {
     const handleClickBookMark = async () => {
         if (questionInfo.bookmark_user_id.includes(userState.userId)) {
             if (setQuestionInfo) {
-                setQuestionInfo({ ...questionInfo, bookmark_user_id: questionInfo.bookmark_user_id.filter((user)=>user.match(userState.userId) == null) })
+                setQuestionInfo({
+                    ...questionInfo,
+                    bookmark_user_id: questionInfo.bookmark_user_id.filter(
+                        (user) => user.match(userState.userId) == null
+                    ),
+                })
             }
             try {
                 await deleteBookMark(userState.userId, questionInfo.question_id)
                 await deleteQuestionBookmark(questionInfo.question_id, questionInfo.bookmark_user_id, userState.userId)
-                const Q = await getQuestion()
+                const Q = await getQuestion(sortText)
                 setSolvedQuestions(Q[1])
                 setUnSolvedQuestions(Q[0])
             } catch (error) {
@@ -125,7 +132,10 @@ const CardDetail = React.memo((props: CardContentProps) => {
             }
         } else {
             if (setQuestionInfo) {
-                setQuestionInfo({ ...questionInfo, bookmark_user_id: [...questionInfo.bookmark_user_id,userState.userId] })
+                setQuestionInfo({
+                    ...questionInfo,
+                    bookmark_user_id: [...questionInfo.bookmark_user_id, userState.userId],
+                })
             }
             try {
                 await addBookMark(
@@ -142,7 +152,7 @@ const CardDetail = React.memo((props: CardContentProps) => {
                     questionInfo.replied_user_id
                 )
                 await upDateQuestionBookmark(questionInfo.question_id, questionInfo.bookmark_user_id, userState.userId)
-                const Q = await getQuestion()
+                const Q = await getQuestion(sortText)
                 setSolvedQuestions(Q[1])
                 setUnSolvedQuestions(Q[0])
             } catch (error) {
@@ -165,7 +175,7 @@ const CardDetail = React.memo((props: CardContentProps) => {
         deleteBookMarkQuestion(questionInfo.question_id, questionInfo.bookmark_user_id)
         try {
             await deleteQuestion(questionInfo.question_id)
-            const Q = await getQuestion()
+            const Q = await getQuestion(sortText)
             setSolvedQuestions(Q[1])
             setUnSolvedQuestions(Q[0])
             if (router.query.qid !== undefined) {
@@ -225,7 +235,7 @@ const CardDetail = React.memo((props: CardContentProps) => {
                     onClose={handleCloseMenu}
                 >
                     <MenuItem onClick={handleClickSolved}>
-                        <PublishedWithChangesIcon sx={{ mr: "20px" }}/>
+                        <PublishedWithChangesIcon sx={{ mr: "20px" }} />
                         {questionInfo.solution ? "再質問!" : "解決した!"}
                     </MenuItem>
                     <MenuItem onClick={handleClickDelete}>
@@ -275,12 +285,12 @@ const CardDetail = React.memo((props: CardContentProps) => {
                     </Typography>
                 }
             />
-            <CardContent sx={{ p:"0px", ml: "55px", maxWidth: "460px" }}>
+            <CardContent sx={{ p: "0px", ml: "55px", maxWidth: "460px" }}>
                 <Typography sx={{ whiteSpace: "pre-wrap" }} variant="body2">
                     {questionInfo.question}
                 </Typography>
             </CardContent>
-            <CardActions sx={{justifyContent:"end"}}>
+            <CardActions sx={{ justifyContent: "end" }}>
                 <Box>
                     <IconButton onClick={handleClickBookMark}>
                         {bookMark ? (

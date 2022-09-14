@@ -9,7 +9,8 @@ import Toolbar from "@mui/material/Toolbar"
 import IconButton from "@mui/material/IconButton"
 import Typography from "@mui/material/Typography"
 import { Icon } from "@iconify/react"
-import { useRecoilState } from "recoil"
+import { useRecoilState, useRecoilValue } from "recoil"
+import { selectedSort } from "@/store/selectedSort"
 import { solvedQuestions } from "@/store/solvedQuestions"
 import { unSolvedQuestions } from "@/store/unSolvedQuestions"
 import { getQuestion } from "./api/questionApi"
@@ -17,6 +18,7 @@ import { auth } from "@/firebase"
 
 export default function Home() {
     const router = useRouter()
+    const sortText = useRecoilValue(selectedSort)
     const [unSolvedQuestionList, setUnSolvedQuestions] = useRecoilState(unSolvedQuestions)
     const [solvedQuestionList, setSolvedQuestions] = useRecoilState(solvedQuestions)
     const [isOpenFormDialog, setOpenFormDialog] = React.useState(false)
@@ -24,7 +26,7 @@ export default function Home() {
     React.useEffect(() => {
         auth.onAuthStateChanged((user) => {
             if (user) {
-                getQuestion()
+                getQuestion(sortText)
                     .then((question) => {
                         setUnSolvedQuestions(question[0])
                         setSolvedQuestions(question[1])

@@ -13,6 +13,7 @@ import IconButton from "@mui/material/IconButton"
 import ArrowBackIcon from "@mui/icons-material/ArrowBack"
 import { Icon } from "@iconify/react"
 import { useRecoilState, useRecoilValue } from "recoil"
+import { selectedSort } from "@/store/selectedSort"
 import { solvedQuestions } from "@/store/solvedQuestions"
 import { unSolvedQuestions } from "@/store/unSolvedQuestions"
 import { userInfo } from "@/store/userInfo"
@@ -23,6 +24,7 @@ import { auth } from "@/firebase"
 
 export default function MyPage() {
     const userState = useRecoilValue(userInfo)
+    const sortText = useRecoilValue(selectedSort)
     const [unSolvedQuestionList, setUnSolvedQuestions] = useRecoilState<QuestionsCollectionData[]>(unSolvedQuestions)
     const solvedQuestionList = useRecoilValue(solvedQuestions)
     const [value, setValue] = React.useState(0)
@@ -35,13 +37,13 @@ export default function MyPage() {
     React.useEffect(() => {
         auth.onAuthStateChanged((user) => {
             if (user) {
-                getMyQuestion(userState.userId)
+                getMyQuestion(userState.userId,sortText)
                     .then((question) => {
                         setUnSolvedMyQuestions(question[0])
                         setSolvedMyQuestions(question[1])
                     })
                     .catch((error) => console.error(error))
-                getBookMark(userState.userId)
+                getBookMark(userState.userId,sortText)
                     .then((bookmark) => {
                         setUnSolvedBookMarkQuestions(bookmark[0])
                         setSolvedBookMarkQuestions(bookmark[1])
