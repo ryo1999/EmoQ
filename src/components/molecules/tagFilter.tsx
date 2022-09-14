@@ -119,7 +119,7 @@ export default function TagFilter() {
                 <SortIcon />
                 <Typography variant="body2">並び替え：</Typography>
                 <FormControl sx={{ m: 1, minWidth: 200 }} size="small">
-                    <Select value={sortText} onChange={handleSortChange}>
+                    <Select value={sortText===undefined ? "new" : sortText} onChange={handleSortChange}>
                         <MenuItem value="new">投稿日時の新しい順</MenuItem>
                         <MenuItem value="old">投稿日時の古い順</MenuItem>
                         <MenuItem value="emergency">緊急度順</MenuItem>
