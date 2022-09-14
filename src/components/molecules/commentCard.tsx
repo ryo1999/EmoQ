@@ -12,20 +12,18 @@ import Avatar from "@mui/material/Avatar"
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz"
 import DeleteIcon from "@mui/icons-material/Delete"
 import { useRecoilValue } from "recoil"
-import { useSetRecoilState } from "recoil"
 import { userInfo } from "@/store/userInfo"
-import { selectedComment } from "@/store/selectedComment"
 import { deleteComment, getComment } from "@/pages/api/commentApi"
 import { CommentsCollectionData } from "@/utils/types"
 
 type CardContentProps = {
     commentInfo: CommentsCollectionData
+    setCommentList:React.Dispatch<CommentsCollectionData[]>
 }
 
 const CommentCard = React.memo((props: CardContentProps) => {
-    const { commentInfo } = props
+    const { commentInfo, setCommentList } = props
     const userState = useRecoilValue(userInfo)
-    const setCommentList = useSetRecoilState(selectedComment)
     const [menuAnchorEl, setMenuAnchorEl] = React.useState<null | HTMLElement>(null)
 
     const today = format(new Date(), "MM/dd HH:mm")

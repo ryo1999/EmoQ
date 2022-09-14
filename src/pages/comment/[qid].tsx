@@ -15,44 +15,42 @@ import { useRecoilState, useRecoilValue } from "recoil"
 import { useInitializeRecoilState } from "@/hooks/useInitializeRecoilState"
 import { userInfo } from "@/store/userInfo"
 import { selectedQuestion } from "@/store/selectedQuestion"
-import { selectedComment } from "@/store/selectedComment"
 import { getSelectQuestion } from "../api/questionApi"
 import { getComment, addComment } from "@/pages/api/commentApi"
 import { auth } from "@/firebase"
 import { useValidation } from "@/hooks/useValidation"
+import { CommentsCollectionData } from "@/utils/types"
 
 const Comment = () => {
     const router = useRouter()
     const userState = useRecoilValue(userInfo)
     const [questionInfo, setQuestionInfo] = useRecoilState(selectedQuestion)
-    const [commentList, setCommentList] = useRecoilState(selectedComment)
+    const [commentList, setCommentList] = React.useState<CommentsCollectionData[]>([])
     const [emotion, setEmotion] = React.useState("ホッ")
-    const { resetSelectedQuestion, resetSelectedComment } = useInitializeRecoilState()
+    const { resetSelectedQuestion } = useInitializeRecoilState()
     const { valueText, setValueText, isValidated, errorMessage, setIsInputStart, textValidation } = useValidation()
 
     React.useEffect(() => {
         auth.onAuthStateChanged((user) => {
             if (user) {
-                if (router.query.qid !== undefined) {
                     //ここのgetを無くすと、このコンポーネントをいじった時に質問が消えるのはなぜ？リロード時はなくても消えない、recoilで永続化してるはずなのに
-                    getSelectQuestion(router.query.qid).then((question) => {
+                    getSelectQuestion(questionInfo.question_id).then((question) => {
                         if (question !== undefined) {
                             setQuestionInfo(question)
                         }
                     })
-                    getComment(router.query.qid)
-                        .then((comment) => {
-                            setCommentList(comment)
-                        })
-                        .catch((error) => console.error(error))
-                }
+                getComment(questionInfo.question_id)
+                    .then((comment) => {
+                        setCommentList(comment)
+                    })
+                    .catch((error) => console.error(error))
+                
             } else {
-                router.push("/")
+                    router.push("/")
             }
         })
         return () => {
             resetSelectedQuestion()
-            resetSelectedComment()
         }
     }, [])
 
@@ -60,14 +58,13 @@ const Comment = () => {
         setValueText("")
         setIsInputStart(false)
         try {
-            await addComment(router.query.qid, userState.userId, userState.userName, valueText, emotion, new Date())
-            const C = await getComment(router.query.qid)
+            await addComment(questionInfo.question_id, userState.userId, userState.userName, valueText, emotion, new Date())
+            const C = await getComment(questionInfo.question_id)
             setCommentList(C)
         } catch (error) {
             console.error(error)
         }
     }
-
 
     return (
         <div>
@@ -84,10 +81,10 @@ const Comment = () => {
                         </IconButton>
                     </Box>
                     <Box sx={{ height: "670px", overflowY: "scroll" }}>
-                        <Box>{questionInfo && <CardDetail questionInfo={questionInfo} />}</Box>
+                        <Box>{questionInfo && <CardDetail questionInfo={questionInfo} commentList={commentList}/>}</Box>
                         <Box sx={{ width: "90%", m: "0 auto" }}>
                             {commentList.map((commentInfo, index) => {
-                                return <CommentCard key={index} commentInfo={commentInfo} />
+                                return <CommentCard key={index} commentInfo={commentInfo} setCommentList={setCommentList}/>
                             })}
                         </Box>
                     </Box>

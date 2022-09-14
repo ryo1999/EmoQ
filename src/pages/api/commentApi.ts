@@ -3,7 +3,7 @@ import { collection, deleteDoc, getDocs, query, doc, orderBy, addDoc } from "fir
 import { CommentsCollectionData } from "@/utils/types"
 
 //指定されたquestion_idのコメントをとってくる
-export const getComment = async (question_id: string | string[] | undefined) => {
+export const getComment = async (question_id: string | string[]) => {
     const commentList: CommentsCollectionData[] = []
     if (typeof question_id === "string") {
         const commentId = query(collection(db, "questions", question_id, "comments"), orderBy("time", "desc"))

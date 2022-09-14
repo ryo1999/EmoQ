@@ -21,7 +21,7 @@ export const addBookMark = async (
     tag: string[],
     time: Date,
     emotion: string,
-    parameter: string | number | number[],
+    parameter: number | number[],
     solution: boolean,
     replied_user_id: string[]
 ) => {

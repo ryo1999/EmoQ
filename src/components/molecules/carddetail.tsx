@@ -24,7 +24,6 @@ import { useRecoilValue } from "recoil"
 import { useSetRecoilState } from "recoil"
 import { solvedQuestions } from "@/store/solvedQuestions"
 import { unSolvedQuestions } from "@/store/unSolvedQuestions"
-import { selectedComment } from "@/store/selectedComment"
 import { userInfo } from "@/store/userInfo"
 import { selectedQuestion } from "@/store/selectedQuestion"
 import { getComment } from "@/pages/api/commentApi"
@@ -37,19 +36,20 @@ import {
     deleteQuestion,
 } from "@/pages/api/questionApi"
 import { QuestionsCollectionData } from "@/utils/types"
+import { CommentsCollectionData } from "@/utils/types"
 
 type CardContentProps = {
     questionInfo: QuestionsCollectionData
+    commentList?:CommentsCollectionData[]
 }
 
 const CardDetail = React.memo((props: CardContentProps) => {
-    const { questionInfo } = props
+    const { questionInfo, commentList } = props
     const router = useRouter()
     const userState = useRecoilValue(userInfo)
     const setUnSolvedQuestions = useSetRecoilState(unSolvedQuestions)
     const setSolvedQuestions = useSetRecoilState(solvedQuestions)
     const setSelectedQuestion = useSetRecoilState(selectedQuestion)
-    const commentList = useRecoilValue(selectedComment)
     const [bookMark, setBookMark] = React.useState(false)
     const [checkMark, setCheckMark] = React.useState(false)
     const [commentLength, setCommentLength] = React.useState(0)
