@@ -90,7 +90,7 @@ const Comment = () => {
                     </Box>
                     <Box sx={{ height: "670px", overflowY: "scroll" }}>
                         <Box>
-                            {questionInfo && <CardDetail questionInfo={questionInfo} commentList={commentList} />}
+                            {questionInfo && <CardDetail questionInfo={questionInfo} setQuestionInfo={setQuestionInfo} commentList={commentList} />}
                         </Box>
                         <Box sx={{ width: "90%", m: "0 auto" }}>
                             {commentList.map((commentInfo, index) => {

@@ -15,8 +15,7 @@ import Slider from "@mui/material/Slider"
 import Chip from "@mui/material/Chip"
 import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder"
 import BookmarkIcon from "@mui/icons-material/Bookmark"
-import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline"
-import CheckCircleIcon from "@mui/icons-material/CheckCircle"
+import PublishedWithChangesIcon from '@mui/icons-material/PublishedWithChanges';
 import CommentIcon from "@mui/icons-material/Comment"
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz"
 import DeleteIcon from "@mui/icons-material/Delete"
@@ -45,7 +44,7 @@ type CardContentProps = {
 }
 
 const CardDetail = React.memo((props: CardContentProps) => {
-    const { questionInfo, commentList, setQuestionInfo} = props
+    const { questionInfo, commentList, setQuestionInfo } = props
     const router = useRouter()
     const userState = useRecoilValue(userInfo)
     const setUnSolvedQuestions = useSetRecoilState(unSolvedQuestions)
@@ -94,15 +93,16 @@ const CardDetail = React.memo((props: CardContentProps) => {
         })
     }
 
-    const handleClickCheckMark = async () => {
+    const handleClickSolved = async () => {
+        setMenuAnchorEl(null)
         try {
             await upDateQuestionSolution(questionInfo.question_id, !checkMark)
             await upDateBookmarkSolution(questionInfo.question_id, questionInfo.bookmark_user_id, !checkMark)
             const Q = await getQuestion()
             setSolvedQuestions(Q[1])
             setUnSolvedQuestions(Q[0])
-            if(router.query.qid !== undefined){
-                setCheckMark(!checkMark)
+            if (setQuestionInfo) {
+                setQuestionInfo({ ...questionInfo, solution: !questionInfo.solution })
             }
         } catch (error) {
             console.error(error)
@@ -111,6 +111,9 @@ const CardDetail = React.memo((props: CardContentProps) => {
 
     const handleClickBookMark = async () => {
         if (questionInfo.bookmark_user_id.includes(userState.userId)) {
+            if (setQuestionInfo) {
+                setQuestionInfo({ ...questionInfo, bookmark_user_id: questionInfo.bookmark_user_id.filter((user)=>user.match(userState.userId) == null) })
+            }
             try {
                 await deleteBookMark(userState.userId, questionInfo.question_id)
                 await deleteQuestionBookmark(questionInfo.question_id, questionInfo.bookmark_user_id, userState.userId)
@@ -121,6 +124,9 @@ const CardDetail = React.memo((props: CardContentProps) => {
                 console.error(error)
             }
         } else {
+            if (setQuestionInfo) {
+                setQuestionInfo({ ...questionInfo, bookmark_user_id: [...questionInfo.bookmark_user_id,userState.userId] })
+            }
             try {
                 await addBookMark(
                     userState.userId,
@@ -143,9 +149,9 @@ const CardDetail = React.memo((props: CardContentProps) => {
                 console.error(error)
             }
         }
-        if(router.query.qid !== undefined){
-            setBookMark(!bookMark)
-        }
+        // if (router.query.qid !== undefined) {
+        //     setBookMark(!bookMark)
+        // }
     }
 
     const handleClickMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -218,6 +224,10 @@ const CardDetail = React.memo((props: CardContentProps) => {
                     open={Boolean(menuAnchorEl)}
                     onClose={handleCloseMenu}
                 >
+                    <MenuItem onClick={handleClickSolved}>
+                        <PublishedWithChangesIcon sx={{ mr: "20px" }}/>
+                        {questionInfo.solution ? "再質問!" : "解決した!"}
+                    </MenuItem>
                     <MenuItem onClick={handleClickDelete}>
                         <DeleteIcon sx={{ mr: "20px" }} />
                         削除
@@ -238,15 +248,6 @@ const CardDetail = React.memo((props: CardContentProps) => {
                     sx={{ width: "200px", mr: "30px" }}
                     disabled
                 />
-                <Box
-                    sx={{
-                        width: "30px",
-                        mr: "20px",
-                        borderBottom: "solid 1px",
-                    }}
-                >
-                    {questionInfo.parameter}
-                </Box>
                 <Tooltip title={questionInfo.emotion} placement="bottom">
                     <IconButton
                         disableRipple
@@ -274,20 +275,12 @@ const CardDetail = React.memo((props: CardContentProps) => {
                     </Typography>
                 }
             />
-            <CardContent sx={{ ml: "55px", maxWidth: "460px" }}>
+            <CardContent sx={{ p:"0px", ml: "55px", maxWidth: "460px" }}>
                 <Typography sx={{ whiteSpace: "pre-wrap" }} variant="body2">
                     {questionInfo.question}
                 </Typography>
             </CardContent>
-            <CardActions sx={{ justifyContent: "space-between" }}>
-                <Box>
-                    <IconButton
-                        disabled={!(questionInfo.contributor_id === userState.userId)}
-                        onClick={handleClickCheckMark}
-                    >
-                        {checkMark ? <CheckCircleIcon sx={{ color: "red" }} /> : <CheckCircleOutlineIcon />}
-                    </IconButton>
-                </Box>
+            <CardActions sx={{justifyContent:"end"}}>
                 <Box>
                     <IconButton onClick={handleClickBookMark}>
                         {bookMark ? (

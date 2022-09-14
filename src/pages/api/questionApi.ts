@@ -176,7 +176,7 @@ export const deleteRepliedUserId = async (question_id: string, uid: string, repl
         commentSet.add(doc.data().commenter_id)
     })
     if (!commentSet.has(uid)) {
-        const users = replied_user_id.filter((users) => users.match(uid) == null)
+        const users = replied_user_id.filter((user) => user.match(uid) == null)
         await updateDoc(doc(db, "questions", question_id), {
             replied_user_id: users,
         })

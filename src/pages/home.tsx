@@ -36,8 +36,6 @@ export default function Home() {
         })
     }, [])
 
-    console.log(unSolvedQuestionList)
-    console.log(solvedQuestionList)
 
     const handleClickOpen = () => {
         setOpenFormDialog(true)
@@ -50,7 +48,7 @@ export default function Home() {
             <TagFilter />
             <Box sx={{ display: "flex", justifyContent: "space-around", width: "100%" }}>
                 <div style={{ width: "40%" }}>
-                    <div>
+                    <div style={{marginBottom:"10px"}}>
                         <Typography variant="h5">
                             未解決
                         </Typography>
@@ -62,7 +60,7 @@ export default function Home() {
                     </Box>
                 </div>
                 <div style={{ width: "40%" }}>
-                    <div>
+                    <div style={{marginBottom:"10px"}}>
                         <Typography variant="h5">
                             解決済み
                         </Typography>
