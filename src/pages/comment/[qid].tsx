@@ -33,14 +33,19 @@ const Comment = () => {
     React.useEffect(() => {
         auth.onAuthStateChanged((user) => {
             if (user) {
-                getSelectQuestion(router.query.qid).then((question) => {
-                    setQuestionInfo(question)
-                })
-                getComment(router.query.qid)
-                    .then((comment) => {
-                        setCommentList(comment)
+                if (router.query.qid !== undefined) {
+                    //ここのgetを無くすと、このコンポーネントをいじった時に質問が消えるのはなぜ？リロード時はなくても消えない、recoilで永続化してるはずなのに
+                    getSelectQuestion(router.query.qid).then((question) => {
+                        if (question !== undefined) {
+                            setQuestionInfo(question)
+                        }
                     })
-                    .catch((error) => console.error(error))
+                    getComment(router.query.qid)
+                        .then((comment) => {
+                            setCommentList(comment)
+                        })
+                        .catch((error) => console.error(error))
+                }
             } else {
                 router.push("/")
             }
@@ -63,12 +68,13 @@ const Comment = () => {
         }
     }
 
+
     return (
         <div>
             <Appbar />
             <Toolbar />
             <Box sx={{ display: "flex" }}>
-                <Box sx={{width: "50%",}}>
+                <Box sx={{ width: "50%" }}>
                     <Box sx={{ display: "flex" }}>
                         <IconButton onClick={() => router.push("/home")} sx={{ mt: "5px" }}>
                             <ArrowBackIcon sx={{ color: "black", fontSize: "20px" }} />
@@ -77,12 +83,8 @@ const Comment = () => {
                             </Typography>
                         </IconButton>
                     </Box>
-                    <Box sx={{ height: "720px", overflowY: "scroll" }}>
-                        {questionInfo && (
-                            <Box>
-                                <CardDetail questionInfo={questionInfo} />
-                            </Box>
-                        )}
+                    <Box sx={{ height: "670px", overflowY: "scroll" }}>
+                        <Box>{questionInfo && <CardDetail questionInfo={questionInfo} />}</Box>
                         <Box sx={{ width: "90%", m: "0 auto" }}>
                             {commentList.map((commentInfo, index) => {
                                 return <CommentCard key={index} commentInfo={commentInfo} />

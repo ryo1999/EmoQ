@@ -51,7 +51,7 @@ export const addQuestion = async (
     tag: string[],
     time: Date,
     emotion: string,
-    parameter: string | number | number[],
+    parameter: number | number[],
     solution: boolean
 ) => {
     await addDoc(collection(db, "questions"), {
@@ -139,23 +139,25 @@ export const deleteQuestion = async (question_id: string) => {
 }
 
 //指定された質問だけとってくる
-export const getSelectQuestion = async (question_id: string | string[] | undefined) => {
+export const getSelectQuestion = async (question_id: string | string[]) => {
     if (typeof question_id === "string") {
         const docRef = doc(db, "questions", question_id)
         const docSnap = await getDoc(docRef)
-        const selectedQuestion = {
-            contributor_id: docSnap.data()?.contributor_id,
-            contributor_name: docSnap.data()?.contributor_name,
-            question_id: question_id,
-            question: docSnap.data()?.question,
-            tag: docSnap.data()?.tag,
-            time: docSnap.data()?.time.toDate(),
-            emotion: docSnap.data()?.emotion,
-            parameter: docSnap.data()?.parameter,
-            solution: docSnap.data()?.solution,
-            bookmark_user_id: docSnap.data()?.bookmark_user_id,
-            replied_user_id: docSnap.data()?.replied_user_id,
+        if (docSnap.exists()) {
+            const selectedQuestion = {
+                contributor_id: docSnap.data().contributor_id,
+                contributor_name: docSnap.data().contributor_name,
+                question_id: question_id,
+                question: docSnap.data().question,
+                tag: docSnap.data().tag,
+                time: docSnap.data().time.toDate(),
+                emotion: docSnap.data().emotion,
+                parameter: docSnap.data().parameter,
+                solution: docSnap.data().solution,
+                bookmark_user_id: docSnap.data().bookmark_user_id,
+                replied_user_id: docSnap.data().replied_user_id,
+            }
+            return selectedQuestion
         }
-        return selectedQuestion
     }
 }

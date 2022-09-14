@@ -1,6 +1,6 @@
 import React from "react"
 import { format } from "date-fns"
-import {useRouter} from "next/router"
+import { useRouter } from "next/router"
 import ReturnIcon from "../atoms/returnIcon"
 import { ReturnEmotionColor } from "@/utils/commonFunctions/returnEmotionColor"
 import { Box, Menu, MenuItem, Tooltip } from "@mui/material"
@@ -265,11 +265,16 @@ const CardDetail = React.memo((props: CardContentProps) => {
                 }
             />
             <CardContent sx={{ ml: "55px", maxWidth: "460px" }}>
-                <Typography sx={{whiteSpace:"pre-wrap"}} variant="body2">{questionInfo.question}</Typography>
+                <Typography sx={{ whiteSpace: "pre-wrap" }} variant="body2">
+                    {questionInfo.question}
+                </Typography>
             </CardContent>
             <CardActions sx={{ justifyContent: "space-between" }}>
                 <Box>
-                    <IconButton disabled={!(questionInfo.contributor_id === userState.userId)} onClick={handleClickCheckMark}>
+                    <IconButton
+                        disabled={!(questionInfo.contributor_id === userState.userId)}
+                        onClick={handleClickCheckMark}
+                    >
                         {checkMark ? <CheckCircleIcon sx={{ color: "red" }} /> : <CheckCircleOutlineIcon />}
                     </IconButton>
                 </Box>
