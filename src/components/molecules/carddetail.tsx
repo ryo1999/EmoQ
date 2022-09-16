@@ -19,7 +19,7 @@ import PublishedWithChangesIcon from "@mui/icons-material/PublishedWithChanges"
 import CommentIcon from "@mui/icons-material/Comment"
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz"
 import DeleteIcon from "@mui/icons-material/Delete"
-import { useRecoilValue } from "recoil"
+import { useRecoilState, useRecoilValue } from "recoil"
 import { useSetRecoilState } from "recoil"
 import { solvedQuestions } from "@/store/solvedQuestions"
 import { unSolvedQuestions } from "@/store/unSolvedQuestions"
@@ -49,8 +49,8 @@ const CardDetail = React.memo((props: CardContentProps) => {
     const router = useRouter()
     const sortText = useRecoilValue(selectedSort)
     const userState = useRecoilValue(userInfo)
-    const setUnSolvedQuestions = useSetRecoilState(unSolvedQuestions)
-    const setSolvedQuestions = useSetRecoilState(solvedQuestions)
+    const [unSolvedQuestionList, setUnSolvedQuestions] = useRecoilState(unSolvedQuestions)
+    const [solvedQuestionList, setSolvedQuestions] = useRecoilState(solvedQuestions)
     const setSelectedQuestion = useSetRecoilState(selectedQuestion)
     const [bookMark, setBookMark] = React.useState(false)
     const [checkMark, setCheckMark] = React.useState(false)
@@ -69,7 +69,7 @@ const CardDetail = React.memo((props: CardContentProps) => {
                 setCommentLength(comment.length)
             })
             .catch((error) => console.error(error))
-    }, [commentList])
+    }, [commentList, unSolvedQuestionList])
 
     React.useEffect(() => {
         if (questionInfo.bookmark_user_id.indexOf(userState.userId) !== -1) {

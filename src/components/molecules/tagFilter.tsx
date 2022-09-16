@@ -131,14 +131,14 @@ export default function TagFilter() {
                 <Typography variant="body2">絞り込み</Typography>
                 <FormControl sx={{ m: 1, minWidth: 100 }} size="small">
                     <Select value={filterKind} onChange={handleFilterKindChange}>
-                        <MenuItem value="none">絞り込み解除</MenuItem>
+                        <MenuItem value="none">ーーー</MenuItem>
                         <MenuItem value="タグ">タグ</MenuItem>
                         <MenuItem value="ユーザー">ユーザー</MenuItem>
                     </Select>
                 </FormControl>
                 <FormControl sx={{ m: 1, minWidth: 200 }} size="small">
-                    <Select disabled={filterKind == ""} multiple value={filterList} onChange={handleFilterChange}>
-                        <MenuItem value="none">絞り込み解除</MenuItem>
+                    <Select disabled={filterKind === "" || filterKind=== "none"} multiple value={filterList} onChange={handleFilterChange}>
+                        <MenuItem value="none">ーーー</MenuItem>
                         {filterKind == "タグ" &&
                             tagList.map((tagValue) => (
                                 <MenuItem value={tagValue} key={tagValue}>

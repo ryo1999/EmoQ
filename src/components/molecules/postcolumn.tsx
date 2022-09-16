@@ -23,7 +23,7 @@ import { TransitionProps } from "@mui/material/transitions"
 import AppBar from "@mui/material/AppBar"
 import Toolbar from "@mui/material/Toolbar"
 import IconButton from "@mui/material/IconButton"
-import { useRecoilValue } from "recoil"
+import { useRecoilState, useRecoilValue } from "recoil"
 import { selectedSort } from "@/store/selectedSort"
 import { userInfo } from "@/store/userInfo"
 import { getTag } from "@/pages/api/tagApi"
@@ -57,7 +57,7 @@ const Transition = React.forwardRef(function Transition(
 export default function PostColumn(props: PostColumnProps) {
     const { isOpenFormDialog, setOpenFormDialog, setUnSolvedQuestions } = props
     const theme = useTheme()
-    const sortText = useRecoilValue(selectedSort)
+    const [sortText, setSortText] = useRecoilState(selectedSort)
     const userState = useRecoilValue(userInfo)
     const [isOpenTagDialog, setOpenTagDialog] = React.useState(false)
     const [parameter, setParameter] = React.useState<number | number[]>(0)
@@ -128,6 +128,7 @@ export default function PostColumn(props: PostColumnProps) {
 
     const handleSubmitClick = async () => {
         setOpenFormDialog(false)
+        setSortText("new")
         try {
             await addQuestion(
                 userState.userId,
@@ -139,7 +140,7 @@ export default function PostColumn(props: PostColumnProps) {
                 parameter,
                 false
             )
-            const Q = await getQuestion(sortText)
+            const Q = await getQuestion("new")
             setUnSolvedQuestions(Q[0])
         } catch (error) {
             console.error(error)
