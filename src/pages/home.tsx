@@ -4,6 +4,7 @@ import PostColumn from "@/components/molecules/postcolumn"
 import Appbar from "@/components/molecules/appbar"
 import CardDetail from "@/components/molecules/carddetail"
 import TagFilter from "@/components/molecules/tagFilter"
+import { getIsDuplicate } from "@/utils/commonFunctions/getIsDuplicate"
 import { Box } from "@mui/material"
 import Toolbar from "@mui/material/Toolbar"
 import IconButton from "@mui/material/IconButton"
@@ -13,10 +14,9 @@ import { useRecoilState, useRecoilValue } from "recoil"
 import { selectedSort } from "@/store/selectedSort"
 import { solvedQuestions } from "@/store/solvedQuestions"
 import { unSolvedQuestions } from "@/store/unSolvedQuestions"
+import { selectedFilter } from "@/store/selectedFilter"
 import { getQuestion } from "./api/questionApi"
 import { auth } from "@/firebase"
-import { selectedFilter } from "@/store/selectedFilter"
-
 
 export default function Home() {
     const router = useRouter()
@@ -25,7 +25,6 @@ export default function Home() {
     const [solvedQuestionList, setSolvedQuestions] = useRecoilState(solvedQuestions)
     const [isOpenFormDialog, setOpenFormDialog] = React.useState(false)
     const [filter, setFilter] = useRecoilState(selectedFilter)
-
 
     React.useEffect(() => {
         auth.onAuthStateChanged((user) => {
@@ -42,7 +41,6 @@ export default function Home() {
         })
     }, [])
 
-
     const handleClickOpen = () => {
         setOpenFormDialog(true)
     }
@@ -54,27 +52,65 @@ export default function Home() {
             <TagFilter />
             <Box sx={{ display: "flex", justifyContent: "space-around", width: "100%" }}>
                 <div style={{ width: "40%" }}>
-                    <div style={{marginBottom:"10px"}}>
-                        <Typography variant="h5">
-                            未解決
-                        </Typography>
+                    <div style={{ marginBottom: "10px" }}>
+                        <Typography variant="h5">未解決</Typography>
                     </div>
                     <Box sx={{ height: "625px", overflowY: "scroll" }}>
-                        {unSolvedQuestionList.map((questionInfo, index) => {
-                            return <CardDetail key={index} questionInfo={questionInfo} />
-                        })}
+                        {filter.filterList.length === 0 &&
+                            unSolvedQuestionList.map((questionInfo, index) => {
+                                return <CardDetail key={index} questionInfo={questionInfo} isFilter={true} />
+                            })}
+                        {filter.filterKind === "タグ" &&
+                            unSolvedQuestionList.map((questionInfo, index) => {
+                                return (
+                                    <CardDetail
+                                        key={index}
+                                        questionInfo={questionInfo}
+                                        isFilter={getIsDuplicate(questionInfo.tag, filter.filterList)}
+                                    />
+                                )
+                            })}
+                        {filter.filterKind === "ユーザー" &&
+                            unSolvedQuestionList.map((questionInfo, index) => {
+                                return (
+                                    <CardDetail
+                                        key={index}
+                                        questionInfo={questionInfo}
+                                        isFilter={getIsDuplicate(questionInfo.contributor_name, filter.filterList)}
+                                    />
+                                )
+                            })}
                     </Box>
                 </div>
                 <div style={{ width: "40%" }}>
-                    <div style={{marginBottom:"10px"}}>
-                        <Typography variant="h5">
-                            解決済み
-                        </Typography>
+                    <div style={{ marginBottom: "10px" }}>
+                        <Typography variant="h5">解決済み</Typography>
                     </div>
                     <Box sx={{ height: "625px", overflowY: "scroll" }}>
-                        {solvedQuestionList.map((questionInfo, index) => (
-                            <CardDetail key={index} questionInfo={questionInfo} />
-                        ))}
+                        {filter.filterList.length === 0 &&
+                            solvedQuestionList.map((questionInfo, index) => {
+                                return <CardDetail key={index} questionInfo={questionInfo} isFilter={true} />
+                            })}
+                        {filter.filterKind === "タグ" &&
+                            solvedQuestionList.map((questionInfo, index) => {
+                                return (
+                                    <CardDetail
+                                        key={index}
+                                        questionInfo={questionInfo}
+                                        isFilter={getIsDuplicate(questionInfo.tag, filter.filterList)}
+                                    />
+                                )
+                            })}
+                        {filter.filterKind === "ユーザー" &&
+                            solvedQuestionList.map((questionInfo, index) => {
+                                return (
+                                    <CardDetail
+                                        key={index}
+                                        questionInfo={questionInfo}
+                                        isFilter={getIsDuplicate(questionInfo.contributor_name, filter.filterList)}
+                                    />
+                                )
+                            })}
                     </Box>
                 </div>
             </Box>

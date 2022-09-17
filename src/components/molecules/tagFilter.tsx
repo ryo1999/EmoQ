@@ -1,5 +1,5 @@
 import React from "react"
-import { Box, Button, IconButton, Tooltip } from "@mui/material"
+import { Box, Tooltip } from "@mui/material"
 import SortIcon from "@mui/icons-material/Sort"
 import FilterListIcon from "@mui/icons-material/FilterList"
 import Typography from "@mui/material/Typography"
@@ -109,10 +109,6 @@ export default function TagFilter() {
         }
     }
 
-    // const handleClickFilter = (event: React.MouseEvent<HTMLElement>) => {
-    //     setFilterAnchorEl(event.currentTarget)
-    // }
-
     const handleFilterKindChange = (event: SelectChangeEvent<typeof filter.filterKind>) => {
         const {
             target: { value },
@@ -160,7 +156,6 @@ export default function TagFilter() {
             <Box sx={{ display: "flex", alignItems: "center", mr: "50px" }}>
                 <FilterListIcon />
                 <Typography variant="body2">絞り込み</Typography>
-
                 <FormControl sx={{ m: 1, minWidth: 100 }} size="small">
                     <Select value={filter === undefined ? "" : filter.filterKind} onChange={handleFilterKindChange}>
                         <MenuItem value="none">フィルター解除</MenuItem>
@@ -200,7 +195,7 @@ export default function TagFilter() {
                         MenuProps={MenuProps}
                         sx={{maxWidth:"720px"}}
                     >
-                        <MenuItem value="none">フィルター解除</MenuItem>
+                        <MenuItem value="none">選択解除</MenuItem>
                         {filter !== undefined &&
                             filter.filterKind == "タグ" &&
                             tagList.map((tagValue) => (

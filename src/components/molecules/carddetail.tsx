@@ -42,10 +42,11 @@ type CardContentProps = {
     questionInfo: QuestionsCollectionData
     setQuestionInfo?: React.Dispatch<QuestionsCollectionData>
     commentList?: CommentsCollectionData[]
+    isFilter?: boolean
 }
 
 const CardDetail = React.memo((props: CardContentProps) => {
-    const { questionInfo, commentList, setQuestionInfo } = props
+    const { questionInfo, commentList, setQuestionInfo, isFilter } = props
     const router = useRouter()
     const sortText = useRecoilValue(selectedSort)
     const userState = useRecoilValue(userInfo)
@@ -184,127 +185,133 @@ const CardDetail = React.memo((props: CardContentProps) => {
     }
 
     return (
-        <Card
-            sx={{
-                width: "100%",
-                mb: "10px",
-                borderRadius: "10px",
-            }}
-        >
-            <Box sx={{ display: "flex", m: "0px 5px", justifyContent: "space-between" }}>
-                <Box>
-                    {questionInfo.tag.map((v, i) => (
-                        <Tooltip key={v} title={v} placement="top">
-                            <Chip
-                                key={i}
-                                label={v}
-                                sx={{
-                                    cursor: "pointer",
-                                    mt: "10px",
-                                    mr: "5px",
-                                    bgcolor: "#24292f",
-                                    color: "white",
-                                    maxWidth: "150px",
-                                }}
-                            />
-                        </Tooltip>
-                    ))}
-                </Box>
-                {questionInfo.contributor_id === userState.userId ? (
-                    <IconButton onClick={handleClickMenu} sx={{ mt: "5px" }}>
-                        <MoreHorizIcon />
-                    </IconButton>
-                ) : (
-                    <></>
-                )}
-                <Menu
-                    anchorEl={menuAnchorEl}
-                    anchorOrigin={{
-                        vertical: "bottom",
-                        horizontal: "right",
+        <>
+            {isFilter ? (
+                <Card
+                    sx={{
+                        width: "100%",
+                        mb: "10px",
+                        borderRadius: "10px",
                     }}
-                    keepMounted
-                    transformOrigin={{
-                        vertical: "top",
-                        horizontal: "right",
-                    }}
-                    open={Boolean(menuAnchorEl)}
-                    onClose={handleCloseMenu}
                 >
-                    <MenuItem onClick={handleClickSolved}>
-                        <PublishedWithChangesIcon sx={{ mr: "20px" }} />
-                        {questionInfo.solution ? "再質問!" : "解決した!"}
-                    </MenuItem>
-                    <MenuItem onClick={handleClickDelete}>
-                        <DeleteIcon sx={{ mr: "20px" }} />
-                        削除
-                    </MenuItem>
-                </Menu>
-            </Box>
-            <Box sx={{ display: "flex", justifyContent: "right", alignItems: "center", mt: "10px" }}>
-                <Typography variant="caption" sx={{ mr: "20px" }}>
-                    緊急度
-                </Typography>
-                <Slider
-                    key={questionInfo.parameter}
-                    defaultValue={questionInfo.parameter}
-                    marks
-                    step={10}
-                    min={0}
-                    max={100}
-                    sx={{ width: "200px", mr: "30px" }}
-                    disabled
-                />
-                <Tooltip title={questionInfo.emotion} placement="bottom">
-                    <IconButton
-                        disableRipple
-                        sx={{
-                            bgcolor: ReturnEmotionColor(questionInfo.emotion),
-                            mr: "10px",
-                            mt: "3px",
-                            color: "white",
-                        }}
-                    >
-                        {ReturnIcon(questionInfo.emotion)}
-                    </IconButton>
-                </Tooltip>
-            </Box>
-            <CardHeader
-                avatar={
-                    <Avatar sx={{ border: "solid 1px #24292f", bgcolor: "white", color: "black" }}>
-                        {questionInfo.contributor_name[0]}
-                    </Avatar>
-                }
-                title={questionInfo.contributor_name}
-                subheader={
-                    <Typography variant="caption">
-                        {today.slice(3, 5) === date.slice(3, 5) ? `今日：${dateTime}` : date}
-                    </Typography>
-                }
-            />
-            <CardContent sx={{ p: "0px", ml: "55px", maxWidth: "460px" }}>
-                <Typography sx={{ whiteSpace: "pre-wrap" }} variant="body2">
-                    {questionInfo.question}
-                </Typography>
-            </CardContent>
-            <CardActions sx={{ justifyContent: "end" }}>
-                <Box>
-                    <IconButton onClick={handleClickBookMark}>
-                        {bookMark ? (
-                            <BookmarkIcon sx={{ color: "black" }} />
+                    <Box sx={{ display: "flex", m: "0px 5px", justifyContent: "space-between" }}>
+                        <Box>
+                            {questionInfo.tag.map((v, i) => (
+                                <Tooltip key={v} title={v} placement="top">
+                                    <Chip
+                                        key={i}
+                                        label={v}
+                                        sx={{
+                                            cursor: "pointer",
+                                            mt: "10px",
+                                            mr: "5px",
+                                            bgcolor: "#24292f",
+                                            color: "white",
+                                            maxWidth: "150px",
+                                        }}
+                                    />
+                                </Tooltip>
+                            ))}
+                        </Box>
+                        {questionInfo.contributor_id === userState.userId ? (
+                            <IconButton onClick={handleClickMenu} sx={{ mt: "5px" }}>
+                                <MoreHorizIcon />
+                            </IconButton>
                         ) : (
-                            <BookmarkBorderIcon sx={{ color: "black" }} />
+                            <></>
                         )}
-                    </IconButton>
-                    <IconButton onClick={handleClickCommentIcon} sx={{ fontSize: "15px" }}>
-                        <CommentIcon sx={{ color: "black" }} />
-                        <Typography variant="button" sx={{ color: "black" }}>
-                            {commentLength}
+                        <Menu
+                            anchorEl={menuAnchorEl}
+                            anchorOrigin={{
+                                vertical: "bottom",
+                                horizontal: "right",
+                            }}
+                            keepMounted
+                            transformOrigin={{
+                                vertical: "top",
+                                horizontal: "right",
+                            }}
+                            open={Boolean(menuAnchorEl)}
+                            onClose={handleCloseMenu}
+                        >
+                            <MenuItem onClick={handleClickSolved}>
+                                <PublishedWithChangesIcon sx={{ mr: "20px" }} />
+                                {questionInfo.solution ? "再質問!" : "解決した!"}
+                            </MenuItem>
+                            <MenuItem onClick={handleClickDelete}>
+                                <DeleteIcon sx={{ mr: "20px" }} />
+                                削除
+                            </MenuItem>
+                        </Menu>
+                    </Box>
+                    <Box sx={{ display: "flex", justifyContent: "right", alignItems: "center", mt: "10px" }}>
+                        <Typography variant="caption" sx={{ mr: "20px" }}>
+                            緊急度
                         </Typography>
-                    </IconButton>
-                </Box>
-            </CardActions>
-        </Card>
+                        <Slider
+                            key={questionInfo.parameter}
+                            defaultValue={questionInfo.parameter}
+                            marks
+                            step={10}
+                            min={0}
+                            max={100}
+                            sx={{ width: "200px", mr: "30px" }}
+                            disabled
+                        />
+                        <Tooltip title={questionInfo.emotion} placement="bottom">
+                            <IconButton
+                                disableRipple
+                                sx={{
+                                    bgcolor: ReturnEmotionColor(questionInfo.emotion),
+                                    mr: "10px",
+                                    mt: "3px",
+                                    color: "white",
+                                }}
+                            >
+                                {ReturnIcon(questionInfo.emotion)}
+                            </IconButton>
+                        </Tooltip>
+                    </Box>
+                    <CardHeader
+                        avatar={
+                            <Avatar sx={{ border: "solid 1px #24292f", bgcolor: "white", color: "black" }}>
+                                {questionInfo.contributor_name[0]}
+                            </Avatar>
+                        }
+                        title={questionInfo.contributor_name}
+                        subheader={
+                            <Typography variant="caption">
+                                {today.slice(3, 5) === date.slice(3, 5) ? `今日：${dateTime}` : date}
+                            </Typography>
+                        }
+                    />
+                    <CardContent sx={{ p: "0px", ml: "55px", maxWidth: "460px" }}>
+                        <Typography sx={{ whiteSpace: "pre-wrap" }} variant="body2">
+                            {questionInfo.question}
+                        </Typography>
+                    </CardContent>
+                    <CardActions sx={{ justifyContent: "end" }}>
+                        <Box>
+                            <IconButton onClick={handleClickBookMark}>
+                                {bookMark ? (
+                                    <BookmarkIcon sx={{ color: "black" }} />
+                                ) : (
+                                    <BookmarkBorderIcon sx={{ color: "black" }} />
+                                )}
+                            </IconButton>
+                            <IconButton onClick={handleClickCommentIcon} sx={{ fontSize: "15px" }}>
+                                <CommentIcon sx={{ color: "black" }} />
+                                <Typography variant="button" sx={{ color: "black" }}>
+                                    {commentLength}
+                                </Typography>
+                            </IconButton>
+                        </Box>
+                    </CardActions>
+                </Card>
+            ) : (
+                <></>
+            )}
+        </>
     )
 })
 

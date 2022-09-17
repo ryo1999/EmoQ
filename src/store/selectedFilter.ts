@@ -8,6 +8,6 @@ const { persistAtom } = recoilPersist({
 
 export const selectedFilter = atom<{filterKind:string, filterList:string[]}>({
     key: "selectedFilter",
-    default: undefined,
+    default: {filterKind:"",filterList:[]},
     effects_UNSTABLE: [persistAtom],
 })
