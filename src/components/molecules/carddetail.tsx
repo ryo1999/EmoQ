@@ -159,9 +159,6 @@ const CardDetail = React.memo((props: CardContentProps) => {
                 console.error(error)
             }
         }
-        // if (router.query.qid !== undefined) {
-        //     setBookMark(!bookMark)
-        // }
     }
 
     const handleClickMenu = (event: React.MouseEvent<HTMLElement>) => {

@@ -233,6 +233,7 @@ export default function PostColumn(props: PostColumnProps) {
                                                         key={value}
                                                         label={value}
                                                         sx={{
+                                                            fontWeight:"bold",
                                                             fontSize: "18px",
                                                             color: "white",
                                                             bgcolor: "#24292f",

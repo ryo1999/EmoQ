@@ -4,6 +4,7 @@ import { solvedQuestions } from "@/store/solvedQuestions"
 import { unSolvedQuestions } from "@/store/unSolvedQuestions"
 import { userInfo } from "@/store/userInfo"
 import { selectedSort } from "@/store/selectedSort"
+import { selectedFilter } from "@/store/selectedFilter"
 
 export const useInitializeRecoilState = () => {
     const resetUserState = useResetRecoilState(userInfo)
@@ -11,6 +12,7 @@ export const useInitializeRecoilState = () => {
     const resetSolvedQuestions = useResetRecoilState(solvedQuestions)
     const resetSelectedQuestion = useResetRecoilState(selectedQuestion)
     const resetSelectedSort = useResetRecoilState(selectedSort)
+    const resetSelectedFilter = useResetRecoilState(selectedFilter)
 
     return {
         resetUserState,
@@ -18,5 +20,6 @@ export const useInitializeRecoilState = () => {
         resetSolvedQuestions,
         resetSelectedQuestion,
         resetSelectedSort,
+        resetSelectedFilter,
     }
 }

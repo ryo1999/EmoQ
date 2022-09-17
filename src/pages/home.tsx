@@ -15,6 +15,8 @@ import { solvedQuestions } from "@/store/solvedQuestions"
 import { unSolvedQuestions } from "@/store/unSolvedQuestions"
 import { getQuestion } from "./api/questionApi"
 import { auth } from "@/firebase"
+import { selectedFilter } from "@/store/selectedFilter"
+
 
 export default function Home() {
     const router = useRouter()
@@ -22,6 +24,8 @@ export default function Home() {
     const [unSolvedQuestionList, setUnSolvedQuestions] = useRecoilState(unSolvedQuestions)
     const [solvedQuestionList, setSolvedQuestions] = useRecoilState(solvedQuestions)
     const [isOpenFormDialog, setOpenFormDialog] = React.useState(false)
+    const [filter, setFilter] = useRecoilState(selectedFilter)
+
 
     React.useEffect(() => {
         auth.onAuthStateChanged((user) => {
@@ -55,7 +59,7 @@ export default function Home() {
                             未解決
                         </Typography>
                     </div>
-                    <Box sx={{ height: "635px", overflowY: "scroll" }}>
+                    <Box sx={{ height: "625px", overflowY: "scroll" }}>
                         {unSolvedQuestionList.map((questionInfo, index) => {
                             return <CardDetail key={index} questionInfo={questionInfo} />
                         })}
@@ -67,7 +71,7 @@ export default function Home() {
                             解決済み
                         </Typography>
                     </div>
-                    <Box sx={{ height: "635px", overflowY: "scroll" }}>
+                    <Box sx={{ height: "625px", overflowY: "scroll" }}>
                         {solvedQuestionList.map((questionInfo, index) => (
                             <CardDetail key={index} questionInfo={questionInfo} />
                         ))}
