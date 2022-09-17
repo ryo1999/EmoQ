@@ -136,8 +136,8 @@ export default function TagFilter() {
     }
 
     const handleClickDelete = (value: string) => {
-        const list = filter.filterList.filter((word)=>word.match(value)==null)
-        setFilter({...filter,filterList:list})
+        const list = filter.filterList.filter((word) => word.match(value) == null)
+        setFilter({ ...filter, filterList: list })
     }
 
     return (
@@ -157,7 +157,7 @@ export default function TagFilter() {
                 <FilterListIcon />
                 <Typography variant="body2">絞り込み</Typography>
                 <FormControl sx={{ m: 1, minWidth: 100 }} size="small">
-                    <Select value={filter === undefined ? "" : filter.filterKind} onChange={handleFilterKindChange}>
+                    <Select value={filter.filterKind} onChange={handleFilterKindChange}>
                         <MenuItem value="none">フィルター解除</MenuItem>
                         <MenuItem value="タグ">タグ</MenuItem>
                         <MenuItem value="ユーザー">ユーザー</MenuItem>
@@ -165,46 +165,55 @@ export default function TagFilter() {
                 </FormControl>
                 <FormControl sx={{ m: 1, minWidth: 200 }} size="small">
                     <Select
-                        disabled={filter !== undefined && (filter.filterKind === "" || filter.filterKind === "none")}
+                        disabled={filter.filterKind === "none"}
                         multiple
-                        value={filter === undefined ? [] : filter.filterList}
+                        value={filter.filterList}
                         onChange={handleFilterChange}
                         renderValue={(selected) => (
-                            <Box sx={{ height:"32px", overflowY:"auto", fontWeight: "bold", display: "flex", flexWrap: "wrap", gap: 0.5}}>
+                            <Box
+                                sx={{
+                                    height: "32px",
+                                    overflowY: "auto",
+                                    fontWeight: "bold",
+                                    display: "flex",
+                                    flexWrap: "wrap",
+                                    gap: 0.5,
+                                }}
+                            >
                                 {selected.map((value) => (
-                                    <Tooltip key={value} title={value} placement="bottom" >
-                                    <Chip
-                                        key={value}
-                                        label={value}
-                                        variant="outlined"
-                                        deleteIcon={
-                                            <HighlightOffIcon onMouseDown={(event: any) => event.stopPropagation()} />
-                                        }
-                                        onDelete={() => handleClickDelete(value)}
-                                        sx={{
-                                            borderColor: "#24292f",
-                                            fontSize: "15px",
-                                            color: "#24292f",
-                                            maxWidth: "200px",
-                                        }}
-                                    />
+                                    <Tooltip key={value} title={value} placement="bottom">
+                                        <Chip
+                                            key={value}
+                                            label={value}
+                                            variant="outlined"
+                                            deleteIcon={
+                                                <HighlightOffIcon
+                                                    onMouseDown={(event: any) => event.stopPropagation()}
+                                                />
+                                            }
+                                            onDelete={() => handleClickDelete(value)}
+                                            sx={{
+                                                borderColor: "#24292f",
+                                                fontSize: "15px",
+                                                color: "#24292f",
+                                                maxWidth: "200px",
+                                            }}
+                                        />
                                     </Tooltip>
-                                    ))}
+                                ))}
                             </Box>
                         )}
                         MenuProps={MenuProps}
-                        sx={{maxWidth:"720px"}}
+                        sx={{ maxWidth: "720px" }}
                     >
                         <MenuItem value="none">選択解除</MenuItem>
-                        {filter !== undefined &&
-                            filter.filterKind == "タグ" &&
+                        {filter.filterKind == "タグ" &&
                             tagList.map((tagValue) => (
                                 <MenuItem value={tagValue} key={tagValue}>
                                     {tagValue}
                                 </MenuItem>
                             ))}
-                        {filter !== undefined &&
-                            filter.filterKind == "ユーザー" &&
+                        {filter.filterKind == "ユーザー" &&
                             userList.map((userValue) => (
                                 <MenuItem value={userValue} key={userValue}>
                                     {userValue}
