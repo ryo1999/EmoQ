@@ -74,6 +74,7 @@ const Comment = () => {
         upDateRepliedUserId(questionInfo.question_id, userState.userId, questionInfo.replied_user_id)
     }
 
+
     return (
         <div>
             <Appbar />
@@ -90,7 +91,7 @@ const Comment = () => {
                     </Box>
                     <Box sx={{ height: "670px", overflowY: "scroll" }}>
                         <Box>
-                            {questionInfo && <CardDetail questionInfo={questionInfo} setQuestionInfo={setQuestionInfo} commentList={commentList} />}
+                            {questionInfo && <CardDetail questionInfo={questionInfo} setQuestionInfo={setQuestionInfo} commentList={commentList} isFilter={true}/>}
                         </Box>
                         <Box sx={{ width: "90%", m: "0 auto" }}>
                             {commentList.map((commentInfo, index) => {

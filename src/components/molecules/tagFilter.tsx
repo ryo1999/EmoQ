@@ -172,7 +172,7 @@ export default function TagFilter() {
                         renderValue={(selected) => (
                             <Box
                                 sx={{
-                                    height: "32px",
+                                    height: "25px",
                                     overflowY: "auto",
                                     fontWeight: "bold",
                                     display: "flex",
@@ -186,6 +186,7 @@ export default function TagFilter() {
                                             key={value}
                                             label={value}
                                             variant="outlined"
+                                            size="small"
                                             deleteIcon={
                                                 <HighlightOffIcon
                                                     onMouseDown={(event: any) => event.stopPropagation()}
