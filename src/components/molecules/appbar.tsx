@@ -80,7 +80,7 @@ export default function Appbar() {
                         <Typography variant="h5" component="div" sx={{ fontWeight: "bold" }}>
                             EmoQ：
                         </Typography>
-                        <Typography variant="h6" component="div" sx={{ fontWeight: "bold"}}>
+                        <Typography variant="h6" component="div">
                             {userState.groupName}
                         </Typography>
                     </Box>
