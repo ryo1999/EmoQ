@@ -23,7 +23,14 @@ import { useInitializeRecoilState } from "@/hooks/useInitializeRecoilState"
 export default function Appbar() {
     const userState = useRecoilValue(userInfo)
     const [avatarAnchorEl, setAvatarAnchorEl] = React.useState<null | HTMLElement>(null)
-    const { resetUserState, resetUnSolvedQuestions, resetSolvedQuestions, resetSelectedQuestion, resetSelectedSort, resetSelectedFilter } = useInitializeRecoilState()
+    const {
+        resetUserState,
+        resetUnSolvedQuestions,
+        resetSolvedQuestions,
+        resetSelectedQuestion,
+        resetSelectedSort,
+        resetSelectedFilter,
+    } = useInitializeRecoilState()
     // const [mailAnchorEl, setMailAnchorEl] = React.useState<null | HTMLElement>(null)
 
     const handleClickAvatar = (event: React.MouseEvent<HTMLElement>) => {
@@ -69,9 +76,14 @@ export default function Appbar() {
         <Box>
             <AppBar sx={{ bgcolor: "#24292f" }} position="fixed">
                 <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
-                    <Typography variant="h5" component="div" sx={{ fontWeight: "bold" }}>
-                        EmoQ
-                    </Typography>
+                    <Box sx={{display:"flex"}}>
+                        <Typography variant="h5" component="div" sx={{ fontWeight: "bold" }}>
+                            EmoQ：
+                        </Typography>
+                        <Typography variant="h6" component="div" sx={{ fontWeight: "bold"}}>
+                            {userState.groupName}
+                        </Typography>
+                    </Box>
                     <div>
                         {/* <IconButton onClick={handleClickMail} color="inherit">
                             <Badge badgeContent={4} color="success">

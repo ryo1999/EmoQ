@@ -23,7 +23,8 @@ export const getUserName = async(uid:string)=>{
         return {
             userId:userSnap.id,
             userName:userSnap.data().name,
-            groupId:userSnap.data().group_id
+            groupId:userSnap.data().group_id,
+            groupName:userSnap.data().group_name
         }
     }
 }

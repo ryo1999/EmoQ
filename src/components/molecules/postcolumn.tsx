@@ -76,7 +76,6 @@ export default function PostColumn(props: PostColumnProps) {
             })
     }, [])
 
-    console.log(tagList)
 
     const getStyles = (name: string, tag: string | string[], theme: Theme) => {
         return {
