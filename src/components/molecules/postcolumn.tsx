@@ -67,7 +67,7 @@ export default function PostColumn(props: PostColumnProps) {
     const { tag, setTag, isTagValidated, errorTagMessage, tagValidation } = usePostTagValidation()
 
     React.useEffect(() => {
-        getTag()
+        getTag(userState.groupId)
             .then((data) => {
                 setTagList(data)
             })
@@ -75,6 +75,8 @@ export default function PostColumn(props: PostColumnProps) {
                 console.error(error)
             })
     }, [])
+
+    console.log(tagList)
 
     const getStyles = (name: string, tag: string | string[], theme: Theme) => {
         return {
@@ -138,7 +140,8 @@ export default function PostColumn(props: PostColumnProps) {
                 new Date(),
                 emotion,
                 parameter,
-                false
+                false,
+                userState.groupId
             )
             const Q = await getQuestion("new",userState.groupId)
             setUnSolvedQuestions(Q[0])

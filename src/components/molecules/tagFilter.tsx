@@ -8,6 +8,8 @@ import FormControl from "@mui/material/FormControl"
 import Chip from "@mui/material/Chip"
 import Select, { SelectChangeEvent } from "@mui/material/Select"
 import { useRecoilState } from "recoil"
+import { useRecoilValue } from "recoil"
+import { userInfo } from "@/store/userInfo"
 import { solvedQuestions } from "@/store/solvedQuestions"
 import { unSolvedQuestions } from "@/store/unSolvedQuestions"
 import { selectedSort } from "@/store/selectedSort"
@@ -26,6 +28,7 @@ const MenuProps = {
 }
 
 export default function TagFilter() {
+    const userState = useRecoilValue(userInfo)
     const [sortText, setSortText] = useRecoilState(selectedSort)
     const [unSolvedQuestionList, setUnSolvedQuestions] = useRecoilState(unSolvedQuestions)
     const [solvedQuestionList, setSolvedQuestions] = useRecoilState(solvedQuestions)
@@ -34,7 +37,7 @@ export default function TagFilter() {
     const [userList, setUserList] = React.useState<string[]>([])
 
     React.useEffect(() => {
-        getTag()
+        getTag(userState.groupId)
             .then((data) => {
                 setTagList(data)
             })
@@ -49,6 +52,7 @@ export default function TagFilter() {
                 console.log(error)
             })
     }, [])
+
 
     const handleSortChange = (event: SelectChangeEvent) => {
         setSortText(event.target.value)

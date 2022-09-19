@@ -2,7 +2,7 @@ import React from "react"
 import { format } from "date-fns"
 import ReturnIcon from "../atoms/returnIcon"
 import { ReturnEmotionColor } from "@/utils/commonFunctions/returnEmotionColor"
-import { Box, Menu, MenuItem, Tooltip } from "@mui/material"
+import { Box, CardActions, Menu, MenuItem, Tooltip } from "@mui/material"
 import Card from "@mui/material/Card"
 import CardContent from "@mui/material/CardContent"
 import CardHeader from "@mui/material/CardHeader"
@@ -19,8 +19,8 @@ import { CommentsCollectionData } from "@/utils/types"
 
 type CardContentProps = {
     commentInfo: CommentsCollectionData
-    replied_user_id:string[]
-    setCommentList:React.Dispatch<CommentsCollectionData[]>
+    replied_user_id: string[]
+    setCommentList: React.Dispatch<CommentsCollectionData[]>
 }
 
 const CommentCard = React.memo((props: CardContentProps) => {
@@ -60,34 +60,6 @@ const CommentCard = React.memo((props: CardContentProps) => {
                 borderRadius: "10px",
             }}
         >
-            <Box sx={{ textAlign: "right", mr: "10px" }}>
-                {commentInfo.commenter_id === userState.userId ? (
-                    <IconButton onClick={handleClickMenu} sx={{ mt: "5px" }}>
-                        <MoreHorizIcon />
-                    </IconButton>
-                ) : (
-                    <div style={{height:"20px"}}></div>
-                )}
-                <Menu
-                    anchorEl={menuAnchorEl}
-                    anchorOrigin={{
-                        vertical: "bottom",
-                        horizontal: "right",
-                    }}
-                    keepMounted
-                    transformOrigin={{
-                        vertical: "top",
-                        horizontal: "right",
-                    }}
-                    open={Boolean(menuAnchorEl)}
-                    onClose={handleCloseMenu}
-                >
-                    <MenuItem onClick={handleClickDelete}>
-                        <DeleteIcon sx={{ mr: "20px" }} />
-                        削除
-                    </MenuItem>
-                </Menu>
-            </Box>
             <CardHeader
                 avatar={
                     <Avatar sx={{ border: "solid 1px #24292f", bgcolor: "white", color: "black" }}>
@@ -116,9 +88,35 @@ const CommentCard = React.memo((props: CardContentProps) => {
                     </Tooltip>
                 }
             />
-            <CardContent sx={{ ml: "55px", maxWidth: "460px" }}>
+            <CardContent sx={{ ml: "55px", maxWidth: "500px" }}>
                 <Typography variant="body2">{commentInfo.comment}</Typography>
             </CardContent>
+            <CardActions sx={{mt:"-30px", justifyContent:"end"}}>
+                {commentInfo.commenter_id === userState.userId && (
+                    <IconButton onClick={handleClickMenu} >
+                        <MoreHorizIcon />
+                    </IconButton>
+                )}
+                <Menu
+                    anchorEl={menuAnchorEl}
+                    anchorOrigin={{
+                        vertical: "bottom",
+                        horizontal: "center",
+                    }}
+                    keepMounted
+                    transformOrigin={{
+                        vertical: "top",
+                        horizontal: "center",
+                    }}
+                    open={Boolean(menuAnchorEl)}
+                    onClose={handleCloseMenu}
+                >
+                    <MenuItem onClick={handleClickDelete}>
+                        <DeleteIcon sx={{ mr: "20px" }} />
+                        削除
+                    </MenuItem>
+                </Menu>
+            </CardActions>
         </Card>
     )
 })

@@ -6,6 +6,8 @@ import DialogContent from "@mui/material/DialogContent"
 import Box from "@mui/material/Box"
 import Button from "@mui/material/Button"
 import TextField from "@mui/material/TextField"
+import { useRecoilValue } from "recoil"
+import { userInfo } from "@/store/userInfo"
 import { addTag } from "@/pages/api/tagApi"
 import { getTag } from "@/pages/api/tagApi"
 import { useValidation } from "@/hooks/useValidation"
@@ -19,6 +21,7 @@ type TagDialogProps = {
 
 const TagDialog = React.memo((props: TagDialogProps) => {
     const { tagList, isOpenTagDialog, setOpenTagDialog, setTagList } = props
+    const userState = useRecoilValue(userInfo)
     const { valueText, setValueText, isValidated, errorMessage, textValidation } = useValidation(tagList)
 
     const handleCreateTag = (value: string) => {
@@ -31,8 +34,8 @@ const TagDialog = React.memo((props: TagDialogProps) => {
 
     const handleTagSave = async () => {
         setOpenTagDialog(false)
-        await addTag(valueText)
-        setTagList(await getTag())
+        await addTag(valueText,userState.groupId)
+        setTagList(await getTag(userState.groupId))
     }
 
     return (

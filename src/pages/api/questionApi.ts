@@ -59,9 +59,10 @@ export const addQuestion = async (
     time: Date,
     emotion: string,
     parameter: number | number[],
-    solution: boolean
+    solution: boolean,
+    group_id:string
 ) => {
-    await addDoc(collection(db, "questions"), {
+    await addDoc(collection(db, "groups", group_id, "questions"), {
         contributor_id: contributor_id,
         contributor_name: contributor_name,
         question: question,
@@ -176,7 +177,7 @@ export const getSelectQuestion = async (question_id: string, groupId:string) => 
 
 //コメントされたquestion_idのreplied_user_idにコメントした人を追加
 export const upDateRepliedUserId = async (question_id: string, uid: string, replied_user_id: string[], groupId:string) => {
-    await updateDoc(doc(db, "questions", question_id), {
+    await updateDoc(doc(db, "groups", groupId, "questions", question_id), {
         replied_user_id: [...replied_user_id, uid],
     })
 }

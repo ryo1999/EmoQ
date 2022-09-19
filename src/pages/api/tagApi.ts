@@ -4,24 +4,25 @@ import {
     getDocs,
     query,
     addDoc,
+    orderBy,
 } from "firebase/firestore/lite"
 
 //タグの全種類を取ってくる
-export const getTag = async () => {
+export const getTag = async (groupId:string) => {
     const tagList:string[] = []
-    const tagId = query(collection(db, "tags"))
+    const tagId = query(collection(db,"groups", groupId, "tags"),orderBy("tag_name"))
     const tagDoc = await getDocs(tagId)
     tagDoc.forEach((doc) => {
         tagList.push(doc.data().tag_name)
     })
-    tagList.sort()
+    console.log(tagList)
     return tagList
 }
 
 
 //新しいタグを追加する
-export const addTag = async(tagName:string)=>{
-        await addDoc(collection(db,"tags"),{
+export const addTag = async(tagName:string, groupId:string)=>{
+        await addDoc(collection(db, "groups", groupId, "tags"),{
         tag_name : tagName
     })
 }
