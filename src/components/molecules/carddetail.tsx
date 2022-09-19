@@ -194,112 +194,6 @@ const CardDetail = React.memo((props: CardContentProps) => {
                         borderRadius: "10px",
                     }}
                 >
-                    {/* <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-                        {questionInfo.contributor_id === userState.userId ? (
-                            <IconButton onClick={handleClickMenu} sx={{ml:"5px"}}>
-                                <MoreHorizIcon />
-                            </IconButton>
-                        ) : (
-                            <div></div>
-                        )}
-                        <Menu
-                            anchorEl={menuAnchorEl}
-                            anchorOrigin={{
-                                vertical: "bottom",
-                                horizontal: "center",
-                            }}
-                            keepMounted
-                            transformOrigin={{
-                                vertical: "top",
-                                horizontal: "center",
-                            }}
-                            open={Boolean(menuAnchorEl)}
-                            onClose={handleCloseMenu}
-                        >
-                            <MenuItem onClick={handleClickSolved}>
-                                <PublishedWithChangesIcon sx={{ mr: "20px" }} />
-                                {questionInfo.solution ? "再質問!" : "解決した!"}
-                            </MenuItem>
-                            <MenuItem onClick={handleClickDelete}>
-                                <DeleteIcon sx={{ mr: "20px" }} />
-                                削除
-                            </MenuItem>
-                        </Menu>
-                        <Box sx={{ display: "flex", justifyContent: "right", alignItems: "center", mt: "10px" }}>
-                            <Typography variant="caption" sx={{ mr: "20px" }}>
-                                緊急度
-                            </Typography>
-                            <Slider
-                                key={questionInfo.parameter}
-                                defaultValue={questionInfo.parameter}
-                                marks
-                                step={10}
-                                min={0}
-                                max={100}
-                                sx={{ width: "200px", mr: "30px" }}
-                                disabled
-                            />
-                            <Tooltip title={questionInfo.emotion} placement="bottom">
-                                <IconButton
-                                    disableRipple
-                                    sx={{
-                                        bgcolor: ReturnEmotionColor(questionInfo.emotion),
-                                        mr: "10px",
-                                        mt: "3px",
-                                        color: "white",
-                                    }}
-                                >
-                                    {ReturnIcon(questionInfo.emotion)}
-                                </IconButton>
-                            </Tooltip>
-                        </Box> */}
-                    {/* <Box>
-                            {questionInfo.tag.map((v, i) => (
-                                <Tooltip key={v} title={v} placement="top">
-                                    <Chip
-                                        key={i}
-                                        label={v}
-                                        sx={{
-                                            cursor: "pointer",
-                                            mt: "10px",
-                                            mr: "5px",
-                                            bgcolor: "#24292f",
-                                            color: "white",
-                                            maxWidth: "150px",
-                                        }}
-                                    />
-                                </Tooltip>
-                            ))}
-                        </Box> */}
-                    {/* </Box> */}
-                    {/* <Box sx={{ display: "flex", justifyContent: "right", alignItems: "center", mt: "10px" }}>
-                        <Typography variant="caption" sx={{ mr: "20px" }}>
-                            緊急度
-                        </Typography>
-                        <Slider
-                            key={questionInfo.parameter}
-                            defaultValue={questionInfo.parameter}
-                            marks
-                            step={10}
-                            min={0}
-                            max={100}
-                            sx={{ width: "200px", mr: "30px" }}
-                            disabled
-                        />
-                        <Tooltip title={questionInfo.emotion} placement="bottom">
-                            <IconButton
-                                disableRipple
-                                sx={{
-                                    bgcolor: ReturnEmotionColor(questionInfo.emotion),
-                                    mr: "10px",
-                                    mt: "3px",
-                                    color: "white",
-                                }}
-                            >
-                                {ReturnIcon(questionInfo.emotion)}
-                            </IconButton>
-                        </Tooltip>
-                    </Box> */}
                     <Box sx={{ display: "flex", justifyContent: "space-between" }}>
                         <CardHeader
                             avatar={
@@ -317,7 +211,6 @@ const CardDetail = React.memo((props: CardContentProps) => {
                         <Box
                             sx={{
                                 display: "flex",
-                                // justifyContent: "right",
                                 alignItems: "center",
                                 mt: "-25px",
                             }}
