@@ -194,7 +194,7 @@ const CardDetail = React.memo((props: CardContentProps) => {
                         borderRadius: "10px",
                     }}
                 >
-                    <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+                    {/* <Box sx={{ display: "flex", justifyContent: "space-between" }}>
                         {questionInfo.contributor_id === userState.userId ? (
                             <IconButton onClick={handleClickMenu} sx={{ml:"5px"}}>
                                 <MoreHorizIcon />
@@ -252,8 +252,8 @@ const CardDetail = React.memo((props: CardContentProps) => {
                                     {ReturnIcon(questionInfo.emotion)}
                                 </IconButton>
                             </Tooltip>
-                        </Box>
-                        {/* <Box>
+                        </Box> */}
+                    {/* <Box>
                             {questionInfo.tag.map((v, i) => (
                                 <Tooltip key={v} title={v} placement="top">
                                     <Chip
@@ -271,7 +271,7 @@ const CardDetail = React.memo((props: CardContentProps) => {
                                 </Tooltip>
                             ))}
                         </Box> */}
-                    </Box>
+                    {/* </Box> */}
                     {/* <Box sx={{ display: "flex", justifyContent: "right", alignItems: "center", mt: "10px" }}>
                         <Typography variant="caption" sx={{ mr: "20px" }}>
                             緊急度
@@ -300,26 +300,63 @@ const CardDetail = React.memo((props: CardContentProps) => {
                             </IconButton>
                         </Tooltip>
                     </Box> */}
-                    <CardHeader
-                        avatar={
-                            <Avatar sx={{ border: "solid 1px #24292f", bgcolor: "white", color: "black" }}>
-                                {questionInfo.contributor_name[0]}
-                            </Avatar>
-                        }
-                        title={questionInfo.contributor_name}
-                        subheader={
-                            <Typography variant="caption">
-                                {today.slice(3, 5) === date.slice(3, 5) ? `今日：${dateTime}` : date}
+                    <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+                        <CardHeader
+                            avatar={
+                                <Avatar sx={{ border: "solid 1px #24292f", bgcolor: "white", color: "black" }}>
+                                    {questionInfo.contributor_name[0]}
+                                </Avatar>
+                            }
+                            title={questionInfo.contributor_name}
+                            subheader={
+                                <Typography variant="caption">
+                                    {today.slice(3, 5) === date.slice(3, 5) ? `今日：${dateTime}` : date}
+                                </Typography>
+                            }
+                        />
+                        <Box
+                            sx={{
+                                display: "flex",
+                                // justifyContent: "right",
+                                alignItems: "center",
+                                mt: "-25px",
+                            }}
+                        >
+                            <Typography variant="caption" sx={{ mr: "20px" }}>
+                                緊急度
                             </Typography>
-                        }
-                    />
-                    <CardContent sx={{ p: "0px", ml: "55px", maxWidth: "460px" }}>
+                            <Slider
+                                key={questionInfo.parameter}
+                                defaultValue={questionInfo.parameter}
+                                marks
+                                step={10}
+                                min={0}
+                                max={100}
+                                sx={{ width: "200px", mr: "30px" }}
+                                disabled
+                            />
+                            <Tooltip title={questionInfo.emotion} placement="bottom">
+                                <IconButton
+                                    disableRipple
+                                    sx={{
+                                        bgcolor: ReturnEmotionColor(questionInfo.emotion),
+                                        mr: "10px",
+                                        mt: "3px",
+                                        color: "white",
+                                    }}
+                                >
+                                    {ReturnIcon(questionInfo.emotion)}
+                                </IconButton>
+                            </Tooltip>
+                        </Box>
+                    </Box>
+                    <CardContent sx={{ ml: "55px", maxWidth: "460px" }}>
                         <Typography sx={{ whiteSpace: "pre-wrap" }} variant="body2">
                             {questionInfo.question}
                         </Typography>
                     </CardContent>
                     <CardActions sx={{ justifyContent: "space-between" }}>
-                        <Box sx={{ display: "flex" }}>
+                        <Box sx={{ ml: "8px" }}>
                             {questionInfo.tag.map((v, i) => (
                                 <Tooltip key={v} title={v} placement="bottom">
                                     <Chip
@@ -331,13 +368,13 @@ const CardDetail = React.memo((props: CardContentProps) => {
                                             cursor: "pointer",
                                             mt: "10px",
                                             mr: "5px",
-                                            maxWidth: "140px",
+                                            maxWidth: "125px",
                                         }}
                                     />
                                 </Tooltip>
                             ))}
                         </Box>
-                        <Box>
+                        <Box sx={{mb:"-8px"}}>
                             <IconButton onClick={handleClickBookMark}>
                                 {bookMark ? (
                                     <BookmarkIcon sx={{ color: "black" }} />
@@ -345,12 +382,40 @@ const CardDetail = React.memo((props: CardContentProps) => {
                                     <BookmarkBorderIcon sx={{ color: "black" }} />
                                 )}
                             </IconButton>
-                            <IconButton onClick={handleClickCommentIcon} sx={{ fontSize: "15px" }}>
+                            <IconButton onClick={handleClickCommentIcon}>
                                 <CommentIcon sx={{ color: "black" }} />
                                 <Typography variant="button" sx={{ color: "black" }}>
                                     {commentLength}
                                 </Typography>
                             </IconButton>
+                            {questionInfo.contributor_id === userState.userId && (
+                                <IconButton onClick={handleClickMenu} >
+                                    <MoreHorizIcon />
+                                </IconButton>
+                            )}
+                            <Menu
+                                anchorEl={menuAnchorEl}
+                                anchorOrigin={{
+                                    vertical: "bottom",
+                                    horizontal: "center",
+                                }}
+                                keepMounted
+                                transformOrigin={{
+                                    vertical: "top",
+                                    horizontal: "center",
+                                }}
+                                open={Boolean(menuAnchorEl)}
+                                onClose={handleCloseMenu}
+                            >
+                                <MenuItem onClick={handleClickSolved}>
+                                    <PublishedWithChangesIcon sx={{ mr: "20px" }} />
+                                    {questionInfo.solution ? "再質問!" : "解決した!"}
+                                </MenuItem>
+                                <MenuItem onClick={handleClickDelete}>
+                                    <DeleteIcon sx={{ mr: "20px" }} />
+                                    削除
+                                </MenuItem>
+                            </Menu>
                         </Box>
                     </CardActions>
                 </Card>
