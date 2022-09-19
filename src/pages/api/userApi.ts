@@ -22,7 +22,8 @@ export const getUserName = async(uid:string)=>{
     if(userSnap.exists()){
         return {
             userId:userSnap.id,
-            userName:userSnap.data().name
+            userName:userSnap.data().name,
+            groupId:userSnap.data().group_id
         }
     }
 }

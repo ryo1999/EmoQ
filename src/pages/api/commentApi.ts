@@ -3,9 +3,9 @@ import { collection, deleteDoc, getDocs, query, doc, orderBy, addDoc } from "fir
 import { CommentsCollectionData } from "@/utils/types"
 
 //指定されたquestion_idのコメントをとってくる
-export const getComment = async (question_id: string) => {
+export const getComment = async (question_id: string, groupId:string) => {
     const commentList: CommentsCollectionData[] = []
-    const commentId = query(collection(db, "questions", question_id, "comments"), orderBy("time", "desc"))
+    const commentId = query(collection(db, "groups", groupId, "questions", question_id, "comments"), orderBy("time", "desc"))
     const commentDoc = await getDocs(commentId)
     commentDoc.forEach((doc) => {
         const commentField = {
@@ -24,8 +24,8 @@ export const getComment = async (question_id: string) => {
 }
 
 //指定されたコメントを削除
-export const deleteComment = async (question_id: string, comment_id: string) => {
-    await deleteDoc(doc(db, "questions", question_id, "comments", comment_id))
+export const deleteComment = async (question_id: string, comment_id: string, groupId:string) => {
+    await deleteDoc(doc(db, "groups", groupId, "questions", question_id, "comments", comment_id))
 }
 
 //コメント追加
@@ -36,9 +36,10 @@ export const addComment = async (
     comment: string,
     emotion: string,
     time: Date,
-    replied_user_id:string[]
+    replied_user_id:string[],
+    group_id:string
 ) => {
-    await addDoc(collection(db, "questions", question_id, "comments"), {
+    await addDoc(collection(db, "groups", group_id, "questions", question_id, "comments"), {
         commenter_id: commenter_id,
         commenter_name: commenter_name,
         comment: comment,

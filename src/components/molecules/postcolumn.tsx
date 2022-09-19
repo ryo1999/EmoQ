@@ -140,7 +140,7 @@ export default function PostColumn(props: PostColumnProps) {
                 parameter,
                 false
             )
-            const Q = await getQuestion("new")
+            const Q = await getQuestion("new",userState.groupId)
             setUnSolvedQuestions(Q[0])
         } catch (error) {
             console.error(error)

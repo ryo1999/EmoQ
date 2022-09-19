@@ -41,7 +41,7 @@ export default function MyPage() {
     React.useEffect(() => {
         auth.onAuthStateChanged((user) => {
             if (user) {
-                getMyQuestion(userState.userId, sortText)
+                getMyQuestion(userState.userId, sortText,userState.groupId)
                     .then((question) => {
                         setUnSolvedMyQuestions(question[0])
                         setSolvedMyQuestions(question[1])

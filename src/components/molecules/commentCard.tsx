@@ -43,10 +43,10 @@ const CommentCard = React.memo((props: CardContentProps) => {
     const handleClickDelete = async () => {
         setMenuAnchorEl(null)
         try {
-            await deleteComment(commentInfo.question_id, commentInfo.comment_id)
-            const C = await getComment(commentInfo.question_id)
+            await deleteComment(commentInfo.question_id, commentInfo.comment_id, userState.groupId)
+            const C = await getComment(commentInfo.question_id, userState.groupId)
             setCommentList(C)
-            deleteRepliedUserId(commentInfo.question_id, userState.userId, replied_user_id)
+            deleteRepliedUserId(commentInfo.question_id, userState.userId, replied_user_id, userState.groupId)
         } catch (error) {
             console.error(error)
         }

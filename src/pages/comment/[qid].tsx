@@ -34,12 +34,12 @@ const Comment = () => {
         auth.onAuthStateChanged((user) => {
             if (user) {
                 //ここのgetを無くすと、このコンポーネントをいじった時に質問が消えるのはなぜ？リロード時はなくても消えない、recoilで永続化してるはずなのに
-                getSelectQuestion(questionInfo.question_id).then((question) => {
+                getSelectQuestion(questionInfo.question_id,userState.groupId).then((question) => {
                     if (question !== undefined) {
                         setQuestionInfo(question)
                     }
                 })
-                getComment(questionInfo.question_id)
+                getComment(questionInfo.question_id, userState.groupId)
                     .then((comment) => {
                         setCommentList(comment)
                     })
@@ -64,14 +64,15 @@ const Comment = () => {
                 valueText,
                 emotion,
                 new Date(),
-                questionInfo.replied_user_id
+                questionInfo.replied_user_id,
+                userState.groupId
             )
-            const C = await getComment(questionInfo.question_id)
+            const C = await getComment(questionInfo.question_id, userState.groupId)
             setCommentList(C)
         } catch (error) {
             console.error(error)
         }
-        upDateRepliedUserId(questionInfo.question_id, userState.userId, questionInfo.replied_user_id)
+        upDateRepliedUserId(questionInfo.question_id, userState.userId, questionInfo.replied_user_id, userState.groupId)
     }
 
 

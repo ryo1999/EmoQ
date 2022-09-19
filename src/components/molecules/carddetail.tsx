@@ -65,7 +65,7 @@ const CardDetail = React.memo((props: CardContentProps) => {
     const dateTime = format(dateToDate, "HH:mm")
 
     React.useEffect(() => {
-        getComment(questionInfo.question_id)
+        getComment(questionInfo.question_id,userState.groupId)
             .then((comment) => {
                 setCommentLength(comment.length)
             })
@@ -99,9 +99,9 @@ const CardDetail = React.memo((props: CardContentProps) => {
     const handleClickSolved = async () => {
         setMenuAnchorEl(null)
         try {
-            await upDateQuestionSolution(questionInfo.question_id, !checkMark)
+            await upDateQuestionSolution(questionInfo.question_id, !checkMark, userState.groupId)
             await upDateBookmarkSolution(questionInfo.question_id, questionInfo.bookmark_user_id, !checkMark)
-            const Q = await getQuestion(sortText)
+            const Q = await getQuestion(sortText,userState.groupId)
             setSolvedQuestions(Q[1])
             setUnSolvedQuestions(Q[0])
             if (setQuestionInfo) {
@@ -124,8 +124,8 @@ const CardDetail = React.memo((props: CardContentProps) => {
             }
             try {
                 await deleteBookMark(userState.userId, questionInfo.question_id)
-                await deleteQuestionBookmark(questionInfo.question_id, questionInfo.bookmark_user_id, userState.userId)
-                const Q = await getQuestion(sortText)
+                await deleteQuestionBookmark(questionInfo.question_id, questionInfo.bookmark_user_id, userState.userId, userState.groupId)
+                const Q = await getQuestion(sortText, userState.groupId)
                 setSolvedQuestions(Q[1])
                 setUnSolvedQuestions(Q[0])
             } catch (error) {
@@ -152,8 +152,8 @@ const CardDetail = React.memo((props: CardContentProps) => {
                     questionInfo.solution,
                     questionInfo.replied_user_id
                 )
-                await upDateQuestionBookmark(questionInfo.question_id, questionInfo.bookmark_user_id, userState.userId)
-                const Q = await getQuestion(sortText)
+                await upDateQuestionBookmark(questionInfo.question_id, questionInfo.bookmark_user_id, userState.userId, userState.groupId)
+                const Q = await getQuestion(sortText, userState.groupId)
                 setSolvedQuestions(Q[1])
                 setUnSolvedQuestions(Q[0])
             } catch (error) {
@@ -172,8 +172,8 @@ const CardDetail = React.memo((props: CardContentProps) => {
         setMenuAnchorEl(null)
         deleteBookMarkQuestion(questionInfo.question_id, questionInfo.bookmark_user_id)
         try {
-            await deleteQuestion(questionInfo.question_id)
-            const Q = await getQuestion(sortText)
+            await deleteQuestion(questionInfo.question_id, userState.groupId)
+            const Q = await getQuestion(sortText, userState.groupId)
             setSolvedQuestions(Q[1])
             setUnSolvedQuestions(Q[0])
             if (router.query.qid !== undefined) {
