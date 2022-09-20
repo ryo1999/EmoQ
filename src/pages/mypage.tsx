@@ -102,7 +102,7 @@ export default function MyPage() {
                                 {value === 0 &&
                                     filter.filterList.length === 0 &&
                                     unSolvedMyQuestions.map((questionInfo, index) => {
-                                        return <CardDetail key={index} questionInfo={questionInfo} isFilter={true} />
+                                        return <CardDetail key={questionInfo.question_id} questionInfo={questionInfo} isFilter={true} />
                                     })}
                                 {value === 0 &&
                                     filter.filterKind === "タグ" &&
@@ -132,7 +132,7 @@ export default function MyPage() {
                                 {value === 1 &&
                                     filter.filterList.length === 0 &&
                                     unSolvedBookMarkQuestions.map((questionInfo, index) => {
-                                        return <CardDetail key={index} questionInfo={questionInfo} isFilter={true} />
+                                        return <CardDetail key={questionInfo.question_id} questionInfo={questionInfo} isFilter={true} />
                                     })}
                                 {value === 1 &&
                                     filter.filterKind === "タグ" &&
@@ -169,7 +169,7 @@ export default function MyPage() {
                                 {value === 0 &&
                                     filter.filterList.length === 0 &&
                                     solvedMyQuestions.map((questionInfo, index) => {
-                                        return <CardDetail key={index} questionInfo={questionInfo} isFilter={true} />
+                                        return <CardDetail key={questionInfo.question_id} questionInfo={questionInfo} isFilter={true} />
                                     })}
                                 {value === 0 &&
                                     filter.filterKind === "タグ" &&
@@ -199,7 +199,7 @@ export default function MyPage() {
                                 {value === 1 &&
                                     filter.filterList.length === 0 &&
                                     solvedBookMarkQuestions.map((questionInfo, index) => {
-                                        return <CardDetail key={index} questionInfo={questionInfo} isFilter={true} />
+                                        return <CardDetail key={questionInfo.question_id} questionInfo={questionInfo} isFilter={true} />
                                     })}
                                 {value === 1 &&
                                     filter.filterKind === "タグ" &&

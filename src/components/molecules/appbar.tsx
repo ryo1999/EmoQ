@@ -1,7 +1,8 @@
 import React from "react"
+import { useRouter } from "next/router"
+import GroupIdDialog from "./groupIdDialog"
 import { ToastContainer, toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
-import router from "next/router"
 import AppBar from "@mui/material/AppBar"
 import Box from "@mui/material/Box"
 import Toolbar from "@mui/material/Toolbar"
@@ -14,6 +15,7 @@ import Avatar from "@mui/material/Avatar"
 import Divider from "@mui/material/Divider"
 import PersonIcon from "@mui/icons-material/Person"
 import LogoutIcon from "@mui/icons-material/Logout"
+import GroupIcon from "@mui/icons-material/Group"
 // import MailIcon from "@mui/icons-material/Mail"
 import { useRecoilValue } from "recoil"
 import { auth, signOut } from "@/firebase"
@@ -21,7 +23,9 @@ import { userInfo } from "@/store/userInfo"
 import { useInitializeRecoilState } from "@/hooks/useInitializeRecoilState"
 
 export default function Appbar() {
+    const router = useRouter()
     const userState = useRecoilValue(userInfo)
+    const [open, setOpen] = React.useState(false)
     const [avatarAnchorEl, setAvatarAnchorEl] = React.useState<null | HTMLElement>(null)
     const {
         resetUserState,
@@ -76,7 +80,7 @@ export default function Appbar() {
         <Box>
             <AppBar sx={{ bgcolor: "#24292f" }} position="fixed">
                 <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
-                    <Box sx={{display:"flex"}}>
+                    <Box sx={{ display: "flex" }}>
                         <Typography variant="h5" component="div" sx={{ fontWeight: "bold" }}>
                             EmoQ：
                         </Typography>
@@ -140,10 +144,17 @@ export default function Appbar() {
                                 {userState.userName}
                             </MenuItem>
                             <Divider />
-                            <MenuItem onClick={() => handleMenuClick("/mypage")}>
-                                <PersonIcon sx={{ mr: "20px" }} />
-                                マイページ
-                            </MenuItem>
+                            {router.pathname === "/mypage" ? (
+                                <MenuItem onClick={()=>setOpen(true)}>
+                                    <GroupIcon sx={{ mr: "20px" }} />
+                                    グループID
+                                </MenuItem>
+                            ) : (
+                                <MenuItem onClick={() => handleMenuClick("/mypage")}>
+                                    <PersonIcon sx={{ mr: "20px" }} />
+                                    マイページ
+                                </MenuItem>
+                            )}
                             <Divider />
                             <MenuItem onClick={handleClickLogOut}>
                                 <LogoutIcon sx={{ mr: "20px" }} />
@@ -169,6 +180,7 @@ export default function Appbar() {
                     </div>
                 </Toolbar>
             </AppBar>
+            <GroupIdDialog open={open} setOpen={setOpen}/>
             <ToastContainer position="bottom-center" pauseOnHover={false} closeOnClick autoClose={2000} />
         </Box>
     )
