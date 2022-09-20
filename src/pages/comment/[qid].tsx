@@ -98,7 +98,7 @@ const Comment = () => {
                             {commentList.map((commentInfo, index) => {
                                 return (
                                     <CommentCard
-                                        key={index}
+                                        key={commentInfo.question_id}
                                         commentInfo={commentInfo}
                                         replied_user_id={questionInfo.replied_user_id}
                                         setCommentList={setCommentList}

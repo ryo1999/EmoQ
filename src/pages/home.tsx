@@ -60,13 +60,19 @@ export default function Home() {
                     <Box sx={{ height: "625px", overflowY: "scroll" }}>
                         {filter.filterList.length === 0 &&
                             unSolvedQuestionList.map((questionInfo, index) => {
-                                return <CardDetail key={index} questionInfo={questionInfo} isFilter={true} />
+                                return (
+                                    <CardDetail
+                                        key={questionInfo.question_id}
+                                        questionInfo={questionInfo}
+                                        isFilter={true}
+                                    />
+                                )
                             })}
                         {filter.filterKind === "タグ" &&
                             unSolvedQuestionList.map((questionInfo, index) => {
                                 return (
                                     <CardDetail
-                                        key={index}
+                                        key={questionInfo.question_id}
                                         questionInfo={questionInfo}
                                         isFilter={getIsDuplicate(questionInfo.tag, filter.filterList)}
                                     />
@@ -76,7 +82,7 @@ export default function Home() {
                             unSolvedQuestionList.map((questionInfo, index) => {
                                 return (
                                     <CardDetail
-                                        key={index}
+                                        key={questionInfo.question_id}
                                         questionInfo={questionInfo}
                                         isFilter={getIsDuplicate(questionInfo.contributor_name, filter.filterList)}
                                     />
@@ -91,13 +97,19 @@ export default function Home() {
                     <Box sx={{ height: "625px", overflowY: "scroll" }}>
                         {filter.filterList.length === 0 &&
                             solvedQuestionList.map((questionInfo, index) => {
-                                return <CardDetail key={index} questionInfo={questionInfo} isFilter={true} />
+                                return (
+                                    <CardDetail
+                                        key={questionInfo.question_id}
+                                        questionInfo={questionInfo}
+                                        isFilter={true}
+                                    />
+                                )
                             })}
                         {filter.filterKind === "タグ" &&
                             solvedQuestionList.map((questionInfo, index) => {
                                 return (
                                     <CardDetail
-                                        key={index}
+                                        key={questionInfo.question_id}
                                         questionInfo={questionInfo}
                                         isFilter={getIsDuplicate(questionInfo.tag, filter.filterList)}
                                     />
@@ -107,7 +119,7 @@ export default function Home() {
                             solvedQuestionList.map((questionInfo, index) => {
                                 return (
                                     <CardDetail
-                                        key={index}
+                                        key={questionInfo.question_id}
                                         questionInfo={questionInfo}
                                         isFilter={getIsDuplicate(questionInfo.contributor_name, filter.filterList)}
                                     />

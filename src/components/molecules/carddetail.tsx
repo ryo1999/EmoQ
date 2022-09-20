@@ -70,7 +70,7 @@ const CardDetail = React.memo((props: CardContentProps) => {
                 setCommentLength(comment.length)
             })
             .catch((error) => console.error(error))
-    }, [commentList, unSolvedQuestionList])
+    }, [commentList])
 
     React.useEffect(() => {
         if (questionInfo.bookmark_user_id.indexOf(userState.userId) !== -1) {
@@ -184,6 +184,8 @@ const CardDetail = React.memo((props: CardContentProps) => {
         }
     }
 
+    console.log(commentLength,questionInfo.question)
+
     return (
         <>
             {isFilter ? (
@@ -253,7 +255,7 @@ const CardDetail = React.memo((props: CardContentProps) => {
                             {questionInfo.tag.map((v, i) => (
                                 <Tooltip key={v} title={v} placement="bottom">
                                     <Chip
-                                        key={i}
+                                        key={v}
                                         variant="outlined"
                                         label={v}
                                         size="small"
