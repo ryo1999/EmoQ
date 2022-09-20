@@ -15,7 +15,6 @@ export const getTag = async (groupId:string) => {
     tagDoc.forEach((doc) => {
         tagList.push(doc.data().tag_name)
     })
-    console.log(tagList)
     return tagList
 }
 

@@ -31,6 +31,7 @@ export default function Home() {
     React.useEffect(() => {
         auth.onAuthStateChanged((user) => {
             if (user) {
+                console.log(userState)
                 getQuestion(sortText, userState.groupId)
                     .then((question) => {
                         setUnSolvedQuestions(question[0])

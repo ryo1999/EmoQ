@@ -184,8 +184,6 @@ const CardDetail = React.memo((props: CardContentProps) => {
         }
     }
 
-    console.log(commentLength,questionInfo.question)
-
     return (
         <>
             {isFilter ? (
