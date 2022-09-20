@@ -109,7 +109,7 @@ export default function MyPage() {
                                     unSolvedMyQuestions.map((questionInfo, index) => {
                                         return (
                                             <CardDetail
-                                                key={index}
+                                                key={questionInfo.question_id}
                                                 questionInfo={questionInfo}
                                                 isFilter={getIsDuplicate(questionInfo.tag, filter.filterList)}
                                             />
@@ -120,7 +120,7 @@ export default function MyPage() {
                                     unSolvedMyQuestions.map((questionInfo, index) => {
                                         return (
                                             <CardDetail
-                                                key={index}
+                                                key={questionInfo.question_id}
                                                 questionInfo={questionInfo}
                                                 isFilter={getIsDuplicate(
                                                     questionInfo.contributor_name,
@@ -139,7 +139,7 @@ export default function MyPage() {
                                     unSolvedBookMarkQuestions.map((questionInfo, index) => {
                                         return (
                                             <CardDetail
-                                                key={index}
+                                                key={questionInfo.question_id}
                                                 questionInfo={questionInfo}
                                                 isFilter={getIsDuplicate(questionInfo.tag, filter.filterList)}
                                             />
@@ -150,7 +150,7 @@ export default function MyPage() {
                                     unSolvedBookMarkQuestions.map((questionInfo, index) => {
                                         return (
                                             <CardDetail
-                                                key={index}
+                                                key={questionInfo.question_id}
                                                 questionInfo={questionInfo}
                                                 isFilter={getIsDuplicate(
                                                     questionInfo.contributor_name,
@@ -176,7 +176,7 @@ export default function MyPage() {
                                     solvedMyQuestions.map((questionInfo, index) => {
                                         return (
                                             <CardDetail
-                                                key={index}
+                                                key={questionInfo.question_id}
                                                 questionInfo={questionInfo}
                                                 isFilter={getIsDuplicate(questionInfo.tag, filter.filterList)}
                                             />
@@ -187,7 +187,7 @@ export default function MyPage() {
                                     solvedMyQuestions.map((questionInfo, index) => {
                                         return (
                                             <CardDetail
-                                                key={index}
+                                                key={questionInfo.question_id}
                                                 questionInfo={questionInfo}
                                                 isFilter={getIsDuplicate(
                                                     questionInfo.contributor_name,
@@ -206,7 +206,7 @@ export default function MyPage() {
                                     solvedBookMarkQuestions.map((questionInfo, index) => {
                                         return (
                                             <CardDetail
-                                                key={index}
+                                                key={questionInfo.question_id}
                                                 questionInfo={questionInfo}
                                                 isFilter={getIsDuplicate(questionInfo.tag, filter.filterList)}
                                             />
@@ -217,7 +217,7 @@ export default function MyPage() {
                                     solvedBookMarkQuestions.map((questionInfo, index) => {
                                         return (
                                             <CardDetail
-                                                key={index}
+                                                key={questionInfo.question_id}
                                                 questionInfo={questionInfo}
                                                 isFilter={getIsDuplicate(
                                                     questionInfo.contributor_name,
