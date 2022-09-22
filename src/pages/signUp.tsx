@@ -1,34 +1,100 @@
 import React from "react"
 import router from "next/router"
 import LoadingButton from "@mui/lab/LoadingButton"
-import CssBaseline from "@mui/material/CssBaseline"
 import TextField from "@mui/material/TextField"
 import Link from "@mui/material/Link"
 import Box from "@mui/material/Box"
 import Typography from "@mui/material/Typography"
-import Container from "@mui/material/Container"
 import { createTheme, ThemeProvider } from "@mui/material/styles"
 import { auth, createUserWithEmailAndPassword } from "@/firebase"
 import { ToastContainer, toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
-import { singUp } from "@/pages/api/userApi"
-import { useValidation, useMailValidation, usePasswordValidation } from "@/hooks/useValidation"
+import { useSetRecoilState } from "recoil"
+import { userInfo } from "@/store/userInfo"
+import { getUserName, registerUserGroup, signUp } from "@/pages/api/userApi"
+import { addGroup, getGroupName } from "./api/groupApi"
+import { useValidation, useMailValidation, usePasswordValidation, useGroupValidation } from "@/hooks/useValidation"
+import FormControl from "@mui/material/FormControl"
+import Select, { SelectChangeEvent } from "@mui/material/Select"
+import MenuItem from "@mui/material/MenuItem"
+import { deleteUser } from "firebase/auth"
 
 const theme = createTheme()
 
 export default function SignUp() {
+    const setUserState = useSetRecoilState(userInfo)
     const [loading, setLoading] = React.useState(false)
+    const [groupValue, setGroupValue] = React.useState("new")
+    const [groupId, setGroupId] = React.useState("")
     const { valueText, setValueText, isValidated, errorMessage, textValidation } = useValidation()
-    const { emailValueText, setEmailValueText, isEmailValidated, errorEmailMessage, emailValidation } = useMailValidation()
-    const { passwordValueText, setPasswordValueText, isPasswordValidated, errorPasswordMessage, passwordValidation } = usePasswordValidation()
+    const { emailValueText, setEmailValueText, isEmailValidated, errorEmailMessage, emailValidation } =
+        useMailValidation()
+    const { passwordValueText, setPasswordValueText, isPasswordValidated, errorPasswordMessage, passwordValidation } =
+        usePasswordValidation()
+    const {
+        groupValueText,
+        setGroupValueText,
+        setIsInputGroupStart,
+        isGroupValidated,
+        errorGroupMessage,
+        groupValidation,
+    } = useGroupValidation()
 
-    const handleSignUp = () => {
+    React.useEffect(() => {
+        setGroupId("")
+        setGroupValueText("")
+        setIsInputGroupStart(false)
+    }, [groupValue])
+
+    const handleSignUp = async () => {
         setLoading(true)
+        let gid: string
+        let gname: string
         createUserWithEmailAndPassword(auth, emailValueText, passwordValueText)
-            .then((data) => {
-                toast.success("登録が完了しました")
-                singUp(data.user.uid, valueText)
-                router.push("/")
+            .then(async (data) => {
+                if (groupValue === "join") {
+                    const name = await getGroupName(groupId)
+                    if (name === false) {
+                        toast.error("そのようなグループは存在しません")
+                        const user = auth.currentUser
+                        if (user) {
+                            deleteUser(user)
+                                .then(() => {
+                                    //ユーザー削除
+                                })
+                                .catch((error) => {
+                                    console.error(error)
+                                })
+                        }
+                        setLoading(false)
+                        return
+                    } else {
+                        toast.success("登録が完了しました")
+                        gid = groupId
+                        gname = name
+                        await signUp(data.user.uid, valueText)
+                        await registerUserGroup(data.user.uid, gid, gname)
+                        getUserName(data.user.uid).then((userdata) => {
+                            if (userdata) {
+                                setUserState(userdata)
+                            }
+                        })
+                        router.push("/")
+                    }
+                } else if (groupValue === "new") {
+                    toast.success("登録が完了しました")
+                    const id = await addGroup(groupValueText)
+                    gid = id
+                    gname = groupValueText
+                    await signUp(data.user.uid, valueText)
+                    await registerUserGroup(data.user.uid, gid, gname)
+                    getUserName(data.user.uid).then((userdata) => {
+                        if (userdata) {
+                            setUserState(userdata)
+                        }
+                    })
+                    router.push("/")
+                }
             })
             .catch(() => {
                 setLoading(false)
@@ -36,22 +102,25 @@ export default function SignUp() {
             })
     }
 
+    const handleGroupChange = (event: SelectChangeEvent) => {
+        setGroupValue(event.target.value)
+    }
+
     return (
         <ThemeProvider theme={theme}>
-            <Container component="main" maxWidth="xs">
-                <CssBaseline />
-                <Box
-                    sx={{
-                        mt: "30px",
-                        display: "flex",
-                        flexDirection: "column",
-                        alignItems: "center",
-                    }}
-                >
-                    <Typography variant="h4" sx={{ mb: "20px" }}>
-                        新規登録
-                    </Typography>
-                    <Box sx={{ mt: 1, width: "100%" }}>
+            <Box
+                sx={{
+                    mt: "30px",
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                }}
+            >
+                <Typography variant="h4" sx={{ textAlign: "center", mb: "20px", mt: "50px" }}>
+                    新規登録
+                </Typography>
+                <Box sx={{ display: "flex", justifyContent: "space-between", width: "80%", m: "0 auto" }}>
+                    <Box sx={{ mt: 1, width: "45%" }}>
                         <Typography variant="h6">アカウント名*</Typography>
                         <TextField
                             error={!isValidated}
@@ -90,25 +159,76 @@ export default function SignUp() {
                             helperText={isPasswordValidated ? "" : errorPasswordMessage}
                             onChange={(e) => setPasswordValueText(e.target.value)}
                         />
-                        <LoadingButton
-                            type="submit"
-                            onClick={handleSignUp}
-                            fullWidth
-                            loading={loading}
-                            variant="contained"
-                            sx={{ mt: 3, mb: 2 }}
-                            disabled={!(textValidation && emailValidation && passwordValidation)}
-                        >
-                            登録
-                        </LoadingButton>
-                        <Box sx={{ m: "20px 0px" }}>
-                            <Link href="/" variant="body2">
-                                アカウントをお持ちの方はこちら
-                            </Link>
-                        </Box>
+                    </Box>
+                    <Box sx={{ mt: 1, width: "45%" }}>
+                        <Typography variant="h6">グループを選択*</Typography>
+                        <FormControl margin="normal" sx={{ minWidth: "98%", mb: "30px" }}>
+                            <Select value={groupValue} onChange={handleGroupChange}>
+                                <MenuItem value="new">新しくグループを作る</MenuItem>
+                                <MenuItem value="join">既存のグループに参加する</MenuItem>
+                            </Select>
+                        </FormControl>
+                        {groupValue === "new" && (
+                            <>
+                                <Typography variant="h6">グループ名*</Typography>
+                                <TextField
+                                    error={!isGroupValidated}
+                                    fullWidth
+                                    name="groupName"
+                                    margin="normal"
+                                    placeholder="あいうえお"
+                                    autoComplete="groupName"
+                                    helperText={isGroupValidated ? "" : errorGroupMessage}
+                                    onChange={(e) => setGroupValueText(e.target.value)}
+                                    sx={{ mb: "30px" }}
+                                />
+                            </>
+                        )}
+                        {groupValue === "join" && (
+                            <>
+                                <Typography variant="h6">グループID*</Typography>
+                                <TextField
+                                    fullWidth
+                                    name="groupId"
+                                    margin="normal"
+                                    placeholder="abcdefg"
+                                    autoComplete="groupId"
+                                    sx={{ mb: "30px" }}
+                                    onChange={(e) => setGroupId(e.target.value)}
+                                />
+                            </>
+                        )}
                     </Box>
                 </Box>
-            </Container>
+                <LoadingButton
+                    type="submit"
+                    onClick={handleSignUp}
+                    loading={loading}
+                    variant="contained"
+                    sx={{
+                        fontSize: "18px",
+                        mt: "50px",
+                        width: "30%",
+                        bgcolor: "#24292f",
+                        ":hover": { bgcolor: "#777777" },
+                    }}
+                    disabled={
+                        !(
+                            textValidation &&
+                            emailValidation &&
+                            passwordValidation &&
+                            (groupValidation == true || groupId != "")
+                        )
+                    }
+                >
+                    登録
+                </LoadingButton>
+                <Box sx={{ m: "20px 0px" }}>
+                    <Link href="/" variant="body2" sx={{ color: "black" }}>
+                        アカウントをお持ちの方はこちら
+                    </Link>
+                </Box>
+            </Box>
             <ToastContainer position="bottom-center" pauseOnHover={false} closeOnClick autoClose={2000} />
         </ThemeProvider>
     )

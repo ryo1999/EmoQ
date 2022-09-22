@@ -7,16 +7,16 @@ import { useRecoilValue } from "recoil"
 import { userInfo } from "@/store/userInfo"
 
 type GroupIdDialogProps = {
-    open:boolean,
+    isOpen:boolean,
     setOpen:React.Dispatch<boolean>
 }
 
 export default function GroupIdDialog(props:GroupIdDialogProps) {
-    const { setOpen, open } = props
+    const { setOpen, isOpen } = props
     const userState = useRecoilValue(userInfo)
 
     return (
-        <Dialog onClose={()=>setOpen(false)} open={open}>
+        <Dialog onClose={()=>setOpen(false)} open={isOpen}>
             <DialogContent>
             <Typography variant="h5">グループID ： {userState.groupId}</Typography>
             </DialogContent>

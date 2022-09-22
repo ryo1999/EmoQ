@@ -1,6 +1,6 @@
 import React from "react"
 import { useRouter } from "next/router"
-import GroupIdDialog from "./groupIdDialog"
+import GroupIdDialog from "../atoms/groupIdDialog"
 import { ToastContainer, toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 import AppBar from "@mui/material/AppBar"
@@ -25,7 +25,7 @@ import { useInitializeRecoilState } from "@/hooks/useInitializeRecoilState"
 export default function Appbar() {
     const router = useRouter()
     const userState = useRecoilValue(userInfo)
-    const [open, setOpen] = React.useState(false)
+    const [isOpen, setOpen] = React.useState(false)
     const [avatarAnchorEl, setAvatarAnchorEl] = React.useState<null | HTMLElement>(null)
     const {
         resetUserState,
@@ -180,7 +180,7 @@ export default function Appbar() {
                     </div>
                 </Toolbar>
             </AppBar>
-            <GroupIdDialog open={open} setOpen={setOpen}/>
+            <GroupIdDialog isOpen={isOpen} setOpen={setOpen}/>
             <ToastContainer position="bottom-center" pauseOnHover={false} closeOnClick autoClose={2000} />
         </Box>
     )

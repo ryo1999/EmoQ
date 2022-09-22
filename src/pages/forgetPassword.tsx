@@ -63,12 +63,12 @@ export default function ForgetPassword() {
                             fullWidth
                             loading={loading}
                             variant="contained"
-                            sx={{ mt: 3, mb: 2 }}
+                            sx={{ fontSize:"18px", mt: 3, mb: 2, bgcolor: "#24292f", ":hover": { bgcolor: "#777777" } }}
                         >
                             送信
                         </LoadingButton>
                         <Box sx={{ m: "20px 0px" }}>
-                            <Link href="/" variant="body2">
+                            <Link href="/" variant="body2" sx={{color:"black"}}>
                                 ログイン画面へ
                             </Link>
                         </Box>

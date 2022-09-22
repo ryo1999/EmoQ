@@ -6,13 +6,21 @@ import {
     collection,
     orderBy,
     query,
-    getDocs
+    getDocs,
+    updateDoc
 } from "firebase/firestore/lite"
 
-export const singUp = async (user_id:string, name:string) => {
-    //登録されたユーザーidドキュメントにフィールド追加
+//登録されたユーザーidドキュメントにフィールド追加
+export const signUp = async (user_id:string, name:string) => {
     await setDoc(doc(db,"users",user_id),{
         name:name,
+    })
+}
+
+export const registerUserGroup = async(user_id:string, group_id:string, group_name:string)=>{
+    await updateDoc(doc(db,"users",user_id),{
+        group_id:group_id,
+        group_name:group_name
     })
 }
 
