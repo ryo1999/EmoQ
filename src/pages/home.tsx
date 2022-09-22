@@ -59,7 +59,7 @@ export default function Home() {
                     </div>
                     <Box sx={{ height: "625px", overflowY: "scroll" }}>
                         {filter.filterList.length === 0 &&
-                            unSolvedQuestionList.map((questionInfo, index) => {
+                            unSolvedQuestionList.map((questionInfo) => {
                                 return (
                                     <CardDetail
                                         key={questionInfo.question_id}
@@ -69,7 +69,7 @@ export default function Home() {
                                 )
                             })}
                         {filter.filterKind === "タグ" &&
-                            unSolvedQuestionList.map((questionInfo, index) => {
+                            unSolvedQuestionList.map((questionInfo) => {
                                 return (
                                     <CardDetail
                                         key={questionInfo.question_id}
@@ -79,7 +79,7 @@ export default function Home() {
                                 )
                             })}
                         {filter.filterKind === "ユーザー" &&
-                            unSolvedQuestionList.map((questionInfo, index) => {
+                            unSolvedQuestionList.map((questionInfo) => {
                                 return (
                                     <CardDetail
                                         key={questionInfo.question_id}
@@ -96,7 +96,7 @@ export default function Home() {
                     </div>
                     <Box sx={{ height: "625px", overflowY: "scroll" }}>
                         {filter.filterList.length === 0 &&
-                            solvedQuestionList.map((questionInfo, index) => {
+                            solvedQuestionList.map((questionInfo) => {
                                 return (
                                     <CardDetail
                                         key={questionInfo.question_id}
@@ -106,7 +106,7 @@ export default function Home() {
                                 )
                             })}
                         {filter.filterKind === "タグ" &&
-                            solvedQuestionList.map((questionInfo, index) => {
+                            solvedQuestionList.map((questionInfo) => {
                                 return (
                                     <CardDetail
                                         key={questionInfo.question_id}
@@ -116,7 +116,7 @@ export default function Home() {
                                 )
                             })}
                         {filter.filterKind === "ユーザー" &&
-                            solvedQuestionList.map((questionInfo, index) => {
+                            solvedQuestionList.map((questionInfo) => {
                                 return (
                                     <CardDetail
                                         key={questionInfo.question_id}

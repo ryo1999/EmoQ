@@ -102,7 +102,7 @@ const Comment = () => {
                         </Box>
                         <Box sx={{ width: "90%", m: "0 auto" }}>
                             {questionInfo &&
-                                commentList.map((commentInfo, index) => {
+                                commentList.map((commentInfo) => {
                                     return (
                                         <CommentCard
                                             key={commentInfo.question_id}

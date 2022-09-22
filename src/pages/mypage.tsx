@@ -101,12 +101,12 @@ export default function MyPage() {
                             <Box sx={{ height: "570px", overflowY: "scroll" }}>
                                 {value === 0 &&
                                     filter.filterList.length === 0 &&
-                                    unSolvedMyQuestions.map((questionInfo, index) => {
+                                    unSolvedMyQuestions.map((questionInfo) => {
                                         return <CardDetail key={questionInfo.question_id} questionInfo={questionInfo} isFilter={true} />
                                     })}
                                 {value === 0 &&
                                     filter.filterKind === "タグ" &&
-                                    unSolvedMyQuestions.map((questionInfo, index) => {
+                                    unSolvedMyQuestions.map((questionInfo) => {
                                         return (
                                             <CardDetail
                                                 key={questionInfo.question_id}
@@ -117,7 +117,7 @@ export default function MyPage() {
                                     })}
                                 {value === 0 &&
                                     filter.filterKind === "ユーザー" &&
-                                    unSolvedMyQuestions.map((questionInfo, index) => {
+                                    unSolvedMyQuestions.map((questionInfo) => {
                                         return (
                                             <CardDetail
                                                 key={questionInfo.question_id}
@@ -131,12 +131,12 @@ export default function MyPage() {
                                     })}
                                 {value === 1 &&
                                     filter.filterList.length === 0 &&
-                                    unSolvedBookMarkQuestions.map((questionInfo, index) => {
+                                    unSolvedBookMarkQuestions.map((questionInfo) => {
                                         return <CardDetail key={questionInfo.question_id} questionInfo={questionInfo} isFilter={true} />
                                     })}
                                 {value === 1 &&
                                     filter.filterKind === "タグ" &&
-                                    unSolvedBookMarkQuestions.map((questionInfo, index) => {
+                                    unSolvedBookMarkQuestions.map((questionInfo) => {
                                         return (
                                             <CardDetail
                                                 key={questionInfo.question_id}
@@ -147,7 +147,7 @@ export default function MyPage() {
                                     })}
                                 {value === 1 &&
                                     filter.filterKind === "ユーザー" &&
-                                    unSolvedBookMarkQuestions.map((questionInfo, index) => {
+                                    unSolvedBookMarkQuestions.map((questionInfo) => {
                                         return (
                                             <CardDetail
                                                 key={questionInfo.question_id}
@@ -168,12 +168,12 @@ export default function MyPage() {
                             <Box sx={{ height: "570px", overflowY: "scroll" }}>
                                 {value === 0 &&
                                     filter.filterList.length === 0 &&
-                                    solvedMyQuestions.map((questionInfo, index) => {
+                                    solvedMyQuestions.map((questionInfo) => {
                                         return <CardDetail key={questionInfo.question_id} questionInfo={questionInfo} isFilter={true} />
                                     })}
                                 {value === 0 &&
                                     filter.filterKind === "タグ" &&
-                                    solvedMyQuestions.map((questionInfo, index) => {
+                                    solvedMyQuestions.map((questionInfo) => {
                                         return (
                                             <CardDetail
                                                 key={questionInfo.question_id}
@@ -184,7 +184,7 @@ export default function MyPage() {
                                     })}
                                 {value === 0 &&
                                     filter.filterKind === "ユーザー" &&
-                                    solvedMyQuestions.map((questionInfo, index) => {
+                                    solvedMyQuestions.map((questionInfo) => {
                                         return (
                                             <CardDetail
                                                 key={questionInfo.question_id}
@@ -198,12 +198,12 @@ export default function MyPage() {
                                     })}
                                 {value === 1 &&
                                     filter.filterList.length === 0 &&
-                                    solvedBookMarkQuestions.map((questionInfo, index) => {
+                                    solvedBookMarkQuestions.map((questionInfo) => {
                                         return <CardDetail key={questionInfo.question_id} questionInfo={questionInfo} isFilter={true} />
                                     })}
                                 {value === 1 &&
                                     filter.filterKind === "タグ" &&
-                                    solvedBookMarkQuestions.map((questionInfo, index) => {
+                                    solvedBookMarkQuestions.map((questionInfo) => {
                                         return (
                                             <CardDetail
                                                 key={questionInfo.question_id}
@@ -214,7 +214,7 @@ export default function MyPage() {
                                     })}
                                 {value === 1 &&
                                     filter.filterKind === "ユーザー" &&
-                                    solvedBookMarkQuestions.map((questionInfo, index) => {
+                                    solvedBookMarkQuestions.map((questionInfo) => {
                                         return (
                                             <CardDetail
                                                 key={questionInfo.question_id}
