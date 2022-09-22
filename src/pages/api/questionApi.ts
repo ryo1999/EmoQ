@@ -177,8 +177,11 @@ export const getSelectQuestion = async (question_id: string, groupId:string) => 
 
 //コメントされたquestion_idのreplied_user_idにコメントした人を追加
 export const upDateRepliedUserId = async (question_id: string, uid: string, replied_user_id: string[], groupId:string) => {
+    const newRepliedUserId = new Set(replied_user_id)
+    newRepliedUserId.add(uid)
+    const repliedUsers = Array.from(newRepliedUserId)
     await updateDoc(doc(db, "groups", groupId, "questions", question_id), {
-        replied_user_id: [...replied_user_id, uid],
+        replied_user_id: repliedUsers,
     })
 }
 
@@ -191,7 +194,9 @@ export const deleteRepliedUserId = async (question_id: string, uid: string, repl
         commentSet.add(doc.data().commenter_id)
     })
     if (!commentSet.has(uid)) {
-        const users = replied_user_id.filter((user) => user.match(uid) == null)
+        const userSet = new Set(replied_user_id)
+        userSet.delete(uid)
+        const users = Array.from(userSet)
         await updateDoc(doc(db, "groups", groupId, "questions", question_id), {
             replied_user_id: users,
         })
