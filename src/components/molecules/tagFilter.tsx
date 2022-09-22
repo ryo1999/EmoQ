@@ -27,7 +27,12 @@ const MenuProps = {
     },
 }
 
-export default function TagFilter() {
+type TagFilterProps = {
+    isOpenFormDialog: boolean
+}
+
+export default function TagFilter(props: TagFilterProps) {
+    const { isOpenFormDialog } = props
     const userState = useRecoilValue(userInfo)
     const [sortText, setSortText] = useRecoilState(selectedSort)
     const [unSolvedQuestionList, setUnSolvedQuestions] = useRecoilState(unSolvedQuestions)
@@ -37,22 +42,23 @@ export default function TagFilter() {
     const [userList, setUserList] = React.useState<string[]>([])
 
     React.useEffect(() => {
-        getTag(userState.groupId)
-            .then((data) => {
-                setTagList(data)
-            })
-            .catch((error) => {
-                console.error(error)
-            })
-        getAllUserName()
-            .then((data) => {
-                setUserList(data)
-            })
-            .catch((error) => {
-                console.log(error)
-            })
-    }, [])
-
+        if (isOpenFormDialog === false) {
+            getTag(userState.groupId)
+                .then((data) => {
+                    setTagList(data)
+                })
+                .catch((error) => {
+                    console.error(error)
+                })
+            getAllUserName()
+                .then((data) => {
+                    setUserList(data)
+                })
+                .catch((error) => {
+                    console.log(error)
+                })
+        }
+    }, [isOpenFormDialog])
 
     const handleSortChange = (event: SelectChangeEvent) => {
         setSortText(event.target.value)

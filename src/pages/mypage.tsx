@@ -78,7 +78,7 @@ export default function MyPage() {
             <Toolbar />
             <div>
                 <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-                    <IconButton onClick={handleClickToHome} sx={{ mt: "5px" }}>
+                    <IconButton onClick={handleClickToHome} sx={{ mt: "5px", mb:"-10px"}}>
                         <ArrowBackIcon sx={{ color: "black", fontSize: "20px" }} />
                         <Typography variant="subtitle1" sx={{ color: "black", fontSize: "20px" }}>
                             ホームへ
@@ -92,7 +92,7 @@ export default function MyPage() {
                     </Box>
                 </Box>
                 <Box>
-                    <TagFilter />
+                    <TagFilter isOpenFormDialog={isOpenFormDialog}/>
                     <div style={{ display: "flex", justifyContent: "space-around", width: "100%" }}>
                         <Box sx={{ width: "40%" }}>
                             <Typography sx={{ mb: "10px" }} variant="h5">

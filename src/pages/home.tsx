@@ -51,7 +51,7 @@ export default function Home() {
         <div>
             <Appbar />
             <Toolbar />
-            <TagFilter />
+            <TagFilter isOpenFormDialog={isOpenFormDialog}/>
             <Box sx={{ display: "flex", justifyContent: "space-around", width: "100%" }}>
                 <div style={{ width: "40%" }}>
                     <div style={{ marginBottom: "10px" }}>

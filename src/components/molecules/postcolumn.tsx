@@ -76,7 +76,6 @@ export default function PostColumn(props: PostColumnProps) {
             })
     }, [])
 
-
     const getStyles = (name: string, tag: string | string[], theme: Theme) => {
         return {
             fontWeight:
@@ -142,7 +141,7 @@ export default function PostColumn(props: PostColumnProps) {
                 false,
                 userState.groupId
             )
-            const Q = await getQuestion("new",userState.groupId)
+            const Q = await getQuestion("new", userState.groupId)
             setUnSolvedQuestions(Q[0])
         } catch (error) {
             console.error(error)
@@ -186,8 +185,10 @@ export default function PostColumn(props: PostColumnProps) {
                 <DialogContent
                     sx={{ display: "flex", justifyContent: "space-around", textAlign: "center", mt: "50px" }}
                 >
-                    <div style={{ marginRight: "-100px", marginTop:"50px" }}>
-                        <Typography sx={{mb:"20px"}} variant="h6">今の感情は？</Typography>
+                    <div style={{ marginRight: "-100px", marginTop: "50px" }}>
+                        <Typography sx={{ mb: "20px" }} variant="h6">
+                            今の感情は？
+                        </Typography>
                         <StampList emotion={emotion} setEmotion={setEmotion} />
                         <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", mb: "40px" }}>
                             <Typography variant="h6" sx={{ mr: "30px" }}>
@@ -235,7 +236,7 @@ export default function PostColumn(props: PostColumnProps) {
                                                         key={value}
                                                         label={value}
                                                         sx={{
-                                                            fontWeight:"bold",
+                                                            fontWeight: "bold",
                                                             fontSize: "18px",
                                                             color: "white",
                                                             bgcolor: "#24292f",
@@ -286,14 +287,19 @@ export default function PostColumn(props: PostColumnProps) {
                             />
                         </Box>
                         <Box>
-                        <Button
-                        variant="contained"
-                            disabled={!(textValidation && tagValidation)}
-                            onClick={handleSubmitClick}
-                            sx={{ fontSize:"18px", width:"100%", bgcolor: "#24292f", ":hover": { bgcolor: "#555555" } }}
-                        >
-                            投稿
-                        </Button>
+                            <Button
+                                variant="contained"
+                                disabled={!(textValidation && tagValidation)}
+                                onClick={handleSubmitClick}
+                                sx={{
+                                    fontSize: "18px",
+                                    width: "100%",
+                                    bgcolor: "#24292f",
+                                    ":hover": { bgcolor: "#555555" },
+                                }}
+                            >
+                                投稿
+                            </Button>
                         </Box>
                     </div>
                 </DialogContent>
