@@ -34,7 +34,7 @@ const Comment = () => {
         auth.onAuthStateChanged((user) => {
             if (user) {
                 //ここのgetを無くすと、このコンポーネントをいじった時に質問が消えるのはなぜ？リロード時はなくても消えない、recoilで永続化してるはずなのに
-                getSelectQuestion(questionInfo.question_id,userState.groupId).then((question) => {
+                getSelectQuestion(questionInfo.question_id, userState.groupId).then((question) => {
                     if (question !== undefined) {
                         setQuestionInfo(question)
                     }
@@ -75,7 +75,6 @@ const Comment = () => {
         upDateRepliedUserId(questionInfo.question_id, userState.userId, questionInfo.replied_user_id, userState.groupId)
     }
 
-
     return (
         <div>
             <Appbar />
@@ -92,19 +91,27 @@ const Comment = () => {
                     </Box>
                     <Box sx={{ height: "670px", overflowY: "scroll" }}>
                         <Box>
-                            {questionInfo && <CardDetail questionInfo={questionInfo} setQuestionInfo={setQuestionInfo} commentList={commentList} isFilter={true}/>}
+                            {questionInfo && (
+                                <CardDetail
+                                    questionInfo={questionInfo}
+                                    setQuestionInfo={setQuestionInfo}
+                                    commentList={commentList}
+                                    isFilter={true}
+                                />
+                            )}
                         </Box>
                         <Box sx={{ width: "90%", m: "0 auto" }}>
-                            {commentList.map((commentInfo, index) => {
-                                return (
-                                    <CommentCard
-                                        key={commentInfo.question_id}
-                                        commentInfo={commentInfo}
-                                        replied_user_id={questionInfo.replied_user_id}
-                                        setCommentList={setCommentList}
-                                    />
-                                )
-                            })}
+                            {questionInfo &&
+                                commentList.map((commentInfo, index) => {
+                                    return (
+                                        <CommentCard
+                                            key={commentInfo.question_id}
+                                            commentInfo={commentInfo}
+                                            replied_user_id={questionInfo.replied_user_id}
+                                            setCommentList={setCommentList}
+                                        />
+                                    )
+                                })}
                         </Box>
                     </Box>
                 </Box>
