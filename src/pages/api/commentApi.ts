@@ -5,7 +5,7 @@ import { CommentsCollectionData } from "@/utils/types"
 //指定されたquestion_idのコメントをとってくる
 export const getComment = async (question_id: string, groupId:string) => {
     const commentList: CommentsCollectionData[] = []
-    const commentId = query(collection(db, "groups", groupId, "questions", question_id, "comments"), orderBy("time", "desc"))
+    const commentId = query(collection(db, "groups", groupId, "questions", question_id, "comments"), orderBy("time"))
     const commentDoc = await getDocs(commentId)
     commentDoc.forEach((doc) => {
         const commentField = {

@@ -243,7 +243,7 @@ const CardDetail = React.memo((props: CardContentProps) => {
                             </Tooltip>
                         </Box>
                     </Box>
-                    <CardContent sx={{ ml: "55px", maxWidth: "460px" }}>
+                    <CardContent onClick={handleClickCommentIcon} sx={{ ml: "55px", maxWidth: "460px", cursor: "pointer" }}>
                         <Typography sx={{ whiteSpace: "pre-wrap" }} variant="body2">
                             {questionInfo.question}
                         </Typography>

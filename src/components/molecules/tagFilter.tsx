@@ -50,7 +50,7 @@ export default function TagFilter(props: TagFilterProps) {
                 .catch((error) => {
                     console.error(error)
                 })
-            getAllUserName()
+            getAllUserName(userState.groupId)
                 .then((data) => {
                     setUserList(data)
                 })

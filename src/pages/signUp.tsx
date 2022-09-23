@@ -55,7 +55,7 @@ export default function SignUp() {
                 if (groupValue === "join") {
                     const name = await getGroupName(groupId)
                     if (name === false) {
-                        toast.error("そのようなグループは存在しません")
+                        toast.error("グループが存在しません")
                         const user = auth.currentUser
                         if (user) {
                             deleteUser(user)
