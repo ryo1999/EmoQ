@@ -13,12 +13,8 @@ import "react-toastify/dist/ReactToastify.css"
 import { useRecoilState } from "recoil"
 import { userInfo } from "@/store/userInfo"
 import { signUp, getUserInfo } from "@/pages/api/userApi"
-// import { addGroup, getGroupName } from "./api/groupApi"
 import { useValidation, useMailValidation, usePasswordValidation } from "@/hooks/useValidation"
-// import FormControl from "@mui/material/FormControl"
-// import Select, { SelectChangeEvent } from "@mui/material/Select"
-// import MenuItem from "@mui/material/MenuItem"
-// import { deleteUser } from "firebase/auth"
+
 
 const theme = createTheme()
 
@@ -26,96 +22,26 @@ export default function SignUp() {
     const router = useRouter()
     const [userState, setUserState] = useRecoilState(userInfo)
     const [loading, setLoading] = React.useState(false)
-    // const [groupValue, setGroupValue] = React.useState("new")
-    // const [groupId, setGroupId] = React.useState("")
     const { valueText, setValueText, isValidated, errorMessage, textValidation } = useValidation()
     const { emailValueText, setEmailValueText, isEmailValidated, errorEmailMessage, emailValidation } =
         useMailValidation()
     const { passwordValueText, setPasswordValueText, isPasswordValidated, errorPasswordMessage, passwordValidation } =
         usePasswordValidation()
 
-    // const {
-    //     groupValueText,
-    //     setGroupValueText,
-    //     setIsInputGroupStart,
-    //     isGroupValidated,
-    //     errorGroupMessage,
-    //     groupValidation,
-    // } = useGroupValidation()
-
-    // React.useEffect(() => {
-    //     setGroupId("")
-    //     setGroupValueText("")
-    //     setIsInputGroupStart(false)
-    // }, [groupValue])
-
     const handleSignUp = async () => {
         setLoading(true)
-        // let gid: string
-        // let gname: string
         createUserWithEmailAndPassword(auth, emailValueText, passwordValueText)
             .then(async (data) => {
                 toast.success("登録が完了しました。次の画面でグループを選択してください")
                 await signUp(data.user.uid, valueText)
                 setUserState({...userState,userId:data.user.uid,userName:valueText})
-                // await getUserInfo(data.user.uid).then((userdata) => {
-                //     if (userdata) {
-                //         setUserState(userdata)
-                //     }
-                // })
                 router.push("/selectGroup")
-                // if (groupValue === "join") {
-                //     const name = await getGroupName(groupId)
-                //     if (name === false) {
-                //         toast.error("グループが存在しません")
-                //         const user = auth.currentUser
-                //         if (user) {
-                //             deleteUser(user)
-                //                 .then(() => {
-                //                     //ユーザー削除
-                //                 })
-                //                 .catch((error) => {
-                //                     console.error(error)
-                //                 })
-                //         }
-                //         setLoading(false)
-                //         return
-                //     } else {
-                //         toast.success("登録が完了しました")
-                //         gid = groupId
-                //         gname = name
-                //         await signUp(data.user.uid, valueText)
-                //         await registerUserGroup(data.user.uid, gid, gname)
-                // getUserInfo(data.user.uid).then((userdata) => {
-                //     if (userdata) {
-                //         setUserState(userdata)
-                //     }
-                // })
-                //         router.push("/")
-                //     }
-                // } else if (groupValue === "new") {
-                //     toast.success("登録が完了しました")
-                //     const id = await addGroup(groupValueText)
-                //     gid = id
-                //     gname = groupValueText
-                //     await signUp(data.user.uid, valueText)
-                //     await registerUserGroup(data.user.uid, gid, gname)
-                //     getUserInfo(data.user.uid).then((userdata) => {
-                //         if (userdata) {
-                //             setUserState(userdata)
-                //         }
-                //     })
-                // router.push("/")
             })
             .catch(() => {
                 setLoading(false)
                 toast.error("登録に失敗しました")
             })
     }
-
-    // const handleGroupChange = (event: SelectChangeEvent) => {
-    //     setGroupValue(event.target.value)
-    // }
 
     return (
         <ThemeProvider theme={theme}>
