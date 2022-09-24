@@ -14,7 +14,7 @@ import Container from "@mui/material/Container"
 import { createTheme, ThemeProvider } from "@mui/material/styles"
 import { auth, signInWithEmailAndPassword } from "@/firebase"
 import { useRecoilState } from "recoil"
-import { getUserName } from "@/pages/api/userApi"
+import { getUserInfo } from "@/pages/api/userApi"
 import { userInfo } from "@/store/userInfo"
 
 const theme = createTheme()
@@ -31,7 +31,7 @@ export default function SignIn() {
         signInWithEmailAndPassword(auth, email, password)
             .then((data) => {
                 if (data.user.uid) {
-                    getUserName(data.user.uid).then((userdata) => {
+                    getUserInfo(data.user.uid).then((userdata) => {
                         if (userdata) {
                             setUserState(userdata)
                         }
@@ -100,18 +100,24 @@ export default function SignIn() {
                             fullWidth
                             loading={loading}
                             variant="contained"
-                            sx={{ mt: 5, mb: 2, fontSize:"18px", bgcolor:"#24292f", ":hover": { bgcolor: "#777777" }, }}
+                            sx={{
+                                mt: 5,
+                                mb: 2,
+                                fontSize: "18px",
+                                bgcolor: "#24292f",
+                                ":hover": { bgcolor: "#777777" },
+                            }}
                             disabled={email == "" || password == ""}
                         >
                             ログイン
                         </LoadingButton>
                         <Box sx={{ m: "20px 0px" }}>
-                            <Link href="/signUp" variant="body2" sx={{color:"black"}}>
-                                新しくグループを作成、グループに参加される方はこちら
+                            <Link href="/signUp" variant="body2" sx={{ color: "black" }}>
+                                アカウントをお持ちでない方はこちら
                             </Link>
                         </Box>
                         <Box>
-                            <Link href="/forgetPassword" variant="body2" sx={{color:"black"}}>
+                            <Link href="/forgetPassword" variant="body2" sx={{ color: "black" }}>
                                 パスワードを忘れた方はこちら
                             </Link>
                         </Box>

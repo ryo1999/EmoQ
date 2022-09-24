@@ -47,107 +47,118 @@ export default function Home() {
         setOpenFormDialog(true)
     }
 
+
     return (
         <div>
             <Appbar />
             <Toolbar />
-            <TagFilter isOpenFormDialog={isOpenFormDialog}/>
-            <Box sx={{ display: "flex", justifyContent: "space-around", width: "100%" }}>
-                <div style={{ width: "40%" }}>
-                    <div style={{ marginBottom: "10px" }}>
-                        <Typography variant="h5">未解決</Typography>
-                    </div>
-                    <Box sx={{ height: "625px", overflowY: "scroll" }}>
-                        {filter.filterList.length === 0 &&
-                            unSolvedQuestionList.map((questionInfo) => {
-                                return (
-                                    <CardDetail
-                                        key={questionInfo.question_id}
-                                        questionInfo={questionInfo}
-                                        isFilter={true}
-                                    />
-                                )
-                            })}
-                        {filter.filterKind === "タグ" &&
-                            unSolvedQuestionList.map((questionInfo) => {
-                                return (
-                                    <CardDetail
-                                        key={questionInfo.question_id}
-                                        questionInfo={questionInfo}
-                                        isFilter={getIsDuplicate(questionInfo.tag, filter.filterList)}
-                                    />
-                                )
-                            })}
-                        {filter.filterKind === "ユーザー" &&
-                            unSolvedQuestionList.map((questionInfo) => {
-                                return (
-                                    <CardDetail
-                                        key={questionInfo.question_id}
-                                        questionInfo={questionInfo}
-                                        isFilter={getIsDuplicate(questionInfo.contributor_name, filter.filterList)}
-                                    />
-                                )
-                            })}
+            {userState.groupId !== "" && (
+                <>
+                    <TagFilter isOpenFormDialog={isOpenFormDialog} />
+                    <Box sx={{ display: "flex", justifyContent: "space-around", width: "100%" }}>
+                        <div style={{ width: "40%" }}>
+                            <div style={{ marginBottom: "10px" }}>
+                                <Typography variant="h5">未解決</Typography>
+                            </div>
+                            <Box sx={{ height: "625px", overflowY: "scroll" }}>
+                                {filter.filterList.length === 0 &&
+                                    unSolvedQuestionList.map((questionInfo) => {
+                                        return (
+                                            <CardDetail
+                                                key={questionInfo.question_id}
+                                                questionInfo={questionInfo}
+                                                isFilter={true}
+                                            />
+                                        )
+                                    })}
+                                {filter.filterKind === "タグ" &&
+                                    unSolvedQuestionList.map((questionInfo) => {
+                                        return (
+                                            <CardDetail
+                                                key={questionInfo.question_id}
+                                                questionInfo={questionInfo}
+                                                isFilter={getIsDuplicate(questionInfo.tag, filter.filterList)}
+                                            />
+                                        )
+                                    })}
+                                {filter.filterKind === "ユーザー" &&
+                                    unSolvedQuestionList.map((questionInfo) => {
+                                        return (
+                                            <CardDetail
+                                                key={questionInfo.question_id}
+                                                questionInfo={questionInfo}
+                                                isFilter={getIsDuplicate(
+                                                    questionInfo.contributor_name,
+                                                    filter.filterList
+                                                )}
+                                            />
+                                        )
+                                    })}
+                            </Box>
+                        </div>
+                        <div style={{ width: "40%" }}>
+                            <div style={{ marginBottom: "10px" }}>
+                                <Typography variant="h5">解決済み</Typography>
+                            </div>
+                            <Box sx={{ height: "625px", overflowY: "scroll" }}>
+                                {filter.filterList.length === 0 &&
+                                    solvedQuestionList.map((questionInfo) => {
+                                        return (
+                                            <CardDetail
+                                                key={questionInfo.question_id}
+                                                questionInfo={questionInfo}
+                                                isFilter={true}
+                                            />
+                                        )
+                                    })}
+                                {filter.filterKind === "タグ" &&
+                                    solvedQuestionList.map((questionInfo) => {
+                                        return (
+                                            <CardDetail
+                                                key={questionInfo.question_id}
+                                                questionInfo={questionInfo}
+                                                isFilter={getIsDuplicate(questionInfo.tag, filter.filterList)}
+                                            />
+                                        )
+                                    })}
+                                {filter.filterKind === "ユーザー" &&
+                                    solvedQuestionList.map((questionInfo) => {
+                                        return (
+                                            <CardDetail
+                                                key={questionInfo.question_id}
+                                                questionInfo={questionInfo}
+                                                isFilter={getIsDuplicate(
+                                                    questionInfo.contributor_name,
+                                                    filter.filterList
+                                                )}
+                                            />
+                                        )
+                                    })}
+                            </Box>
+                        </div>
                     </Box>
-                </div>
-                <div style={{ width: "40%" }}>
-                    <div style={{ marginBottom: "10px" }}>
-                        <Typography variant="h5">解決済み</Typography>
-                    </div>
-                    <Box sx={{ height: "625px", overflowY: "scroll" }}>
-                        {filter.filterList.length === 0 &&
-                            solvedQuestionList.map((questionInfo) => {
-                                return (
-                                    <CardDetail
-                                        key={questionInfo.question_id}
-                                        questionInfo={questionInfo}
-                                        isFilter={true}
-                                    />
-                                )
-                            })}
-                        {filter.filterKind === "タグ" &&
-                            solvedQuestionList.map((questionInfo) => {
-                                return (
-                                    <CardDetail
-                                        key={questionInfo.question_id}
-                                        questionInfo={questionInfo}
-                                        isFilter={getIsDuplicate(questionInfo.tag, filter.filterList)}
-                                    />
-                                )
-                            })}
-                        {filter.filterKind === "ユーザー" &&
-                            solvedQuestionList.map((questionInfo) => {
-                                return (
-                                    <CardDetail
-                                        key={questionInfo.question_id}
-                                        questionInfo={questionInfo}
-                                        isFilter={getIsDuplicate(questionInfo.contributor_name, filter.filterList)}
-                                    />
-                                )
-                            })}
-                    </Box>
-                </div>
-            </Box>
-            <IconButton
-                onClick={handleClickOpen}
-                sx={{
-                    bgcolor: "#24292f",
-                    color: "white",
-                    position: "fixed",
-                    fontSize: "40px",
-                    bottom: "10px",
-                    right: "10px",
-                    ":hover": { bgcolor: "#777777" },
-                }}
-            >
-                <Icon icon="clarity:note-edit-line" />
-            </IconButton>
-            {isOpenFormDialog && (
-                <PostColumn
-                    isOpenFormDialog={isOpenFormDialog}
-                    setOpenFormDialog={setOpenFormDialog}
-                    setUnSolvedQuestions={setUnSolvedQuestions}
-                />
+                    <IconButton
+                        onClick={handleClickOpen}
+                        sx={{
+                            bgcolor: "#24292f",
+                            color: "white",
+                            position: "fixed",
+                            fontSize: "40px",
+                            bottom: "10px",
+                            right: "10px",
+                            ":hover": { bgcolor: "#777777" },
+                        }}
+                    >
+                        <Icon icon="clarity:note-edit-line" />
+                    </IconButton>
+                    {isOpenFormDialog && (
+                        <PostColumn
+                            isOpenFormDialog={isOpenFormDialog}
+                            setOpenFormDialog={setOpenFormDialog}
+                            setUnSolvedQuestions={setUnSolvedQuestions}
+                        />
+                    )}
+                </>
             )}
         </div>
     )

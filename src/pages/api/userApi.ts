@@ -5,6 +5,9 @@ import { setDoc, doc, getDoc, collection, orderBy, query, getDocs, updateDoc } f
 export const signUp = async (user_id: string, name: string) => {
     await setDoc(doc(db, "users", user_id), {
         name: name,
+        group_id:"",
+        group_name:"",
+        group: {},
     })
 }
 
@@ -12,10 +15,11 @@ export const registerUserGroup = async (user_id: string, group_id: string, group
     await updateDoc(doc(db, "users", user_id), {
         group_id: group_id,
         group_name: group_name,
+        group:{[group_id] : group_name}
     })
 }
 
-export const getUserName = async (uid: string) => {
+export const getUserInfo = async (uid: string) => {
     const userRef = doc(db, "users", uid)
     const userSnap = await getDoc(userRef)
     if (userSnap.exists()) {
@@ -24,6 +28,7 @@ export const getUserName = async (uid: string) => {
             userName: userSnap.data().name,
             groupId: userSnap.data().group_id,
             groupName: userSnap.data().group_name,
+            group: userSnap.data().group,
         }
     }
 }

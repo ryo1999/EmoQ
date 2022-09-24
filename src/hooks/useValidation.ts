@@ -214,63 +214,63 @@ export const usePasswordValidation = () => {
 }
 
 //新規登録時のグループ名のバリデーション
-export const useGroupValidation = () => {
-    const [groupValueText, setGroupValueText] = React.useState("")
-    const [errorGroupMessage, setErrorGroupMessage] = React.useState("")
-    const [isInputGroupStart, setIsInputGroupStart] = React.useState(false)
-    const [isGroupValidated, setIsGroupValidated] = React.useState(true)
+// export const useGroupValidation = () => {
+//     const [groupValueText, setGroupValueText] = React.useState("")
+//     const [errorGroupMessage, setErrorGroupMessage] = React.useState("")
+//     const [isInputGroupStart, setIsInputGroupStart] = React.useState(false)
+//     const [isGroupValidated, setIsGroupValidated] = React.useState(true)
 
-    const require = () => {
-        return groupValueText === "" || !groupValueText.match(/\S/g)
-    }
+//     const require = () => {
+//         return groupValueText === "" || !groupValueText.match(/\S/g)
+//     }
 
-    const cannotStartSpace = () => {
-        return groupValueText[0] === " " || groupValueText[0] === "　"
-    }
+//     const cannotStartSpace = () => {
+//         return groupValueText[0] === " " || groupValueText[0] === "　"
+//     }
 
-    const cannotEndSpace = () => {
-        return groupValueText[groupValueText.length - 1] === " " || groupValueText[groupValueText.length - 1] === "　"
-    }
+//     const cannotEndSpace = () => {
+//         return groupValueText[groupValueText.length - 1] === " " || groupValueText[groupValueText.length - 1] === "　"
+//     }
 
-    const validate = () => {
-        if (require()) {
-            setErrorGroupMessage("必須項目です")
-            setIsGroupValidated(false)
-            return
-        }
-        if (cannotStartSpace()) {
-            setErrorGroupMessage("空白で始めることはできません")
-            setIsGroupValidated(false)
-            return
-        }
-        if (cannotEndSpace()) {
-            setErrorGroupMessage("空白で終わることはできません")
-            setIsGroupValidated(false)
-            return
-        }
-        setIsGroupValidated(true)
-        setErrorGroupMessage("")
-    }
+//     const validate = () => {
+//         if (require()) {
+//             setErrorGroupMessage("必須項目です")
+//             setIsGroupValidated(false)
+//             return
+//         }
+//         if (cannotStartSpace()) {
+//             setErrorGroupMessage("空白で始めることはできません")
+//             setIsGroupValidated(false)
+//             return
+//         }
+//         if (cannotEndSpace()) {
+//             setErrorGroupMessage("空白で終わることはできません")
+//             setIsGroupValidated(false)
+//             return
+//         }
+//         setIsGroupValidated(true)
+//         setErrorGroupMessage("")
+//     }
 
-    React.useEffect(() => {
-        if (groupValueText.length === 0 && isInputGroupStart) {
-            setIsInputGroupStart(false)
-            validate()
-        } else if (groupValueText.length > 0) {
-            setIsInputGroupStart(true)
-            validate()
-        }
-    }, [groupValueText])
+//     React.useEffect(() => {
+//         if (groupValueText.length === 0 && isInputGroupStart) {
+//             setIsInputGroupStart(false)
+//             validate()
+//         } else if (groupValueText.length > 0) {
+//             setIsInputGroupStart(true)
+//             validate()
+//         }
+//     }, [groupValueText])
 
-    return {
-        groupValueText,
-        setGroupValueText,
-        setIsInputGroupStart,
-        isGroupValidated,
-        errorGroupMessage,
-        groupValidation: isGroupValidated && isInputGroupStart,
-    }
-}
+//     return {
+//         groupValueText,
+//         setGroupValueText,
+//         setIsInputGroupStart,
+//         isGroupValidated,
+//         errorGroupMessage,
+//         groupValidation: isGroupValidated && isInputGroupStart,
+//     }
+// }
 
 //投稿フォームのタグ欄のバリデーション
 export const usePostTagValidation = () => {
