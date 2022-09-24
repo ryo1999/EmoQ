@@ -153,11 +153,6 @@ export default function Appbar() {
                                 {userState.userName}
                             </MenuItem>
                             <Divider />
-                            <MenuItem onClick={() => setIsOpenGroupListDialog(true)}>
-                                <ManageAccountsIcon sx={{ mr: "20px" }} />
-                                グループ変更
-                            </MenuItem>
-                            <Divider />
                             {router.pathname === "/mypage" ? (
                                 <MenuItem onClick={() => setOpen(true)}>
                                     <GroupIcon sx={{ mr: "20px" }} />
@@ -169,6 +164,11 @@ export default function Appbar() {
                                     マイページ
                                 </MenuItem>
                             )}
+                            <Divider />
+                            <MenuItem onClick={() => setIsOpenGroupListDialog(true)}>
+                                <ManageAccountsIcon sx={{ mr: "20px" }} />
+                                グループ変更
+                            </MenuItem>
                             <Divider />
                             <MenuItem onClick={() => setIsOpenNewGroupDialog(true)}>
                                 <GroupAddIcon sx={{ mr: "20px" }} />
@@ -209,18 +209,21 @@ export default function Appbar() {
                 <GroupListDialog
                     isOpenGroupListDialog={isOpenGroupListDialog}
                     setIsOpenGroupListDialog={setIsOpenGroupListDialog}
+                    setAvatarAnchorEl={setAvatarAnchorEl}
                 />
             )}
             {isOpenNewGroupDialog && (
                 <NewGroupDialog
                     isOpenNewGroupDialog={isOpenNewGroupDialog}
                     setIsOpenNewGroupDialog={setIsOpenNewGroupDialog}
+                    setAvatarAnchorEl={setAvatarAnchorEl}
                 />
             )}
             {isOpenJoinGroupDialog && (
                 <JoinGroupDialog
                     isOpenJoinGroupDialog={isOpenJoinGroupDialog}
                     setIsOpenJoinGroupDialog={setIsOpenJoinGroupDialog}
+                    setAvatarAnchorEl={setAvatarAnchorEl}
                 />
             )}
             <ToastContainer position="bottom-center" pauseOnHover={false} closeOnClick autoClose={2000} />

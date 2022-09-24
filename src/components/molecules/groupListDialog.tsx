@@ -16,11 +16,12 @@ import { changeGroup, getAllUserGroup } from "@/pages/api/userApi"
 type GroupListDialogProps = {
     isOpenGroupListDialog: boolean
     setIsOpenGroupListDialog: React.Dispatch<boolean>
+    setAvatarAnchorEl: React.Dispatch<null | HTMLElement>
 }
 
 const GroupListDialog = React.memo((props: GroupListDialogProps) => {
     const router = useRouter()
-    const { isOpenGroupListDialog, setIsOpenGroupListDialog } = props
+    const { isOpenGroupListDialog, setIsOpenGroupListDialog, setAvatarAnchorEl } = props
     const [userState, setUserState] = useRecoilState(userInfo)
     const [groupList, setGroupList] = React.useState<{ [key: string]: string }>({})
 
@@ -34,6 +35,7 @@ const GroupListDialog = React.memo((props: GroupListDialogProps) => {
         if (userState.groupId !== groupId) {
             setUserState({ ...userState, groupId: groupId, groupName: groupName })
             setIsOpenGroupListDialog(false)
+            setAvatarAnchorEl(null)
             await changeGroup(userState.userId, groupId, groupName)
             router.push("/home")
         }

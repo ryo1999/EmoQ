@@ -73,3 +73,10 @@ export const changeGroup = async(user_id:string, group_id:string, group_name:str
         group_name:group_name
     })
 }
+
+//新しくグループが作られた時、新しくグループに参加した時、mygroupsコレクションにグループIDを作る
+export const createMygroups = async(user_id:string, group_id:string, group_name:string)=>{
+    const docRef = doc(db,"users",user_id,"mygroups",group_id)
+    const data = {name:group_name}
+    await setDoc(docRef,data)
+}

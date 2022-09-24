@@ -18,11 +18,12 @@ import { auth } from "@/firebase"
 type NewGroupDialogProps = {
     isOpenNewGroupDialog: boolean
     setIsOpenNewGroupDialog: React.Dispatch<boolean>
+    setAvatarAnchorEl?: React.Dispatch<null | HTMLElement>
 }
 
 const NewGroupDialog = React.memo((props: NewGroupDialogProps) => {
     const router = useRouter()
-    const { isOpenNewGroupDialog, setIsOpenNewGroupDialog } = props
+    const { isOpenNewGroupDialog, setIsOpenNewGroupDialog, setAvatarAnchorEl } = props
     const [userState, setUserState] = useRecoilState(userInfo)
     const { valueText, setValueText, isValidated, errorMessage, textValidation } = useValidation()
 
@@ -34,13 +35,17 @@ const NewGroupDialog = React.memo((props: NewGroupDialogProps) => {
         auth.onAuthStateChanged(async (user) => {
             if (user) {
                 toast.success("完了しました")
+                setIsOpenNewGroupDialog(false)
+                if (setAvatarAnchorEl) {
+                    setAvatarAnchorEl(null)
+                }
                 const id = await addGroup(valueText)
                 await registerUserGroup(userState.userId, id, valueText)
                 const userInformation = await getUserInfo(userState.userId)
                 if (userInformation) {
                     setUserState(userInformation)
                 }
-                router.push("/")
+                router.push("/home")
             } else {
                 toast.error("作成できませんでした")
             }

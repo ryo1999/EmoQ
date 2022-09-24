@@ -11,17 +11,18 @@ import TextField from "@mui/material/TextField"
 import { useRecoilState } from "recoil"
 import { userInfo } from "@/store/userInfo"
 import { getGroupName } from "@/pages/api/groupApi"
-import { getUserInfo, registerUserGroup } from "@/pages/api/userApi"
+import { createMygroups, getUserInfo, registerUserGroup } from "@/pages/api/userApi"
 import { auth } from "@/firebase"
 
 type JoinGroupDialogProps = {
     isOpenJoinGroupDialog: boolean
     setIsOpenJoinGroupDialog: React.Dispatch<boolean>
+    setAvatarAnchorEl?: React.Dispatch<null | HTMLElement>
 }
 
 const JoinGroupDialog = React.memo((props: JoinGroupDialogProps) => {
     const router = useRouter()
-    const { isOpenJoinGroupDialog, setIsOpenJoinGroupDialog } = props
+    const { isOpenJoinGroupDialog, setIsOpenJoinGroupDialog, setAvatarAnchorEl } = props
     const [userState, setUserState] = useRecoilState(userInfo)
     const [groupId, setGroupId] = React.useState("")
 
@@ -36,13 +37,18 @@ const JoinGroupDialog = React.memo((props: JoinGroupDialogProps) => {
                 if (name === false) {
                     toast.error("グループが存在しません")
                 } else {
+                    setIsOpenJoinGroupDialog(false)
+                    if (setAvatarAnchorEl) {
+                        setAvatarAnchorEl(null)
+                    }
                     toast.success("参加しました")
+                    createMygroups(userState.userId, groupId, name)
                     await registerUserGroup(userState.userId, groupId, name)
                     const userInformation = await getUserInfo(userState.userId)
                     if (userInformation) {
                         setUserState(userInformation)
                     }
-                    router.push("/")
+                    router.push("/home")
                 }
             } else {
                 toast.error("参加できませんでした")
