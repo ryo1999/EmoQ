@@ -100,7 +100,7 @@ const CardDetail = React.memo((props: CardContentProps) => {
         setMenuAnchorEl(null)
         try {
             await upDateQuestionSolution(questionInfo.question_id, !checkMark, userState.groupId)
-            await upDateBookmarkSolution(questionInfo.question_id, questionInfo.bookmark_user_id, !checkMark)
+            await upDateBookmarkSolution(userState.groupId, questionInfo.question_id, questionInfo.bookmark_user_id, !checkMark)
             const Q = await getQuestion(sortText,userState.groupId)
             setSolvedQuestions(Q[1])
             setUnSolvedQuestions(Q[0])
@@ -123,7 +123,7 @@ const CardDetail = React.memo((props: CardContentProps) => {
                 })
             }
             try {
-                await deleteBookMark(userState.userId, questionInfo.question_id)
+                await deleteBookMark(userState.userId, userState.groupId, questionInfo.question_id)
                 await deleteQuestionBookmark(questionInfo.question_id, questionInfo.bookmark_user_id, userState.userId, userState.groupId)
                 const Q = await getQuestion(sortText, userState.groupId)
                 setSolvedQuestions(Q[1])
@@ -141,6 +141,7 @@ const CardDetail = React.memo((props: CardContentProps) => {
             try {
                 await addBookMark(
                     userState.userId,
+                    userState.groupId,
                     questionInfo.contributor_id,
                     questionInfo.contributor_name,
                     questionInfo.question_id,
@@ -170,7 +171,7 @@ const CardDetail = React.memo((props: CardContentProps) => {
     }
     const handleClickDelete = async () => {
         setMenuAnchorEl(null)
-        deleteBookMarkQuestion(questionInfo.question_id, questionInfo.bookmark_user_id)
+        deleteBookMarkQuestion(userState.groupId, questionInfo.question_id, questionInfo.bookmark_user_id)
         try {
             await deleteQuestion(questionInfo.question_id, userState.groupId)
             const Q = await getQuestion(sortText, userState.groupId)

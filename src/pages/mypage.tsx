@@ -47,7 +47,7 @@ export default function MyPage() {
                         setSolvedMyQuestions(question[1])
                     })
                     .catch((error) => console.error(error))
-                getBookMark(userState.userId, sortText)
+                getBookMark(userState.userId, userState.groupId, sortText)
                     .then((bookmark) => {
                         setUnSolvedBookMarkQuestions(bookmark[0])
                         setSolvedBookMarkQuestions(bookmark[1])
