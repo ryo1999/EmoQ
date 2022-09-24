@@ -12,8 +12,8 @@ import { useRecoilState } from "recoil"
 import { userInfo } from "@/store/userInfo"
 import { useValidation } from "@/hooks/useValidation"
 import { addGroup } from "@/pages/api/groupApi"
-import { auth } from "@/firebase"
 import { getUserInfo, registerUserGroup } from "@/pages/api/userApi"
+import { auth } from "@/firebase"
 
 type NewGroupDialogProps = {
     isOpenNewGroupDialog: boolean

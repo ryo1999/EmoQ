@@ -1,6 +1,9 @@
 import React from "react"
 import { useRouter } from "next/router"
 import GroupIdDialog from "../atoms/groupIdDialog"
+import GroupListDialog from "./groupListDialog"
+import NewGroupDialog from "./newGroupDialog"
+import JoinGroupDialog from "./joinGroupDialog"
 import { ToastContainer, toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 import AppBar from "@mui/material/AppBar"
@@ -13,9 +16,12 @@ import Menu from "@mui/material/Menu"
 import Avatar from "@mui/material/Avatar"
 // import Badge from "@mui/material/Badge"
 import Divider from "@mui/material/Divider"
+import ManageAccountsIcon from "@mui/icons-material/ManageAccounts"
 import PersonIcon from "@mui/icons-material/Person"
+import LoginIcon from "@mui/icons-material/Login"
 import LogoutIcon from "@mui/icons-material/Logout"
 import GroupIcon from "@mui/icons-material/Group"
+import GroupAddIcon from "@mui/icons-material/GroupAdd"
 // import MailIcon from "@mui/icons-material/Mail"
 import { useRecoilValue } from "recoil"
 import { auth, signOut } from "@/firebase"
@@ -26,6 +32,9 @@ export default function Appbar() {
     const router = useRouter()
     const userState = useRecoilValue(userInfo)
     const [isOpen, setOpen] = React.useState(false)
+    const [isOpenGroupListDialog, setIsOpenGroupListDialog] = React.useState(false)
+    const [isOpenNewGroupDialog, setIsOpenNewGroupDialog] = React.useState(false)
+    const [isOpenJoinGroupDialog, setIsOpenJoinGroupDialog] = React.useState(false)
     const [avatarAnchorEl, setAvatarAnchorEl] = React.useState<null | HTMLElement>(null)
     const {
         resetUserState,
@@ -144,8 +153,13 @@ export default function Appbar() {
                                 {userState.userName}
                             </MenuItem>
                             <Divider />
+                            <MenuItem onClick={() => setIsOpenGroupListDialog(true)}>
+                                <ManageAccountsIcon sx={{ mr: "20px" }} />
+                                グループ変更
+                            </MenuItem>
+                            <Divider />
                             {router.pathname === "/mypage" ? (
-                                <MenuItem onClick={()=>setOpen(true)}>
+                                <MenuItem onClick={() => setOpen(true)}>
                                     <GroupIcon sx={{ mr: "20px" }} />
                                     グループID
                                 </MenuItem>
@@ -155,6 +169,16 @@ export default function Appbar() {
                                     マイページ
                                 </MenuItem>
                             )}
+                            <Divider />
+                            <MenuItem onClick={() => setIsOpenNewGroupDialog(true)}>
+                                <GroupAddIcon sx={{ mr: "20px" }} />
+                                グループ作成
+                            </MenuItem>
+                            <Divider />
+                            <MenuItem onClick={() => setIsOpenJoinGroupDialog(true)}>
+                                <LoginIcon sx={{ mr: "20px" }} />
+                                グループ参加
+                            </MenuItem>
                             <Divider />
                             <MenuItem onClick={handleClickLogOut}>
                                 <LogoutIcon sx={{ mr: "20px" }} />
@@ -180,7 +204,25 @@ export default function Appbar() {
                     </div>
                 </Toolbar>
             </AppBar>
-            <GroupIdDialog isOpen={isOpen} setOpen={setOpen}/>
+            <GroupIdDialog isOpen={isOpen} setOpen={setOpen} />
+            {isOpenGroupListDialog && (
+                <GroupListDialog
+                    isOpenGroupListDialog={isOpenGroupListDialog}
+                    setIsOpenGroupListDialog={setIsOpenGroupListDialog}
+                />
+            )}
+            {isOpenNewGroupDialog && (
+                <NewGroupDialog
+                    isOpenNewGroupDialog={isOpenNewGroupDialog}
+                    setIsOpenNewGroupDialog={setIsOpenNewGroupDialog}
+                />
+            )}
+            {isOpenJoinGroupDialog && (
+                <JoinGroupDialog
+                    isOpenJoinGroupDialog={isOpenJoinGroupDialog}
+                    setIsOpenJoinGroupDialog={setIsOpenJoinGroupDialog}
+                />
+            )}
             <ToastContainer position="bottom-center" pauseOnHover={false} closeOnClick autoClose={2000} />
         </Box>
     )

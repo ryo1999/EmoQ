@@ -12,13 +12,24 @@ export const signUp = async (user_id: string, name: string) => {
 }
 
 export const registerUserGroup = async (user_id: string, group_id: string, group_name: string) => {
+    let groups
+    const docRef = doc(db, "users", user_id)
+    const docSnap = await getDoc(docRef)
+    if (docSnap.exists()) {
+        if(group_id in docSnap.data().group){
+            groups = docSnap.data().group
+        }else{
+            groups = {...docSnap.data().group, [group_id]:group_name}
+        }
+    }
     await updateDoc(doc(db, "users", user_id), {
         group_id: group_id,
         group_name: group_name,
-        group:{[group_id] : group_name}
+        group:groups
     })
 }
 
+//ユーザーの情報を取ってくる
 export const getUserInfo = async (uid: string) => {
     const userRef = doc(db, "users", uid)
     const userSnap = await getDoc(userRef)
@@ -33,6 +44,7 @@ export const getUserInfo = async (uid: string) => {
     }
 }
 
+//同じグループ内のユーザーの名前を全て取ってくる
 export const getAllUserName = async (group_id: string) => {
     const userNameList: string[] = []
     const userRef = query(collection(db, "users"), orderBy("name"))
@@ -43,4 +55,21 @@ export const getAllUserName = async (group_id: string) => {
         }
     })
     return userNameList
+}
+
+//ユーザーの所属しているグループを全て取ってくる
+export const getAllUserGroup = async (user_id:string)=>{
+    const docRef = doc(db, "users", user_id)
+    const docSnap = await getDoc(docRef)
+    if(docSnap.exists()){
+        return docSnap.data().group
+    }
+}
+
+//アカウントが切り替えられた時にデータベースのgroup_idとgroup_nameを変えにいく
+export const changeGroup = async(user_id:string, group_id:string, group_name:string)=>{
+    await updateDoc(doc(db, "users", user_id),{
+        group_id:group_id,
+        group_name:group_name
+    })
 }

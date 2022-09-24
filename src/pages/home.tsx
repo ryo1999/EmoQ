@@ -41,7 +41,7 @@ export default function Home() {
                 router.push("/")
             }
         })
-    }, [])
+    }, [userState.groupId])
 
     const handleClickOpen = () => {
         setOpenFormDialog(true)
