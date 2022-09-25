@@ -11,13 +11,15 @@ type StampList = {
 }
 
 const EmotionIcon: { [name: string]: string } = {
-    悲しみ: "fa6-regular:face-sad-tear",
+    シクシク: "fa6-regular:face-sad-tear",
     イライラ: "fa6-regular:face-angry",
+    ハッピー: "fa6-regular:face-laugh-squint",
+    びっくり:"fa6-regular:face-flushed",
+    なぜ:"fa6-regular:face-frown-open",
     焦り: "fa6-regular:face-grin-beam-sweat",
-    絶望: "fa6-regular:face-rolling-eyes",
+    絶望: "fa6-regular:face-dizzy",
     どや: "fa6-regular:face-smile-wink",
-    ワクワク: "fa6-regular:face-laugh-squint",
-    お願い: "emojione-monotone:folded-hands",
+    感謝: "fa6-regular:face-grin-hearts",
     ホッ: "fa-regular:handshake",
 }
 

@@ -1,12 +1,14 @@
 const EmotionCOLORS: { [name: string]: string } = {
-    悲しみ: "#2e60b4",
-    イライラ: "#eb352c",
-    焦り: "red",
-    絶望: "gray",
-    どや: "blue",
-    ワクワク: "#f4c900",
-    お願い: "#F5B090",
-    ホッ: "#5cb23a",
+    シクシク: "#3961AE",
+    イライラ: "#D94638",
+    ハッピー: "#EEC936",
+    びっくり: "#049FD9",
+    なぜ: "#1A0D4E",
+    焦り: "#C77628",
+    絶望: "black",
+    どや: "#9CB6F7",
+    感謝: "#DDC3B6",
+    ホッ: "#73AF4C",
 }
 
 export const ReturnEmotionColor = (emotion: string) => {
