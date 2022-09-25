@@ -58,7 +58,7 @@ export default function TagFilter(props: TagFilterProps) {
                     console.log(error)
                 })
         }
-    }, [isOpenFormDialog])
+    }, [isOpenFormDialog,userState.groupId])
 
     const handleSortChange = (event: SelectChangeEvent) => {
         setSortText(event.target.value)
@@ -151,7 +151,7 @@ export default function TagFilter(props: TagFilterProps) {
     }
 
     return (
-        <div style={{ marginLeft: "70px", display: "flex", alignItems: "center" }}>
+        <div style={{ margin: "10px 0px 10px 70px", display: "flex", alignItems: "center" }}>
             <Box sx={{ display: "flex", alignItems: "center", mr: "50px" }}>
                 <SortIcon />
                 <Typography variant="body2">並び替え：</Typography>

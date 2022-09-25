@@ -19,6 +19,7 @@ export default function GroupIdDialog(props:GroupIdDialogProps) {
         <Dialog onClose={()=>setOpen(false)} open={isOpen}>
             <DialogContent>
             <Typography variant="h5">グループID ： {userState.groupId}</Typography>
+            <Typography variant="caption">*このIDをコピーして友達に共有してください</Typography>
             </DialogContent>
         </Dialog>
     )

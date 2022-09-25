@@ -185,7 +185,7 @@ export default function PostColumn(props: PostColumnProps) {
                 <DialogContent
                     sx={{ display: "flex", justifyContent: "space-around", textAlign: "center", mt: "50px" }}
                 >
-                    <div style={{ marginRight: "-100px", marginTop: "50px" }}>
+                    <div style={{ padding:"20px", marginRight: "-100px", backgroundColor:"white", height:window.innerHeight*0.7, borderRadius:"20px" }}>
                         <Typography sx={{ mb: "20px" }} variant="h6">
                             今の感情は？
                         </Typography>
@@ -263,7 +263,7 @@ export default function PostColumn(props: PostColumnProps) {
                             </FormControl>
                         </Box>
                     </div>
-                    <div style={{ marginLeft: "-100px" }}>
+                    <div style={{ marginLeft: "-100px", backgroundColor:"white", height:window.innerHeight*0.7, padding:"20px", borderRadius:"20px" }}>
                         <Typography variant="h6">質問内容*</Typography>
                         <Box
                             component="form"

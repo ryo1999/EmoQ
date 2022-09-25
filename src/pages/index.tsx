@@ -66,10 +66,10 @@ export default function SignIn() {
                     <Typography variant="h2" sx={{ mb: "20px" }}>
                         EmoQ
                     </Typography>
-                    <Typography variant="h4" sx={{ mb: "50px" }}>
+                    <Typography variant="h4" sx={{ mb: "30px" }}>
                         ログイン
                     </Typography>
-                    <Box sx={{ mt: 1, width: "100%" }}>
+                    <Box sx={{ mt: 1, width: "100%", bgcolor: "white", p: "30px 20px" }}>
                         <Typography variant="h6">メールアドレス*</Typography>
                         <TextField
                             margin="normal"

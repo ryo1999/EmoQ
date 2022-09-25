@@ -1,5 +1,5 @@
 import React from "react"
-import {useRouter} from "next/router"
+import { useRouter } from "next/router"
 import LoadingButton from "@mui/lab/LoadingButton"
 import TextField from "@mui/material/TextField"
 import Link from "@mui/material/Link"
@@ -14,7 +14,6 @@ import { useRecoilState } from "recoil"
 import { userInfo } from "@/store/userInfo"
 import { signUp, getUserInfo } from "@/pages/api/userApi"
 import { useValidation, useMailValidation, usePasswordValidation } from "@/hooks/useValidation"
-
 
 const theme = createTheme()
 
@@ -34,7 +33,7 @@ export default function SignUp() {
             .then(async (data) => {
                 toast.success("登録が完了しました。次の画面でグループを選択してください")
                 await signUp(data.user.uid, valueText)
-                setUserState({...userState,userId:data.user.uid,userName:valueText})
+                setUserState({ ...userState, userId: data.user.uid, userName: valueText })
                 router.push("/selectGroup")
             })
             .catch(() => {
@@ -57,7 +56,7 @@ export default function SignUp() {
                     <Typography variant="h4" sx={{ mb: "20px" }}>
                         新規登録
                     </Typography>
-                    <Box sx={{ mt: 1, width: "100%" }}>
+                    <Box sx={{ mt: 1, width: "100%", bgcolor: "white", p: "30px 20px" }}>
                         <Typography variant="h6">アカウント名*</Typography>
                         <TextField
                             error={!isValidated}

@@ -30,6 +30,7 @@ const Comment = () => {
     const { resetSelectedQuestion } = useInitializeRecoilState()
     const { valueText, setValueText, isValidated, errorMessage, setIsInputStart, textValidation } = useValidation()
 
+
     React.useEffect(() => {
         auth.onAuthStateChanged((user) => {
             if (user) {
@@ -89,7 +90,7 @@ const Comment = () => {
                             </Typography>
                         </IconButton>
                     </Box>
-                    <Box sx={{ height: "670px", overflowY: "scroll" }}>
+                    <Box sx={{ height: window.innerHeight*0.84, overflowY: "scroll", p:"0px 10px" }}>
                         <Box>
                             {questionInfo && (
                                 <CardDetail

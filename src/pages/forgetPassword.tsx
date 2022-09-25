@@ -36,7 +36,7 @@ export default function ForgetPassword() {
                 <CssBaseline />
                 <Box
                     sx={{
-                        mt: "30px",
+                        mt: "70px",
                         display: "flex",
                         flexDirection: "column",
                         alignItems: "center",
@@ -45,7 +45,7 @@ export default function ForgetPassword() {
                     <Typography variant="h5" sx={{ mb: "50px" }}>
                         パスワード再設定用メール送信
                     </Typography>
-                    <Box sx={{ mt: 1, width: "100%" }}>
+                    <Box sx={{ mt: 1, width: "100%", bgcolor: "white", p: "30px 20px" }}>
                         <Typography variant="h6">登録したメールアドレスを入力</Typography>
                         <TextField
                             margin="normal"
@@ -63,12 +63,18 @@ export default function ForgetPassword() {
                             fullWidth
                             loading={loading}
                             variant="contained"
-                            sx={{ fontSize:"18px", mt: 3, mb: 2, bgcolor: "#24292f", ":hover": { bgcolor: "#777777" } }}
+                            sx={{
+                                fontSize: "18px",
+                                mt: 3,
+                                mb: 2,
+                                bgcolor: "#24292f",
+                                ":hover": { bgcolor: "#777777" },
+                            }}
                         >
                             送信
                         </LoadingButton>
                         <Box sx={{ m: "20px 0px" }}>
-                            <Link href="/" variant="body2" sx={{color:"black"}}>
+                            <Link href="/" variant="body2" sx={{ color: "black" }}>
                                 ログイン画面へ
                             </Link>
                         </Box>

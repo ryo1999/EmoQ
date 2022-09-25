@@ -47,7 +47,6 @@ export default function Home() {
         setOpenFormDialog(true)
     }
 
-
     return (
         <div>
             <Appbar />
@@ -56,11 +55,11 @@ export default function Home() {
                 <>
                     <TagFilter isOpenFormDialog={isOpenFormDialog} />
                     <Box sx={{ display: "flex", justifyContent: "space-around", width: "100%" }}>
-                        <div style={{ width: "40%" }}>
-                            <div style={{ marginBottom: "10px" }}>
-                                <Typography variant="h5">未解決</Typography>
+                        <div style={{ width: "40%", backgroundColor:"#DDDDDD", padding:"10px", borderRadius:"20px" }}>
+                            <div style={{ marginBottom: "20px" }}>
+                                <Typography variant="h5" >未解決</Typography>
                             </div>
-                            <Box sx={{ height: "625px", overflowY: "scroll" }}>
+                            <Box sx={{ height: window.innerHeight*0.73, overflowY: "scroll" }}>
                                 {filter.filterList.length === 0 &&
                                     unSolvedQuestionList.map((questionInfo) => {
                                         return (
@@ -96,11 +95,11 @@ export default function Home() {
                                     })}
                             </Box>
                         </div>
-                        <div style={{ width: "40%" }}>
-                            <div style={{ marginBottom: "10px" }}>
+                        <div style={{ width: "40%", backgroundColor:"#DDDDDD", padding:"10px", borderRadius:"20px" }}>
+                            <div style={{ marginBottom: "20px" }}>
                                 <Typography variant="h5">解決済み</Typography>
                             </div>
-                            <Box sx={{ height: "625px", overflowY: "scroll" }}>
+                            <Box sx={{ height: window.innerHeight*0.73, overflowY: "scroll" }}>
                                 {filter.filterList.length === 0 &&
                                     solvedQuestionList.map((questionInfo) => {
                                         return (

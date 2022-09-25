@@ -85,7 +85,7 @@ export default function MyPage() {
                         </Typography>
                     </IconButton>
                     <Box>
-                        <Tabs value={value} onChange={handleChange} sx={{ mr: "70px" }}>
+                        <Tabs value={value} onChange={handleChange} sx={{ mr: "70px", bgcolor:"white" }}>
                             <Tab label="過去の投稿" />
                             <Tab label="ブックマーク" />
                         </Tabs>
@@ -94,11 +94,11 @@ export default function MyPage() {
                 <Box>
                     <TagFilter isOpenFormDialog={isOpenFormDialog}/>
                     <div style={{ display: "flex", justifyContent: "space-around", width: "100%" }}>
-                        <Box sx={{ width: "40%" }}>
+                        <Box sx={{ width: "40%", backgroundColor:"#DDDDDD", padding:"10px", borderRadius:"20px" }}>
                             <Typography sx={{ mb: "10px" }} variant="h5">
                                 未解決
                             </Typography>
-                            <Box sx={{ height: "570px", overflowY: "scroll" }}>
+                            <Box sx={{ height: window.innerHeight*0.68, overflowY: "scroll" }}>
                                 {value === 0 &&
                                     filter.filterList.length === 0 &&
                                     unSolvedMyQuestions.map((questionInfo) => {
@@ -161,11 +161,11 @@ export default function MyPage() {
                                     })}
                             </Box>
                         </Box>
-                        <Box sx={{ width: "40%" }}>
+                        <Box sx={{ width: "40%", backgroundColor:"#DDDDDD", padding:"10px", borderRadius:"20px" }}>
                             <Typography sx={{ mb: "10px" }} variant="h5">
                                 解決済み
                             </Typography>
-                            <Box sx={{ height: "570px", overflowY: "scroll" }}>
+                            <Box sx={{ height: window.innerHeight*0.68, overflowY: "scroll" }}>
                                 {value === 0 &&
                                     filter.filterList.length === 0 &&
                                     solvedMyQuestions.map((questionInfo) => {
