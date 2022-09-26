@@ -42,7 +42,7 @@ export default function Appbar() {
     const [avatarAnchorEl, setAvatarAnchorEl] = React.useState<null | HTMLElement>(null)
     const [mailAnchorEl, setMailAnchorEl] = React.useState<null | HTMLElement>(null)
     const [notificationNumber, setNotificationNumber] = React.useState(0)
-    const [notification, setNotification] = React.useState<string[]>([])
+    const [notification, setNotification] = React.useState<{[key:string]:string}[]>([])
     const {
         resetUserState,
         resetUnSolvedQuestions,
@@ -246,17 +246,20 @@ export default function Appbar() {
                                     <MenuItem sx={{ pointerEvents: "none" }}>
                                         {notificationNumber}件の通知があります
                                     </MenuItem>
-                                    {notification.map((qid) => (
-                                        <>
+                                    {notification.map((question,index) => (
+                                        Object.keys(question).map((qid)=>(
+                                            <>
                                             <Divider />
                                             <MenuItem
                                                 onClick={() => handleClickNotification(qid)}
                                                 value={qid}
                                                 key={qid}
                                             >
-                                                {qid}
+                                                {notification[index][qid]}からコメントが来ています
                                             </MenuItem>
                                         </>
+                                        ))
+                                        
                                     ))}
                                 </>
                             )}

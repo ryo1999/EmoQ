@@ -84,6 +84,7 @@ export const createMygroups = async (user_id: string, group_id: string, group_na
 //コメントした時ユーザーのフィールドにnotification追加
 export const addNotification = async (
     user_id: string,
+    user_name: string,
     question_id: string,
     question_user_id: string,
     replied_user_id: string[]
@@ -94,16 +95,16 @@ export const addNotification = async (
         joinUsers.push(question_user_id)
     }
     joinUsers.forEach(async (user) => {
-        let notifications: string[] = []
+        let notifications: { [key: string]: string }[] = []
         if (user_id !== user) {
             const docRef = doc(db, "users", user)
             const docSnap = await getDoc(docRef)
             if (docSnap.exists()) {
                 if (docSnap.data().notification !== undefined) {
                     notifications = [...docSnap.data().notification]
-                    notifications.push(question_id)
+                    notifications.push({ [question_id]: user_name })
                 } else {
-                    notifications = [question_id]
+                    notifications = [{ [question_id]: user_name }]
                 }
             }
             await updateDoc(doc(db, "users", user), {
@@ -128,23 +129,23 @@ export const getNotification = async (user_id: string) => {
 
 //通知の中のリストをクリックされたらそのquestion_idと同じidを全て消す
 export const deleteNotification = async (user_id: string, question_id: string) => {
-    const notificationSet = new Set()
+    const notifications: { [key: string]: string }[] = []
     const docRef = doc(db, "users", user_id)
     const docSnap = await getDoc(docRef)
     if (docSnap.exists()) {
         if (docSnap.data().notification !== undefined) {
-            docSnap.data().notification.forEach((data: string) => {
-                notificationSet.add(data)
+            docSnap.data().notification.forEach((data: { [key: string]: string }) => {
+                Object.keys(data).forEach((qid) => {
+                    if (question_id !== qid) {
+                        notifications.push(data)
+                    }
+                })
             })
         } else {
             return
         }
     }
-    if (notificationSet.has(question_id)) {
-        notificationSet.delete(question_id)
-        const notificationList = Array.from(notificationSet)
-        await updateDoc(doc(db, "users", user_id), {
-            notification: notificationList,
-        })
-    }
+    await updateDoc(doc(db, "users", user_id), {
+        notification: notifications,
+    })
 }
