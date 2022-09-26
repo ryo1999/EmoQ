@@ -23,21 +23,26 @@ import LogoutIcon from "@mui/icons-material/Logout"
 import GroupIcon from "@mui/icons-material/Group"
 import GroupAddIcon from "@mui/icons-material/GroupAdd"
 import MailIcon from "@mui/icons-material/Mail"
-import { useRecoilValue } from "recoil"
+import { useRecoilValue, useSetRecoilState } from "recoil"
+import { selectedQuestion } from "@/store/selectedQuestion"
 import { auth, signOut } from "@/firebase"
 import { userInfo } from "@/store/userInfo"
 import { useInitializeRecoilState } from "@/hooks/useInitializeRecoilState"
-import { getNotification } from "@/pages/api/userApi"
+import { deleteNotification, getNotification } from "@/pages/api/userApi"
+import { getSelectQuestion } from "@/pages/api/questionApi"
 
 export default function Appbar() {
     const router = useRouter()
     const userState = useRecoilValue(userInfo)
+    const setSelectedQuestion = useSetRecoilState(selectedQuestion)
     const [isOpen, setOpen] = React.useState(false)
     const [isOpenGroupListDialog, setIsOpenGroupListDialog] = React.useState(false)
     const [isOpenNewGroupDialog, setIsOpenNewGroupDialog] = React.useState(false)
     const [isOpenJoinGroupDialog, setIsOpenJoinGroupDialog] = React.useState(false)
     const [avatarAnchorEl, setAvatarAnchorEl] = React.useState<null | HTMLElement>(null)
+    const [mailAnchorEl, setMailAnchorEl] = React.useState<null | HTMLElement>(null)
     const [notificationNumber, setNotificationNumber] = React.useState(0)
+    const [notification, setNotification] = React.useState<string[]>([])
     const {
         resetUserState,
         resetUnSolvedQuestions,
@@ -46,7 +51,6 @@ export default function Appbar() {
         resetSelectedSort,
         resetSelectedFilter,
     } = useInitializeRecoilState()
-    const [mailAnchorEl, setMailAnchorEl] = React.useState<null | HTMLElement>(null)
 
     React.useEffect(() => {
         auth.onAuthStateChanged((user) => {
@@ -54,6 +58,7 @@ export default function Appbar() {
                 getNotification(userState.userId)
                     .then((data) => {
                         setNotificationNumber(data.length)
+                        setNotification(data)
                     })
                     .catch((error) => console.error(error))
             } else {
@@ -99,6 +104,25 @@ export default function Appbar() {
         handleClose()
         resetSelectedFilter()
         router.push(url)
+    }
+
+    const handleClickNotification = async (question_id: string) => {
+        const questionInfo = await getSelectQuestion(question_id, userState.groupId)
+        if (questionInfo) {
+            setSelectedQuestion(questionInfo)
+        }
+        setMailAnchorEl(null)
+        await deleteNotification(userState.userId, question_id)
+        await getNotification(userState.userId)
+            .then((data) => {
+                setNotificationNumber(data.length)
+                setNotification(data)
+            })
+            .catch((error) => console.error(error))
+        router.push({
+            pathname: "/comment/[qid]",
+            query: { qid: question_id },
+        })
     }
 
     return (
@@ -215,7 +239,27 @@ export default function Appbar() {
                             open={Boolean(mailAnchorEl)}
                             onClose={handleClose}
                         >
-                            <MenuItem onClick={router.reload}>〜件の通知があります</MenuItem>
+                            {notification.length == 0 ? (
+                                <MenuItem>通知はありません</MenuItem>
+                            ) : (
+                                <>
+                                    <MenuItem sx={{ pointerEvents: "none" }}>
+                                        {notificationNumber}件の通知があります
+                                    </MenuItem>
+                                    {notification.map((qid) => (
+                                        <>
+                                            <Divider />
+                                            <MenuItem
+                                                onClick={() => handleClickNotification(qid)}
+                                                value={qid}
+                                                key={qid}
+                                            >
+                                                {qid}
+                                            </MenuItem>
+                                        </>
+                                    ))}
+                                </>
+                            )}
                         </Menu>
                     </div>
                 </Toolbar>

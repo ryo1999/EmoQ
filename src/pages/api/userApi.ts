@@ -125,3 +125,26 @@ export const getNotification = async (user_id: string) => {
         }
     }
 }
+
+//通知の中のリストをクリックされたらそのquestion_idと同じidを全て消す
+export const deleteNotification = async (user_id: string, question_id: string) => {
+    const notificationSet = new Set()
+    const docRef = doc(db, "users", user_id)
+    const docSnap = await getDoc(docRef)
+    if (docSnap.exists()) {
+        if (docSnap.data().notification !== undefined) {
+            docSnap.data().notification.forEach((data: string) => {
+                notificationSet.add(data)
+            })
+        } else {
+            return
+        }
+    }
+    if (notificationSet.has(question_id)) {
+        notificationSet.delete(question_id)
+        const notificationList = Array.from(notificationSet)
+        await updateDoc(doc(db, "users", user_id), {
+            notification: notificationList,
+        })
+    }
+}
