@@ -143,8 +143,8 @@ export default function Home() {
                             color: "white",
                             position: "fixed",
                             fontSize: "40px",
-                            bottom: "10px",
-                            right: "10px",
+                            bottom: "20px",
+                            right: "20px",
                             ":hover": { bgcolor: "#777777" },
                         }}
                     >

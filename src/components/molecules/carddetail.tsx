@@ -3,7 +3,7 @@ import { format } from "date-fns"
 import { useRouter } from "next/router"
 import ReturnIcon from "../atoms/returnIcon"
 import { ReturnEmotionColor } from "@/utils/commonFunctions/returnEmotionColor"
-import { Box, Menu, MenuItem, Tooltip } from "@mui/material"
+import { Box, CardActionArea, Menu, MenuItem, Tooltip } from "@mui/material"
 import Card from "@mui/material/Card"
 import CardActions from "@mui/material/CardActions"
 import CardContent from "@mui/material/CardContent"
@@ -65,7 +65,7 @@ const CardDetail = React.memo((props: CardContentProps) => {
     const dateTime = format(dateToDate, "HH:mm")
 
     React.useEffect(() => {
-        getComment(questionInfo.question_id,userState.groupId)
+        getComment(questionInfo.question_id, userState.groupId)
             .then((comment) => {
                 setCommentLength(comment.length)
             })
@@ -100,8 +100,13 @@ const CardDetail = React.memo((props: CardContentProps) => {
         setMenuAnchorEl(null)
         try {
             await upDateQuestionSolution(questionInfo.question_id, !checkMark, userState.groupId)
-            await upDateBookmarkSolution(userState.groupId, questionInfo.question_id, questionInfo.bookmark_user_id, !checkMark)
-            const Q = await getQuestion(sortText,userState.groupId)
+            await upDateBookmarkSolution(
+                userState.groupId,
+                questionInfo.question_id,
+                questionInfo.bookmark_user_id,
+                !checkMark
+            )
+            const Q = await getQuestion(sortText, userState.groupId)
             setSolvedQuestions(Q[1])
             setUnSolvedQuestions(Q[0])
             if (setQuestionInfo) {
@@ -124,7 +129,12 @@ const CardDetail = React.memo((props: CardContentProps) => {
             }
             try {
                 await deleteBookMark(userState.userId, userState.groupId, questionInfo.question_id)
-                await deleteQuestionBookmark(questionInfo.question_id, questionInfo.bookmark_user_id, userState.userId, userState.groupId)
+                await deleteQuestionBookmark(
+                    questionInfo.question_id,
+                    questionInfo.bookmark_user_id,
+                    userState.userId,
+                    userState.groupId
+                )
                 const Q = await getQuestion(sortText, userState.groupId)
                 setSolvedQuestions(Q[1])
                 setUnSolvedQuestions(Q[0])
@@ -153,7 +163,12 @@ const CardDetail = React.memo((props: CardContentProps) => {
                     questionInfo.solution,
                     questionInfo.replied_user_id
                 )
-                await upDateQuestionBookmark(questionInfo.question_id, questionInfo.bookmark_user_id, userState.userId, userState.groupId)
+                await upDateQuestionBookmark(
+                    questionInfo.question_id,
+                    questionInfo.bookmark_user_id,
+                    userState.userId,
+                    userState.groupId
+                )
                 const Q = await getQuestion(sortText, userState.groupId)
                 setSolvedQuestions(Q[1])
                 setUnSolvedQuestions(Q[0])
@@ -195,60 +210,62 @@ const CardDetail = React.memo((props: CardContentProps) => {
                         borderRadius: "10px",
                     }}
                 >
-                    <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-                        <CardHeader
-                            avatar={
-                                <Avatar sx={{ border: "solid 1px #24292f", bgcolor: "white", color: "black" }}>
-                                    {questionInfo.contributor_name[0]}
-                                </Avatar>
-                            }
-                            title={questionInfo.contributor_name}
-                            subheader={
-                                <Typography variant="caption">
-                                    {today.slice(3, 5) === date.slice(3, 5) ? `今日：${dateTime}` : date}
-                                </Typography>
-                            }
-                        />
-                        <Box
-                            sx={{
-                                display: "flex",
-                                alignItems: "center",
-                                mt: "-25px",
-                            }}
-                        >
-                            <Typography variant="caption" sx={{ mr: "20px" }}>
-                                緊急度
-                            </Typography>
-                            <Slider
-                                key={questionInfo.parameter}
-                                defaultValue={questionInfo.parameter}
-                                marks
-                                step={10}
-                                min={0}
-                                max={100}
-                                sx={{ width: "200px", mr: "30px" }}
-                                disabled
+                    <CardActionArea disabled={router.query.qid !== undefined} onClick={handleClickCommentIcon}>
+                        <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+                            <CardHeader
+                                avatar={
+                                    <Avatar sx={{ border: "solid 1px #24292f", bgcolor: "white", color: "black" }}>
+                                        {questionInfo.contributor_name[0]}
+                                    </Avatar>
+                                }
+                                title={questionInfo.contributor_name}
+                                subheader={
+                                    <Typography variant="caption">
+                                        {today.slice(3, 5) === date.slice(3, 5) ? `今日：${dateTime}` : date}
+                                    </Typography>
+                                }
                             />
-                            <Tooltip title={questionInfo.emotion} placement="bottom">
-                                <IconButton
-                                    disableRipple
-                                    sx={{
-                                        bgcolor: ReturnEmotionColor(questionInfo.emotion),
-                                        mr: "10px",
-                                        mt: "3px",
-                                        color: "white",
-                                    }}
-                                >
-                                    {ReturnIcon(questionInfo.emotion)}
-                                </IconButton>
-                            </Tooltip>
+                            <Box
+                                sx={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    mt: "-25px",
+                                }}
+                            >
+                                <Typography variant="caption" sx={{ mr: "20px" }}>
+                                    緊急度
+                                </Typography>
+                                <Slider
+                                    key={questionInfo.parameter}
+                                    defaultValue={questionInfo.parameter}
+                                    marks
+                                    step={10}
+                                    min={0}
+                                    max={100}
+                                    sx={{ width: "200px", mr: "30px" }}
+                                    disabled
+                                />
+                                <Tooltip title={questionInfo.emotion} placement="bottom">
+                                    <IconButton
+                                        disableRipple
+                                        sx={{
+                                            bgcolor: ReturnEmotionColor(questionInfo.emotion),
+                                            mr: "10px",
+                                            mt: "3px",
+                                            color: "white",
+                                        }}
+                                    >
+                                        {ReturnIcon(questionInfo.emotion)}
+                                    </IconButton>
+                                </Tooltip>
+                            </Box>
                         </Box>
-                    </Box>
-                    <CardContent onClick={handleClickCommentIcon} sx={{ ml: "55px", maxWidth: "460px", cursor: "pointer" }}>
-                        <Typography sx={{ whiteSpace: "pre-wrap" }} variant="body2">
-                            {questionInfo.question}
-                        </Typography>
-                    </CardContent>
+                        <CardContent sx={{ ml: "55px", maxWidth: "460px" }}>
+                            <Typography sx={{ whiteSpace: "pre-wrap" }} variant="body2">
+                                {questionInfo.question}
+                            </Typography>
+                        </CardContent>
+                    </CardActionArea>
                     <CardActions sx={{ justifyContent: "space-between" }}>
                         <Box sx={{ ml: "8px" }}>
                             {questionInfo.tag.map((v, i) => (
@@ -268,7 +285,7 @@ const CardDetail = React.memo((props: CardContentProps) => {
                                 </Tooltip>
                             ))}
                         </Box>
-                        <Box sx={{mb:"-8px"}}>
+                        <Box sx={{ mb: "-8px" }}>
                             <IconButton onClick={handleClickBookMark}>
                                 {bookMark ? (
                                     <BookmarkIcon sx={{ color: "black" }} />
@@ -283,7 +300,7 @@ const CardDetail = React.memo((props: CardContentProps) => {
                                 </Typography>
                             </IconButton>
                             {questionInfo.contributor_id === userState.userId && (
-                                <IconButton onClick={handleClickMenu} >
+                                <IconButton onClick={handleClickMenu}>
                                     <MoreHorizIcon />
                                 </IconButton>
                             )}

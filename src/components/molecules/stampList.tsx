@@ -39,7 +39,7 @@ const StampList = React.memo((props: StampList) => {
                         size="medium"
                         onClick={() => handleClickStamp(emo)}
                         sx={{
-                            "&:hover": {
+                            ":hover": {
                                 background: emotion == emo ? ReturnEmotionColor(emotion) : "",
                             },
                             bgcolor: emotion == emo ? ReturnEmotionColor(emotion) : "",
