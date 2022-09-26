@@ -15,6 +15,7 @@ import { useRecoilState, useRecoilValue } from "recoil"
 import { useInitializeRecoilState } from "@/hooks/useInitializeRecoilState"
 import { userInfo } from "@/store/userInfo"
 import { selectedQuestion } from "@/store/selectedQuestion"
+import { addNotification } from "../api/userApi"
 import { getSelectQuestion, upDateRepliedUserId } from "../api/questionApi"
 import { getComment, addComment } from "@/pages/api/commentApi"
 import { auth } from "@/firebase"
@@ -70,10 +71,11 @@ const Comment = () => {
             )
             const C = await getComment(questionInfo.question_id, userState.groupId)
             setCommentList(C)
+            await addNotification(userState.userId,questionInfo.question_id,questionInfo.contributor_id,questionInfo.replied_user_id)
+            await upDateRepliedUserId(questionInfo.question_id, userState.userId, questionInfo.replied_user_id, userState.groupId)
         } catch (error) {
             console.error(error)
         }
-        upDateRepliedUserId(questionInfo.question_id, userState.userId, questionInfo.replied_user_id, userState.groupId)
     }
 
     return (
@@ -106,7 +108,7 @@ const Comment = () => {
                                 commentList.map((commentInfo) => {
                                     return (
                                         <CommentCard
-                                            key={commentInfo.question_id}
+                                            key={commentInfo.comment_id}
                                             commentInfo={commentInfo}
                                             replied_user_id={questionInfo.replied_user_id}
                                             setCommentList={setCommentList}

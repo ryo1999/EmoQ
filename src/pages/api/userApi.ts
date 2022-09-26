@@ -5,8 +5,8 @@ import { setDoc, doc, getDoc, collection, orderBy, query, getDocs, updateDoc } f
 export const signUp = async (user_id: string, name: string) => {
     await setDoc(doc(db, "users", user_id), {
         name: name,
-        group_id:"",
-        group_name:"",
+        group_id: "",
+        group_name: "",
         group: {},
     })
 }
@@ -16,16 +16,16 @@ export const registerUserGroup = async (user_id: string, group_id: string, group
     const docRef = doc(db, "users", user_id)
     const docSnap = await getDoc(docRef)
     if (docSnap.exists()) {
-        if(group_id in docSnap.data().group){
+        if (group_id in docSnap.data().group) {
             groups = docSnap.data().group
-        }else{
-            groups = {...docSnap.data().group, [group_id]:group_name}
+        } else {
+            groups = { ...docSnap.data().group, [group_id]: group_name }
         }
     }
     await updateDoc(doc(db, "users", user_id), {
         group_id: group_id,
         group_name: group_name,
-        group:groups
+        group: groups,
     })
 }
 
@@ -58,25 +58,70 @@ export const getAllUserName = async (group_id: string) => {
 }
 
 //ユーザーの所属しているグループを全て取ってくる
-export const getAllUserGroup = async (user_id:string)=>{
+export const getAllUserGroup = async (user_id: string) => {
     const docRef = doc(db, "users", user_id)
     const docSnap = await getDoc(docRef)
-    if(docSnap.exists()){
+    if (docSnap.exists()) {
         return docSnap.data().group
     }
 }
 
 //アカウントが切り替えられた時にデータベースのgroup_idとgroup_nameを変えにいく
-export const changeGroup = async(user_id:string, group_id:string, group_name:string)=>{
-    await updateDoc(doc(db, "users", user_id),{
-        group_id:group_id,
-        group_name:group_name
+export const changeGroup = async (user_id: string, group_id: string, group_name: string) => {
+    await updateDoc(doc(db, "users", user_id), {
+        group_id: group_id,
+        group_name: group_name,
     })
 }
 
 //新しくグループが作られた時、新しくグループに参加した時、mygroupsコレクションにグループIDを作る
-export const createMygroups = async(user_id:string, group_id:string, group_name:string)=>{
-    const docRef = doc(db,"users",user_id,"mygroups",group_id)
-    const data = {name:group_name}
-    await setDoc(docRef,data)
+export const createMygroups = async (user_id: string, group_id: string, group_name: string) => {
+    const docRef = doc(db, "users", user_id, "mygroups", group_id)
+    const data = { name: group_name }
+    await setDoc(docRef, data)
+}
+
+//コメントした時ユーザーのフィールドにnotification追加
+export const addNotification = async (
+    user_id: string,
+    question_id: string,
+    question_user_id: string,
+    replied_user_id: string[]
+) => {
+    let joinUsers: string[] = []
+    joinUsers = [...replied_user_id]
+    if (joinUsers.indexOf(question_user_id) === -1) {
+        joinUsers.push(question_user_id)
+    }
+    joinUsers.forEach(async (user) => {
+        let notifications: string[] = []
+        if (user_id !== user) {
+            const docRef = doc(db, "users", user)
+            const docSnap = await getDoc(docRef)
+            if (docSnap.exists()) {
+                if (docSnap.data().notification !== undefined) {
+                    notifications = [...docSnap.data().notification]
+                    notifications.push(question_id)
+                } else {
+                    notifications = [question_id]
+                }
+            }
+            await updateDoc(doc(db, "users", user), {
+                notification: notifications,
+            })
+        }
+    })
+}
+
+//自分のnotificationのデータを取ってくる
+export const getNotification = async (user_id: string) => {
+    const userRef = doc(db, "users", user_id)
+    const userSnap = await getDoc(userRef)
+    if (userSnap.exists()) {
+        if (userSnap.data().notification === undefined) {
+            return []
+        } else {
+            return userSnap.data().notification
+        }
+    }
 }

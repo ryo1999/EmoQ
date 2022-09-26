@@ -14,7 +14,7 @@ import IconButton from "@mui/material/IconButton"
 import MenuItem from "@mui/material/MenuItem"
 import Menu from "@mui/material/Menu"
 import Avatar from "@mui/material/Avatar"
-// import Badge from "@mui/material/Badge"
+import Badge from "@mui/material/Badge"
 import Divider from "@mui/material/Divider"
 import ManageAccountsIcon from "@mui/icons-material/ManageAccounts"
 import PersonIcon from "@mui/icons-material/Person"
@@ -22,11 +22,12 @@ import LoginIcon from "@mui/icons-material/Login"
 import LogoutIcon from "@mui/icons-material/Logout"
 import GroupIcon from "@mui/icons-material/Group"
 import GroupAddIcon from "@mui/icons-material/GroupAdd"
-// import MailIcon from "@mui/icons-material/Mail"
+import MailIcon from "@mui/icons-material/Mail"
 import { useRecoilValue } from "recoil"
 import { auth, signOut } from "@/firebase"
 import { userInfo } from "@/store/userInfo"
 import { useInitializeRecoilState } from "@/hooks/useInitializeRecoilState"
+import { getNotification } from "@/pages/api/userApi"
 
 export default function Appbar() {
     const router = useRouter()
@@ -36,6 +37,7 @@ export default function Appbar() {
     const [isOpenNewGroupDialog, setIsOpenNewGroupDialog] = React.useState(false)
     const [isOpenJoinGroupDialog, setIsOpenJoinGroupDialog] = React.useState(false)
     const [avatarAnchorEl, setAvatarAnchorEl] = React.useState<null | HTMLElement>(null)
+    const [notificationNumber, setNotificationNumber] = React.useState(0)
     const {
         resetUserState,
         resetUnSolvedQuestions,
@@ -44,18 +46,32 @@ export default function Appbar() {
         resetSelectedSort,
         resetSelectedFilter,
     } = useInitializeRecoilState()
-    // const [mailAnchorEl, setMailAnchorEl] = React.useState<null | HTMLElement>(null)
+    const [mailAnchorEl, setMailAnchorEl] = React.useState<null | HTMLElement>(null)
+
+    React.useEffect(() => {
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                getNotification(userState.userId)
+                    .then((data) => {
+                        setNotificationNumber(data.length)
+                    })
+                    .catch((error) => console.error(error))
+            } else {
+                router.push("/")
+            }
+        })
+    }, [userState.groupId])
 
     const handleClickAvatar = (event: React.MouseEvent<HTMLElement>) => {
         setAvatarAnchorEl(event.currentTarget)
     }
-    // const handleClickMail = (event: React.MouseEvent<HTMLElement>) => {
-    //     setMailAnchorEl(event.currentTarget)
-    // }
+    const handleClickMail = (event: React.MouseEvent<HTMLElement>) => {
+        setMailAnchorEl(event.currentTarget)
+    }
 
     const handleClose = () => {
         setAvatarAnchorEl(null)
-        // setMailAnchorEl(null)
+        setMailAnchorEl(null)
     }
 
     const RESET = () => {
@@ -98,11 +114,11 @@ export default function Appbar() {
                         </Typography>
                     </Box>
                     <div>
-                        {/* <IconButton onClick={handleClickMail} color="inherit">
-                            <Badge badgeContent={4} color="success">
+                        <IconButton onClick={handleClickMail} color="inherit">
+                            <Badge badgeContent={notificationNumber} color="success">
                                 <MailIcon sx={{ width: "30px", height: "30px" }} />
                             </Badge>
-                        </IconButton> */}
+                        </IconButton>
                         <IconButton
                             aria-label="account of current user"
                             aria-controls="menu-appbar"
@@ -185,7 +201,7 @@ export default function Appbar() {
                                 ログアウト
                             </MenuItem>
                         </Menu>
-                        {/* <Menu
+                        <Menu
                             anchorEl={mailAnchorEl}
                             anchorOrigin={{
                                 vertical: "bottom",
@@ -200,7 +216,7 @@ export default function Appbar() {
                             onClose={handleClose}
                         >
                             <MenuItem onClick={router.reload}>〜件の通知があります</MenuItem>
-                        </Menu> */}
+                        </Menu>
                     </div>
                 </Toolbar>
             </AppBar>
