@@ -55,7 +55,7 @@ export default function Appbar() {
     React.useEffect(() => {
         auth.onAuthStateChanged((user) => {
             if (user) {
-                getNotification(userState.userId)
+                getNotification(userState.userId, userState.groupId)
                     .then((data) => {
                         setNotificationNumber(data.length)
                         setNotification(data)
@@ -112,8 +112,8 @@ export default function Appbar() {
             setSelectedQuestion(questionInfo)
         }
         setMailAnchorEl(null)
-        await deleteNotification(userState.userId, question_id)
-        await getNotification(userState.userId)
+        await deleteNotification(userState.userId, question_id, userState.groupId)
+        await getNotification(userState.userId, userState.groupId)
             .then((data) => {
                 setNotificationNumber(data.length)
                 setNotification(data)

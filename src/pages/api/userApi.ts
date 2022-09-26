@@ -85,6 +85,7 @@ export const createMygroups = async (user_id: string, group_id: string, group_na
 export const addNotification = async (
     user_id: string,
     user_name: string,
+    group_id:string,
     question_id: string,
     question_user_id: string,
     replied_user_id: string[]
@@ -97,7 +98,7 @@ export const addNotification = async (
     joinUsers.forEach(async (user) => {
         let notifications: { [key: string]: string }[] = []
         if (user_id !== user) {
-            const docRef = doc(db, "users", user)
+            const docRef = doc(db, "users", user, "mygroups", group_id)
             const docSnap = await getDoc(docRef)
             if (docSnap.exists()) {
                 if (docSnap.data().notification !== undefined) {
@@ -107,7 +108,7 @@ export const addNotification = async (
                     notifications = [{ [question_id]: user_name }]
                 }
             }
-            await updateDoc(doc(db, "users", user), {
+            await updateDoc(doc(db, "users", user, "mygroups", group_id), {
                 notification: notifications,
             })
         }
@@ -115,8 +116,8 @@ export const addNotification = async (
 }
 
 //自分のnotificationのデータを取ってくる
-export const getNotification = async (user_id: string) => {
-    const userRef = doc(db, "users", user_id)
+export const getNotification = async (user_id: string, group_id:string) => {
+    const userRef = doc(db, "users", user_id, "mygroups", group_id)
     const userSnap = await getDoc(userRef)
     if (userSnap.exists()) {
         if (userSnap.data().notification === undefined) {
@@ -128,9 +129,9 @@ export const getNotification = async (user_id: string) => {
 }
 
 //通知の中のリストをクリックされたらそのquestion_idと同じidを全て消す
-export const deleteNotification = async (user_id: string, question_id: string) => {
+export const deleteNotification = async (user_id: string, question_id: string, group_id:string) => {
     const notifications: { [key: string]: string }[] = []
-    const docRef = doc(db, "users", user_id)
+    const docRef = doc(db, "users", user_id, "mygroups", group_id)
     const docSnap = await getDoc(docRef)
     if (docSnap.exists()) {
         if (docSnap.data().notification !== undefined) {
@@ -145,7 +146,7 @@ export const deleteNotification = async (user_id: string, question_id: string) =
             return
         }
     }
-    await updateDoc(doc(db, "users", user_id), {
+    await updateDoc(doc(db, "users", user_id,"mygroups", group_id), {
         notification: notifications,
     })
 }

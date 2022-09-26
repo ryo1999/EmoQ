@@ -71,7 +71,7 @@ const Comment = () => {
             )
             const C = await getComment(questionInfo.question_id, userState.groupId)
             setCommentList(C)
-            await addNotification(userState.userId,userState.userName,questionInfo.question_id,questionInfo.contributor_id,questionInfo.replied_user_id)
+            await addNotification(userState.userId,userState.userName,userState.groupId,questionInfo.question_id,questionInfo.contributor_id,questionInfo.replied_user_id)
             await upDateRepliedUserId(questionInfo.question_id, userState.userId, questionInfo.replied_user_id, userState.groupId)
         } catch (error) {
             console.error(error)
