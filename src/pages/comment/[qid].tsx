@@ -20,6 +20,7 @@ import { getSelectQuestion, upDateRepliedUserId } from "../api/questionApi"
 import { getComment, addComment } from "@/pages/api/commentApi"
 import { auth } from "@/firebase"
 import { useValidation } from "@/hooks/useValidation"
+import { useGetWindowSize } from "@/hooks/useGetWindowSize"
 import { CommentsCollectionData } from "@/utils/types"
 
 const Comment = () => {
@@ -30,12 +31,11 @@ const Comment = () => {
     const [emotion, setEmotion] = React.useState("ホッ")
     const { resetSelectedQuestion } = useInitializeRecoilState()
     const { valueText, setValueText, isValidated, errorMessage, setIsInputStart, textValidation } = useValidation()
-
+    const { height, width } = useGetWindowSize()
 
     React.useEffect(() => {
         auth.onAuthStateChanged((user) => {
             if (user) {
-                //ここのgetを無くすと、このコンポーネントをいじった時に質問が消えるのはなぜ？リロード時はなくても消えない、recoilで永続化してるはずなのに
                 getSelectQuestion(questionInfo.question_id, userState.groupId).then((question) => {
                     if (question !== undefined) {
                         setQuestionInfo(question)
@@ -92,7 +92,7 @@ const Comment = () => {
                             </Typography>
                         </IconButton>
                     </Box>
-                    <Box sx={{ height: window.innerHeight*0.84, overflowY: "scroll", p:"0px 10px" }}>
+                    <Box sx={{ height: height*0.84, overflowY: "scroll", p:"0px 10px" }}>
                         <Box>
                             {questionInfo && (
                                 <CardDetail

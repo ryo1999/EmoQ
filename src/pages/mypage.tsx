@@ -22,6 +22,7 @@ import { selectedFilter } from "@/store/selectedFilter"
 import { getMyQuestion } from "./api/questionApi"
 import { getBookMark } from "./api/bookmarkApi"
 import { useInitializeRecoilState } from "@/hooks/useInitializeRecoilState"
+import { useGetWindowSize } from "@/hooks/useGetWindowSize"
 import { QuestionsCollectionData } from "@/utils/types"
 import { auth } from "@/firebase"
 
@@ -38,6 +39,8 @@ export default function MyPage() {
     const [unSolvedBookMarkQuestions, setUnSolvedBookMarkQuestions] = React.useState<QuestionsCollectionData[]>([])
     const [isOpenFormDialog, setOpenFormDialog] = React.useState(false)
     const { resetSelectedFilter } = useInitializeRecoilState()
+    const { height, width } = useGetWindowSize()
+
     React.useEffect(() => {
         auth.onAuthStateChanged((user) => {
             if (user) {
@@ -98,7 +101,7 @@ export default function MyPage() {
                             <Typography sx={{ mb: "10px" }} variant="h5">
                                 未解決
                             </Typography>
-                            <Box sx={{ height: window.innerHeight*0.68, overflowY: "scroll" }}>
+                            <Box sx={{ height: height*0.68, overflowY: "scroll" }}>
                                 {value === 0 &&
                                     filter.filterList.length === 0 &&
                                     unSolvedMyQuestions.map((questionInfo) => {
@@ -165,7 +168,7 @@ export default function MyPage() {
                             <Typography sx={{ mb: "10px" }} variant="h5">
                                 解決済み
                             </Typography>
-                            <Box sx={{ height: window.innerHeight*0.68, overflowY: "scroll" }}>
+                            <Box sx={{ height: height*0.68, overflowY: "scroll" }}>
                                 {value === 0 &&
                                     filter.filterList.length === 0 &&
                                     solvedMyQuestions.map((questionInfo) => {

@@ -16,6 +16,7 @@ import { selectedSort } from "@/store/selectedSort"
 import { solvedQuestions } from "@/store/solvedQuestions"
 import { unSolvedQuestions } from "@/store/unSolvedQuestions"
 import { selectedFilter } from "@/store/selectedFilter"
+import { useGetWindowSize } from "@/hooks/useGetWindowSize"
 import { getQuestion } from "./api/questionApi"
 import { auth } from "@/firebase"
 
@@ -27,6 +28,7 @@ export default function Home() {
     const [solvedQuestionList, setSolvedQuestions] = useRecoilState(solvedQuestions)
     const [isOpenFormDialog, setOpenFormDialog] = React.useState(false)
     const [filter, setFilter] = useRecoilState(selectedFilter)
+    const { height, width } = useGetWindowSize()
 
     React.useEffect(() => {
         auth.onAuthStateChanged((user) => {
@@ -59,7 +61,7 @@ export default function Home() {
                             <div style={{ marginBottom: "20px" }}>
                                 <Typography variant="h5" >未解決</Typography>
                             </div>
-                            <Box sx={{ height: window.innerHeight*0.73, overflowY: "scroll" }}>
+                            <Box sx={{ height: height*0.73, overflowY: "scroll" }}>
                                 {filter.filterList.length === 0 &&
                                     unSolvedQuestionList.map((questionInfo) => {
                                         return (
@@ -99,7 +101,7 @@ export default function Home() {
                             <div style={{ marginBottom: "20px" }}>
                                 <Typography variant="h5">解決済み</Typography>
                             </div>
-                            <Box sx={{ height: window.innerHeight*0.73, overflowY: "scroll" }}>
+                            <Box sx={{ height: height*0.73, overflowY: "scroll" }}>
                                 {filter.filterList.length === 0 &&
                                     solvedQuestionList.map((questionInfo) => {
                                         return (
