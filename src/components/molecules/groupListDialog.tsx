@@ -8,9 +8,11 @@ import Dialog from "@mui/material/Dialog"
 import DialogTitle from "@mui/material/DialogTitle"
 import DialogContent from "@mui/material/DialogContent"
 import Divider from "@mui/material/Divider"
+import Badge from "@mui/material/Badge"
+import MailIcon from "@mui/icons-material/Mail"
 import { useRecoilState } from "recoil"
 import { userInfo } from "@/store/userInfo"
-import { changeGroup, getAllUserGroup } from "@/pages/api/userApi"
+import { changeGroup, getAllUserGroup, getMygroupsNotification } from "@/pages/api/userApi"
 import { useGetWindowSize } from "@/hooks/useGetWindowSize"
 
 type GroupListDialogProps = {
@@ -24,11 +26,15 @@ const GroupListDialog = React.memo((props: GroupListDialogProps) => {
     const { isOpenGroupListDialog, setIsOpenGroupListDialog, setAvatarAnchorEl } = props
     const [userState, setUserState] = useRecoilState(userInfo)
     const [groupList, setGroupList] = React.useState<{ [key: string]: string }>({})
+    const [notification, setNotification] = React.useState<{ [key: string]: number }>({})
     const { height, width } = useGetWindowSize()
 
     React.useEffect(() => {
         getAllUserGroup(userState.userId).then((data) => {
             setGroupList(data)
+        })
+        getMygroupsNotification(userState.userId).then((data) => {
+            setNotification(data)
         })
     }, [])
 
@@ -43,16 +49,21 @@ const GroupListDialog = React.memo((props: GroupListDialogProps) => {
     }
 
     return (
-        <Dialog open={isOpenGroupListDialog} onClose={() => setIsOpenGroupListDialog(false)} >
+        <Dialog open={isOpenGroupListDialog} onClose={() => setIsOpenGroupListDialog(false)}>
             <DialogTitle>グループの切り替え</DialogTitle>
-            <DialogContent sx={{ width: "500px", maxHeight:height*0.5 }}>
+            <DialogContent sx={{ width: "500px", maxHeight: height * 0.5 }}>
                 {groupList &&
                     Object.keys(groupList).map((group) => (
                         <>
                             <Box>
-                                <Typography variant="body1" sx={{ mb: "10px" }}>
-                                    グループID：{group}
-                                </Typography>
+                                <Box sx={{ display: "flex", justifyContent: "space-between",pt:"10px" }}>
+                                    <Typography variant="body1" sx={{ mb: "10px" }}>
+                                        グループID：{group}
+                                    </Typography>
+                                    <Badge badgeContent={notification[group]} color="info">
+                                        <MailIcon />
+                                    </Badge>
+                                </Box>
                                 <MenuItem
                                     disabled={userState.groupId === group}
                                     onClick={() => handleClickGroup(group, groupList[group])}

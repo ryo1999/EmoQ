@@ -85,7 +85,7 @@ export const createMygroups = async (user_id: string, group_id: string, group_na
 export const addNotification = async (
     user_id: string,
     user_name: string,
-    group_id:string,
+    group_id: string,
     question_id: string,
     question_user_id: string,
     replied_user_id: string[]
@@ -115,8 +115,8 @@ export const addNotification = async (
     })
 }
 
-//自分のnotificationのデータを取ってくる
-export const getNotification = async (user_id: string, group_id:string) => {
+//自分の現在のアカウントのnotificationのデータを取ってくる
+export const getNotification = async (user_id: string, group_id: string) => {
     const userRef = doc(db, "users", user_id, "mygroups", group_id)
     const userSnap = await getDoc(userRef)
     if (userSnap.exists()) {
@@ -128,8 +128,38 @@ export const getNotification = async (user_id: string, group_id:string) => {
     }
 }
 
+//自分の全てのアカウントの通知を取得
+export const getMygroupsNotification = async (user_id: string) => {
+    const groups: { [key: string]: number } = {}
+    const groupId = query(collection(db, "users", user_id, "mygroups"))
+    const querySnapshot = await getDocs(groupId)
+    querySnapshot.forEach((doc) => {
+        if (doc.data().notification !== undefined) {
+            groups[doc.id] = doc.data().notification.length
+        } else {
+            groups[doc.id] = 0
+        }
+    })
+    return groups
+}
+
+//自分の他のアカウントに通知が来ているかどうかを確かめる
+export const confirmNotification = async (user_id: string) => {
+    const groupId = query(collection(db, "users", user_id, "mygroups"))
+    const querySnapshot = await getDocs(groupId)
+    let bool = true
+    querySnapshot.forEach((doc) => {
+        if (doc.data().notification !== undefined) {
+            if (doc.data().notification.length !== 0) {
+                return bool = false
+            }
+        }
+    })
+    return bool
+}
+
 //通知の中のリストをクリックされたらそのquestion_idと同じidを全て消す
-export const deleteNotification = async (user_id: string, question_id: string, group_id:string) => {
+export const deleteNotification = async (user_id: string, question_id: string, group_id: string) => {
     const notifications: { [key: string]: string }[] = []
     const docRef = doc(db, "users", user_id, "mygroups", group_id)
     const docSnap = await getDoc(docRef)
@@ -146,7 +176,7 @@ export const deleteNotification = async (user_id: string, question_id: string, g
             return
         }
     }
-    await updateDoc(doc(db, "users", user_id,"mygroups", group_id), {
+    await updateDoc(doc(db, "users", user_id, "mygroups", group_id), {
         notification: notifications,
     })
 }

@@ -28,7 +28,7 @@ import { selectedQuestion } from "@/store/selectedQuestion"
 import { auth, signOut } from "@/firebase"
 import { userInfo } from "@/store/userInfo"
 import { useInitializeRecoilState } from "@/hooks/useInitializeRecoilState"
-import { deleteNotification, getNotification } from "@/pages/api/userApi"
+import { confirmNotification, deleteNotification, getNotification } from "@/pages/api/userApi"
 import { getSelectQuestion } from "@/pages/api/questionApi"
 
 export default function Appbar() {
@@ -42,7 +42,8 @@ export default function Appbar() {
     const [avatarAnchorEl, setAvatarAnchorEl] = React.useState<null | HTMLElement>(null)
     const [mailAnchorEl, setMailAnchorEl] = React.useState<null | HTMLElement>(null)
     const [notificationNumber, setNotificationNumber] = React.useState(0)
-    const [notification, setNotification] = React.useState<{[key:string]:string}[]>([])
+    const [notification, setNotification] = React.useState<{ [key: string]: string }[]>([])
+    const [otherNotification, setOtherNotification] = React.useState(true)
     const {
         resetUserState,
         resetUnSolvedQuestions,
@@ -61,6 +62,9 @@ export default function Appbar() {
                         setNotification(data)
                     })
                     .catch((error) => console.error(error))
+                confirmNotification(userState.userId).then((bool) => {
+                    setOtherNotification(bool)
+                })
             } else {
                 router.push("/")
             }
@@ -139,7 +143,7 @@ export default function Appbar() {
                     </Box>
                     <div>
                         <IconButton onClick={handleClickMail} color="inherit">
-                            <Badge badgeContent={notificationNumber} color="success">
+                            <Badge badgeContent={notificationNumber} color="info">
                                 <MailIcon sx={{ width: "30px", height: "30px" }} />
                             </Badge>
                         </IconButton>
@@ -150,17 +154,19 @@ export default function Appbar() {
                             onClick={handleClickAvatar}
                             color="inherit"
                         >
-                            <Avatar
-                                sx={{
-                                    bgcolor: "white",
-                                    color: "black",
-                                    width: "35px",
-                                    height: "35px",
-                                    ml: "10px",
-                                }}
-                            >
-                                {userState.userName[0]}
-                            </Avatar>
+                            <Badge overlap="circular" variant="dot" color="info" invisible={otherNotification}>
+                                <Avatar
+                                    sx={{
+                                        bgcolor: "white",
+                                        color: "black",
+                                        width: "35px",
+                                        height: "35px",
+                                        ml: "10px",
+                                    }}
+                                >
+                                    {userState.userName[0]}
+                                </Avatar>
+                            </Badge>
                         </IconButton>
                         <Menu
                             anchorEl={avatarAnchorEl}
@@ -246,21 +252,20 @@ export default function Appbar() {
                                     <MenuItem sx={{ pointerEvents: "none" }}>
                                         {notificationNumber}件の通知があります
                                     </MenuItem>
-                                    {notification.map((question,index) => (
-                                        Object.keys(question).map((qid)=>(
+                                    {notification.map((question, index) =>
+                                        Object.keys(question).map((qid) => (
                                             <>
-                                            <Divider />
-                                            <MenuItem
-                                                onClick={() => handleClickNotification(qid)}
-                                                value={qid}
-                                                key={qid}
-                                            >
-                                                {notification[index][qid]}からコメントが来ています
-                                            </MenuItem>
-                                        </>
+                                                <Divider />
+                                                <MenuItem
+                                                    onClick={() => handleClickNotification(qid)}
+                                                    value={qid}
+                                                    key={qid}
+                                                >
+                                                    {notification[index][qid]}からコメントが来ています
+                                                </MenuItem>
+                                            </>
                                         ))
-                                        
-                                    ))}
+                                    )}
                                 </>
                             )}
                         </Menu>
