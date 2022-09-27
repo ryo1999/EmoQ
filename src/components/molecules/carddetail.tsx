@@ -267,7 +267,7 @@ const CardDetail = React.memo((props: CardContentProps) => {
                     </CardActionArea>
                     <CardActions sx={{ justifyContent: "space-between" }}>
                         <Box sx={{ ml: "8px" }}>
-                            {questionInfo.tag.map((v, i) => (
+                            {questionInfo.tag.map((v) => (
                                 <Tooltip key={v} title={v} placement="bottom">
                                     <Chip
                                         key={v}
@@ -278,7 +278,7 @@ const CardDetail = React.memo((props: CardContentProps) => {
                                             cursor: "pointer",
                                             mt: "10px",
                                             mr: "5px",
-                                            maxWidth: "125px",
+                                            maxWidth: "120px",
                                         }}
                                     />
                                 </Tooltip>

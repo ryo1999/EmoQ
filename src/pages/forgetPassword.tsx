@@ -45,7 +45,7 @@ export default function ForgetPassword() {
                     <Typography variant="h5" sx={{ mb: "50px" }}>
                         パスワード再設定用メール送信
                     </Typography>
-                    <Box sx={{ mt: 1, width: "100%", bgcolor: "white", p: "30px 20px" }}>
+                    <Box sx={{ mt: 1, width: "100%", bgcolor: "white", p: "30px 20px", borderRadius:"20px" }}>
                         <Typography variant="h6">登録したメールアドレスを入力</Typography>
                         <TextField
                             margin="normal"

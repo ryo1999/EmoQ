@@ -47,6 +47,7 @@ const NewGroupDialog = React.memo((props: NewGroupDialogProps) => {
                 }
                 router.push("/home")
             } else {
+                setIsOpenNewGroupDialog(false)
                 toast.error("作成できませんでした")
             }
         })

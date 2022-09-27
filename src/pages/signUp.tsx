@@ -12,7 +12,7 @@ import { ToastContainer, toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 import { useRecoilState } from "recoil"
 import { userInfo } from "@/store/userInfo"
-import { signUp, getUserInfo } from "@/pages/api/userApi"
+import { signUp } from "@/pages/api/userApi"
 import { useValidation, useMailValidation, usePasswordValidation } from "@/hooks/useValidation"
 
 const theme = createTheme()
@@ -43,87 +43,81 @@ export default function SignUp() {
     }
 
     return (
-        <ThemeProvider theme={theme}>
-            <Container component="main" maxWidth="xs">
-                <Box
-                    sx={{
-                        mt: "50px",
-                        display: "flex",
-                        flexDirection: "column",
-                        alignItems: "center",
-                    }}
-                >
-                    <Typography variant="h4" sx={{ mb: "20px" }}>
-                        新規登録
-                    </Typography>
-                    <Box sx={{ mt: 1, width: "100%", bgcolor: "white", p: "30px 20px" }}>
-                        <Typography variant="h6">アカウント名*</Typography>
-                        <TextField
-                            error={!isValidated}
-                            margin="normal"
-                            fullWidth
-                            id="account"
-                            placeholder="太郎"
-                            name="account"
-                            autoComplete="account"
-                            autoFocus
-                            helperText={isValidated ? "" : errorMessage}
-                            sx={{ mb: "30px" }}
-                            onChange={(e) => setValueText(e.target.value)}
-                        />
-                        <Typography variant="h6">メールアドレス*</Typography>
-                        <TextField
-                            error={!isEmailValidated}
-                            margin="normal"
-                            fullWidth
-                            id="email"
-                            placeholder="your-email@sample.com"
-                            name="email"
-                            autoComplete="email"
-                            autoFocus
-                            helperText={isEmailValidated ? "" : errorEmailMessage}
-                            sx={{ mb: "30px" }}
-                            onChange={(e) => setEmailValueText(e.target.value)}
-                        />
-                        <Typography variant="h6">パスワード*</Typography>
-                        <TextField
-                            error={!isPasswordValidated}
-                            margin="normal"
-                            fullWidth
-                            name="password"
-                            placeholder="6文字以上の英数字"
-                            type="password"
-                            id="password"
-                            autoComplete="current-password"
-                            helperText={isPasswordValidated ? "" : errorPasswordMessage}
-                            onChange={(e) => setPasswordValueText(e.target.value)}
-                        />
-                        <LoadingButton
-                            type="submit"
-                            onClick={handleSignUp}
-                            fullWidth
-                            loading={loading}
-                            variant="contained"
-                            sx={{
-                                mt: "50px",
-                                mb: "20px",
-                                fontSize: "18px",
-                                bgcolor: "#24292f",
-                                ":hover": { bgcolor: "#777777" },
-                            }}
-                            disabled={!(textValidation && emailValidation && passwordValidation)}
-                        >
-                            登録
-                        </LoadingButton>
-                        <Box sx={{ m: "20px 0px" }}>
-                            <Link href="/" variant="body2" sx={{ color: "black" }}>
-                                アカウントをお持ちの方はこちら
-                            </Link>
-                        </Box>
+        <div>
+            <Box sx={{mt:"30px"}}>
+                <Typography variant="h4" sx={{ fontWeight: "bold", textAlign:"center" }}>
+                    新規登録
+                </Typography>
+                <Typography variant="h6" sx={{ mb: "30px", textAlign:"center" }}>
+                    より便利に利用するために、登録完了後、ブックマークへの追加をお勧めします
+                </Typography>
+                <Box sx={{ mt: 1, width: "35%", bgcolor: "white", p: "30px 20px", borderRadius: "20px", m:"0 auto" }}>
+                    <Typography variant="h6">アカウント名*</Typography>
+                    <TextField
+                        error={!isValidated}
+                        margin="normal"
+                        fullWidth
+                        id="account"
+                        placeholder="太郎"
+                        name="account"
+                        autoComplete="account"
+                        autoFocus
+                        helperText={isValidated ? "" : errorMessage}
+                        sx={{ mb: "30px" }}
+                        onChange={(e) => setValueText(e.target.value)}
+                    />
+                    <Typography variant="h6">メールアドレス*</Typography>
+                    <TextField
+                        error={!isEmailValidated}
+                        margin="normal"
+                        fullWidth
+                        id="email"
+                        placeholder="your-email@sample.com"
+                        name="email"
+                        autoComplete="email"
+                        autoFocus
+                        helperText={isEmailValidated ? "" : errorEmailMessage}
+                        sx={{ mb: "30px" }}
+                        onChange={(e) => setEmailValueText(e.target.value)}
+                    />
+                    <Typography variant="h6">パスワード*</Typography>
+                    <TextField
+                        error={!isPasswordValidated}
+                        margin="normal"
+                        fullWidth
+                        name="password"
+                        placeholder="6文字以上の英数字"
+                        type="password"
+                        id="password"
+                        autoComplete="current-password"
+                        helperText={isPasswordValidated ? "" : errorPasswordMessage}
+                        onChange={(e) => setPasswordValueText(e.target.value)}
+                    />
+                    <LoadingButton
+                        type="submit"
+                        onClick={handleSignUp}
+                        fullWidth
+                        loading={loading}
+                        variant="contained"
+                        sx={{
+                            mt: "50px",
+                            mb: "20px",
+                            fontSize: "18px",
+                            bgcolor: "#24292f",
+                            ":hover": { bgcolor: "#777777" },
+                        }}
+                        disabled={!(textValidation && emailValidation && passwordValidation)}
+                    >
+                        登録
+                    </LoadingButton>
+                    <Box sx={{ m: "20px 0px" }}>
+                        <Link href="/" variant="body2" sx={{ color: "black" }}>
+                            アカウントをお持ちの方はこちら
+                        </Link>
                     </Box>
                 </Box>
-            </Container>
+            </Box>
             <ToastContainer position="bottom-center" pauseOnHover={false} closeOnClick autoClose={2000} />
-        </ThemeProvider>
+        </div>
     )
 }

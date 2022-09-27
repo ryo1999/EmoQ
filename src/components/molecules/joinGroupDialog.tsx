@@ -35,6 +35,7 @@ const JoinGroupDialog = React.memo((props: JoinGroupDialogProps) => {
             if (user) {
                 const name = await getGroupName(groupId)
                 if (name === false) {
+                    setIsOpenJoinGroupDialog(false)
                     toast.error("グループが存在しません")
                 } else {
                     setIsOpenJoinGroupDialog(false)
@@ -51,6 +52,7 @@ const JoinGroupDialog = React.memo((props: JoinGroupDialogProps) => {
                     router.push("/home")
                 }
             } else {
+                setIsOpenJoinGroupDialog(false)
                 toast.error("参加できませんでした")
             }
         })

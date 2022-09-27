@@ -44,84 +44,83 @@ export default function SignIn() {
     }
 
     React.useEffect(() => {
+        if (userState.userId !== "") {
+            setLoading(true)
+        }
         auth.onAuthStateChanged((user) => {
             if (user) {
                 router.push("/home")
             }
         })
+        return () => {
+            setLoading(false)
+        }
     }, [])
 
     return (
-        <ThemeProvider theme={theme}>
-            <Container component="main" maxWidth="xs">
-                <CssBaseline />
-                <Box
-                    sx={{
-                        mt: "30px",
-                        display: "flex",
-                        flexDirection: "column",
-                        alignItems: "center",
-                    }}
-                >
-                    <Typography variant="h2" sx={{ mb: "20px" }}>
-                        EmoQ
-                    </Typography>
-                    <Typography variant="h4" sx={{ mb: "30px" }}>
+        <div>
+            <Box sx={{ mt: "30px" }}>
+                <Typography variant="h5" sx={{ mb: "20px", textAlign: "center" }}>
+                    疑問をグループで共有・解決！
+                </Typography>
+                <Typography variant="h2" sx={{ mb: "20px", textAlign: "center", fontWeight: "bold" }}>
+                    EmoQ
+                </Typography>
+                <Typography variant="h4" sx={{ mb: "30px", textAlign: "center" }}>
+                    ログイン
+                </Typography>
+                <Box sx={{ mt: 1, width: "30%", bgcolor: "white", p: "30px 20px", m: "0 auto", borderRadius: "20px" }}>
+                    <Typography variant="h6">メールアドレス*</Typography>
+                    <TextField
+                        margin="normal"
+                        fullWidth
+                        placeholder="your-email@sample.com"
+                        name="email"
+                        autoComplete="email"
+                        autoFocus
+                        sx={{ mb: "30px" }}
+                        onChange={(e) => setEmail(e.target.value)}
+                    />
+                    <Typography variant="h6">パスワード*</Typography>
+                    <TextField
+                        margin="normal"
+                        fullWidth
+                        name="password"
+                        placeholder="6文字以上の英数字"
+                        type="password"
+                        autoComplete="current-password"
+                        onChange={(e) => setPassword(e.target.value)}
+                    />
+                    <LoadingButton
+                        type="submit"
+                        onClick={handleSignIn}
+                        fullWidth
+                        loading={loading}
+                        variant="contained"
+                        sx={{
+                            mt: 5,
+                            mb: 2,
+                            fontSize: "18px",
+                            bgcolor: "#24292f",
+                            ":hover": { bgcolor: "#777777" },
+                        }}
+                        disabled={email == "" || password == ""}
+                    >
                         ログイン
-                    </Typography>
-                    <Box sx={{ mt: 1, width: "100%", bgcolor: "white", p: "30px 20px" }}>
-                        <Typography variant="h6">メールアドレス*</Typography>
-                        <TextField
-                            margin="normal"
-                            fullWidth
-                            placeholder="your-email@sample.com"
-                            name="email"
-                            autoComplete="email"
-                            autoFocus
-                            sx={{ mb: "30px" }}
-                            onChange={(e) => setEmail(e.target.value)}
-                        />
-                        <Typography variant="h6">パスワード*</Typography>
-                        <TextField
-                            margin="normal"
-                            fullWidth
-                            name="password"
-                            placeholder="6文字以上の英数字"
-                            type="password"
-                            autoComplete="current-password"
-                            onChange={(e) => setPassword(e.target.value)}
-                        />
-                        <LoadingButton
-                            type="submit"
-                            onClick={handleSignIn}
-                            fullWidth
-                            loading={loading}
-                            variant="contained"
-                            sx={{
-                                mt: 5,
-                                mb: 2,
-                                fontSize: "18px",
-                                bgcolor: "#24292f",
-                                ":hover": { bgcolor: "#777777" },
-                            }}
-                            disabled={email == "" || password == ""}
-                        >
-                            ログイン
-                        </LoadingButton>
-                        <Box sx={{ m: "20px 0px" }}>
-                            <Link href="/signUp" variant="body2" sx={{ color: "black" }}>
-                                アカウントをお持ちでない方はこちら
-                            </Link>
-                        </Box>
-                        <Box>
-                            <Link href="/forgetPassword" variant="body2" sx={{ color: "black" }}>
-                                パスワードを忘れた方はこちら
-                            </Link>
-                        </Box>
+                    </LoadingButton>
+                    <Box sx={{ m: "20px 0px" }}>
+                        <Link href="/signUp" variant="body2" sx={{ color: "black" }}>
+                            アカウントをお持ちでない方はこちら
+                        </Link>
+                    </Box>
+                    <Box>
+                        <Link href="/forgetPassword" variant="body2" sx={{ color: "black" }}>
+                            パスワードを忘れた方はこちら
+                        </Link>
                     </Box>
                 </Box>
-            </Container>
+            </Box>
             <ToastContainer position="bottom-center" pauseOnHover={false} closeOnClick autoClose={2000} />
-        </ThemeProvider>
+        </div>
     )
 }

@@ -1,6 +1,5 @@
 import React from "react"
 import { useRouter } from "next/router"
-import { ToastContainer, toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 import Box from "@mui/material/Box"
 import MenuItem from "@mui/material/MenuItem"
@@ -12,6 +11,7 @@ import Divider from "@mui/material/Divider"
 import { useRecoilState } from "recoil"
 import { userInfo } from "@/store/userInfo"
 import { changeGroup, getAllUserGroup } from "@/pages/api/userApi"
+import { useGetWindowSize } from "@/hooks/useGetWindowSize"
 
 type GroupListDialogProps = {
     isOpenGroupListDialog: boolean
@@ -24,6 +24,7 @@ const GroupListDialog = React.memo((props: GroupListDialogProps) => {
     const { isOpenGroupListDialog, setIsOpenGroupListDialog, setAvatarAnchorEl } = props
     const [userState, setUserState] = useRecoilState(userInfo)
     const [groupList, setGroupList] = React.useState<{ [key: string]: string }>({})
+    const { height, width } = useGetWindowSize()
 
     React.useEffect(() => {
         getAllUserGroup(userState.userId).then((data) => {
@@ -42,9 +43,9 @@ const GroupListDialog = React.memo((props: GroupListDialogProps) => {
     }
 
     return (
-        <Dialog open={isOpenGroupListDialog} onClose={() => setIsOpenGroupListDialog(false)}>
+        <Dialog open={isOpenGroupListDialog} onClose={() => setIsOpenGroupListDialog(false)} >
             <DialogTitle>グループの切り替え</DialogTitle>
-            <DialogContent sx={{ width: "500px" }}>
+            <DialogContent sx={{ width: "500px", maxHeight:height*0.5 }}>
                 {groupList &&
                     Object.keys(groupList).map((group) => (
                         <>
