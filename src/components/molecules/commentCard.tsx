@@ -89,7 +89,7 @@ const CommentCard = React.memo((props: CardContentProps) => {
                 }
             />
             <CardContent sx={{ ml: "55px", maxWidth: "500px" }}>
-                <Typography variant="body2">{commentInfo.comment}</Typography>
+                <Typography sx={{ whiteSpace: "pre-wrap" }} variant="body2">{commentInfo.comment}</Typography>
             </CardContent>
             <CardActions sx={{justifyContent:"end"}}>
                 {commentInfo.commenter_id === userState.userId && (
