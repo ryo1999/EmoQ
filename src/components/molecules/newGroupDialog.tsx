@@ -8,11 +8,12 @@ import DialogActions from "@mui/material/DialogActions"
 import DialogContent from "@mui/material/DialogContent"
 import Button from "@mui/material/Button"
 import TextField from "@mui/material/TextField"
+import LoadingButton from "@mui/lab/LoadingButton"
 import { useRecoilState } from "recoil"
 import { userInfo } from "@/store/userInfo"
 import { useValidation } from "@/hooks/useValidation"
 import { addGroup } from "@/pages/api/groupApi"
-import { getUserInfo, registerUserGroup } from "@/pages/api/userApi"
+import { createMygroups, getUserInfo, registerUserGroup } from "@/pages/api/userApi"
 import { auth } from "@/firebase"
 
 type NewGroupDialogProps = {
@@ -25,6 +26,7 @@ const NewGroupDialog = React.memo((props: NewGroupDialogProps) => {
     const router = useRouter()
     const { isOpenNewGroupDialog, setIsOpenNewGroupDialog, setAvatarAnchorEl } = props
     const [userState, setUserState] = useRecoilState(userInfo)
+    const [loading, setLoading] = React.useState(false)
     const { valueText, setValueText, isValidated, errorMessage, textValidation } = useValidation()
 
     const handleClose = () => {
@@ -32,22 +34,26 @@ const NewGroupDialog = React.memo((props: NewGroupDialogProps) => {
     }
 
     const handleCreateGroup = () => {
+        setLoading(true)
         auth.onAuthStateChanged(async (user) => {
             if (user) {
-                toast.success("完了しました")
-                setIsOpenNewGroupDialog(false)
+                toast.success("グループを作成しています")
                 if (setAvatarAnchorEl) {
                     setAvatarAnchorEl(null)
                 }
                 const id = await addGroup(valueText)
+                createMygroups(userState.userId, id, valueText)
                 await registerUserGroup(userState.userId, id, valueText)
                 const userInformation = await getUserInfo(userState.userId)
                 if (userInformation) {
                     setUserState(userInformation)
                 }
+                setIsOpenNewGroupDialog(false)
+                setLoading(false)
                 router.push("/home")
             } else {
                 setIsOpenNewGroupDialog(false)
+                setLoading(false)
                 toast.error("作成できませんでした")
             }
         })
@@ -69,9 +75,9 @@ const NewGroupDialog = React.memo((props: NewGroupDialogProps) => {
             </DialogContent>
             <DialogActions>
                 <Button onClick={handleClose}>キャンセル</Button>
-                <Button disabled={!textValidation} onClick={handleCreateGroup}>
+                <LoadingButton loading={loading} disabled={!textValidation} onClick={handleCreateGroup}>
                     作成
-                </Button>
+                </LoadingButton>
             </DialogActions>
             <ToastContainer position="bottom-center" pauseOnHover={false} closeOnClick autoClose={2000} />
         </Dialog>
