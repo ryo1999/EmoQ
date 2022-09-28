@@ -8,6 +8,6 @@ const { persistAtom } = recoilPersist({
 
 export const selectedSort = atom<string>({
     key: "selectedSort",
-    default: undefined,
+    default: "new",
     effects_UNSTABLE: [persistAtom],
 })
