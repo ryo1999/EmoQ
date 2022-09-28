@@ -1,34 +1,42 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# EmoQ | グループで疑問を共有・解決できる質問掲示板
 
-## Getting Started
+## コンセプト
+- 疑問を1人で悩むのではなく、みんなで共有しあうことで他の人の疑問も知識に
+- 文字だけのコミュニケーションでは伝えきれない感情をアイコンと色で表現
+- グループ化することで投稿の敷居を低く
 
-First, run the development server:
+## 使用技術
+- React
+- TypeScript
+- Next.js
+- firebase
+- MUI(v5)
+- eslint + prettier
+- github
 
-```bash
-npm run dev
-# or
-yarn dev
-```
+## 大まかな機能
+- 質問投稿、返信
+- 質問の際には、感情とタグを選択、緊急度をつけて投稿
+- タグとユーザーでのフィルター
+- 投稿日と緊急度による並び替え
+- メッセージが来ていたら画面上部の自分のアイコンやメールアイコンに通知
+- ブックマーク
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 工夫点
+### 機能面
+- 冷たい雰囲気になりがちな質疑応答にも感情をつけることで気持ちが表現でき、柔らかな雰囲気でコミュニケーションを取りやすく
+- グループ化し、投稿の敷居を下げることで質問や返信を行いやすく
+- 一つのアカウントで複数のグループに所属できるように
+- 緊急を要している質問かどうかを一目で分かりやすいUIに
+- フィルター機能と並び替え機能をつけることで、自分が欲しい情報がすぐ手に入るように
+- ブックマーク機能をつけることで、後から見返しやすく
+- アカウント作成時やグループ作成時、質問・返信投稿時のバリデーションを実装
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+### 開発面
+- 何かバグの修正や機能の追加をしたいときにはissueを立てたうえで、github projectsを使用することで作業をスムーズに行えるように
+- branchにpushする際にはコミットメッセージにプレフィックスをつけるように
+- 修正や機能追加などはdevelopからブランチを切り、mainは常にデプロイできる状態に
+- ブランチを切る際には、feature/issue-10_XXXXXのように、行う作業に合ったブランチ名に
+- miroというアプリを使って、issueをまとめ、ユーザーへの価値が高く実装難易度が低いと思われるものから実装していくことを心がけた
+- eslintとprettierを使用することで開発効率をあげた
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
-
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
