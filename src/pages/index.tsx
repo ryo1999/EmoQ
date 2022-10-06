@@ -20,6 +20,20 @@ export default function SignIn() {
     const [email, setEmail] = React.useState("")
     const [password, setPassword] = React.useState("")
 
+    React.useEffect(() => {
+        if (userState.userId !== "") {
+            setLoading(true)
+        }
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                router.push("/home")
+            }
+        })
+        return () => {
+            setLoading(false)
+        }
+    }, [])
+    
     const handleSignIn = () => {
         setLoading(true)
         signInWithEmailAndPassword(auth, email, password)
@@ -39,19 +53,6 @@ export default function SignIn() {
             })
     }
 
-    React.useEffect(() => {
-        if (userState.userId !== "") {
-            setLoading(true)
-        }
-        auth.onAuthStateChanged((user) => {
-            if (user) {
-                router.push("/home")
-            }
-        })
-        return () => {
-            setLoading(false)
-        }
-    }, [])
 
     return (
         <div>

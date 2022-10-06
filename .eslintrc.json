@@ -31,6 +31,7 @@
         "react/prop-types": "off", //is missing in props validation  react/prop-typesエラー消し
         "react/display-name": "off",
         "react/react-in-jsx-scope": "off",
+        "react-hooks/exhaustive-deps": "off",
         //   "unused-imports/no-unused-imports": "warn",
         "no-unused-vars": "off",
         //   "@typescript-eslint/no-unused-vars": ["warn"],
