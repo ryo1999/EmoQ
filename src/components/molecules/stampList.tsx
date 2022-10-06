@@ -5,7 +5,7 @@ import { Icon } from "@iconify/react"
 import IconButton from "@mui/material/IconButton"
 import Typography from "@mui/material/Typography"
 
-type StampList = {
+type StampListProps = {
     emotion: string
     setEmotion: React.Dispatch<string>
 }
@@ -23,7 +23,7 @@ const EmotionIcon: { [name: string]: string } = {
     ホッ: "fa-regular:handshake",
 }
 
-const StampList = React.memo((props: StampList) => {
+const StampList = React.memo((props: StampListProps) => {
     const { emotion, setEmotion } = props
 
     const handleClickStamp = (currentEmotion: string) => {
