@@ -33,6 +33,7 @@ import {
     getQuestion,
     deleteQuestionBookmark,
     deleteQuestion,
+    deleteQuestionComment,
 } from "@/pages/api/questionApi"
 import { QuestionsCollectionData } from "@/utils/types"
 import { CommentsCollectionData } from "@/utils/types"
@@ -194,6 +195,7 @@ const CardDetail = React.memo((props: CardContentProps) => {
             if (router.query.qid !== undefined) {
                 router.push("/home")
             }
+            deleteQuestionComment(questionInfo.question_id, userState.groupId)
         } catch (error) {
             console.error(error)
         }
