@@ -7,10 +7,10 @@ import Header from "@/components/molecules/head"
 function MyApp({ Component, pageProps }: AppProps) {
     return (
         <ThemeProvider>
-        <RecoilRoot>
-            <Header/>
-            <Component {...pageProps} />
-        </RecoilRoot>
+            <RecoilRoot>
+                <Header />
+                <Component {...pageProps} />
+            </RecoilRoot>
         </ThemeProvider>
     )
 }
