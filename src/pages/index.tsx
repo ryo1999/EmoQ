@@ -13,6 +13,7 @@ import { useRecoilState } from "recoil"
 import { getUserInfo } from "@/pages/api/userApi"
 import { userInfo } from "@/store/userInfo"
 import { useGetWindowSize } from "@/hooks/useGetWindowSize"
+import Header from "@/components/molecules/head"
 
 export default function SignIn() {
     const router = useRouter()
@@ -57,6 +58,7 @@ export default function SignIn() {
 
     return (
         <>
+            <Header />
             {width >= 1024 ? (
                 <div>
                     <Box sx={{ mt: "30px" }}>
@@ -132,7 +134,7 @@ export default function SignIn() {
                     <ToastContainer position="bottom-center" pauseOnHover={false} closeOnClick autoClose={2000} />
                 </div>
             ) : (
-                <Box sx={{textAlign:"center", mt:"100px"}}>
+                <Box sx={{ textAlign: "center", mt: "100px" }}>
                     <Image alt="" src="/notmobile.png" width={100} height={400} />
                     <Typography variant="h6">申し訳ございません。</Typography>
                     <Typography variant="h6">パソコンからのログインをお願いしております。</Typography>
