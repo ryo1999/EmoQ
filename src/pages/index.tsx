@@ -58,7 +58,6 @@ export default function SignIn() {
 
     return (
         <>
-            <Header />
             {width >= 1024 ? (
                 <div>
                     <Box sx={{ mt: "30px" }}>
