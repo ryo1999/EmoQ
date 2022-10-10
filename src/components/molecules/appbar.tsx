@@ -90,6 +90,7 @@ export default function Appbar() {
         resetSelectedQuestion()
         resetSelectedSort()
         resetSelectedFilter()
+        localStorage.removeItem("recoil-persist")
     }
 
     const handleClickLogOut = async () => {
