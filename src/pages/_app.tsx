@@ -15,7 +15,7 @@ function MyApp({ Component, pageProps }: AppProps) {
                     <meta property="og:title" content="EmoQ" />
                     <meta property="og:description" content="グループで気持ちと共に疑問を共有" />
                     <meta property="og:image" content="https://media.istockphoto.com/vectors/cute-emoji-looking-up-at-a-question-mark-indicating-a-problem-problem-vector-id941224134" />
-                    <meta name="twitter:image" content="https://media.istockphoto.com/vectors/cute-emoji-looking-up-at-a-question-mark-indicating-a-problem-problem-vector-id941224134" />
+                    <meta name="twitter:image" content="/notmobile.png" />
                 </Head>
                 <Component {...pageProps} />
             </RecoilRoot>
