@@ -57,7 +57,7 @@ export default function SignIn() {
 
     return (
         <>
-            {width < 1024 ? (
+            {width < 1024 && width !== 0 ? (
                 <Box sx={{ textAlign: "center", mt: "100px" }}>
                     <Image alt="" src="/notmobile.png" width={100} height={400} />
                     <Typography variant="h6">申し訳ございません。</Typography>
