@@ -34,7 +34,7 @@ export default function SignUp() {
                 toast.success("登録が完了しました。次の画面でグループを選択してください")
                 await signUp(data.user.uid, valueText)
                 setUserState({ ...userState, userId: data.user.uid, userName: valueText })
-                router.push("/selectGroup")
+                router.push("/select-group")
             })
             .catch(() => {
                 setLoading(false)

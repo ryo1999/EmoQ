@@ -124,12 +124,12 @@ export default function SignIn() {
                                 ログイン
                             </LoadingButton>
                             <Box sx={{ m: "20px 0px" }}>
-                                <Link href="/signUp" variant="body2" sx={{ color: "black" }}>
+                                <Link href="/sign-up" variant="body2" sx={{ color: "black" }}>
                                     アカウントをお持ちでない方はこちら
                                 </Link>
                             </Box>
                             <Box>
-                                <Link href="/forgetPassword" variant="body2" sx={{ color: "black" }}>
+                                <Link href="/forget-password" variant="body2" sx={{ color: "black" }}>
                                     パスワードを忘れた方はこちら
                                 </Link>
                             </Box>
