@@ -37,7 +37,7 @@ const NewGroupDialog = React.memo((props: NewGroupDialogProps) => {
         setLoading(true)
         auth.onAuthStateChanged(async (user) => {
             if (user) {
-                toast.success("グループを作成しています")
+                toast.success("グループを作成しました")
                 if (setAvatarAnchorEl) {
                     setAvatarAnchorEl(null)
                 }
