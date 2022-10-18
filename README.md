@@ -40,4 +40,4 @@
 - miroというアプリを使って、issueをまとめ、ユーザーへの価値が高く実装難易度が低いと思われるものから実装していくことを心がけた
 - eslintとprettierを使用することで開発効率をあげた
 
-#####  デモ動画：https://drive.google.com/file/d/1AcF4VsCkwuiDKnCcM2AsqvSdtxEoYhG3/view?usp=sharing
+#####  デモ動画：https://drive.google.com/file/d/1sYCdYBB-50Rt7LXEqTF9acbiEmvI6qNc/view?usp=sharing
