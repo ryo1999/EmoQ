@@ -23,6 +23,7 @@ import { TransitionProps } from "@mui/material/transitions"
 import AppBar from "@mui/material/AppBar"
 import Toolbar from "@mui/material/Toolbar"
 import IconButton from "@mui/material/IconButton"
+import useMediaQuery from "@mui/material/useMediaQuery"
 import { useRecoilState, useRecoilValue } from "recoil"
 import { selectedSort } from "@/store/selectedSort"
 import { userInfo } from "@/store/userInfo"
@@ -65,6 +66,7 @@ export default function PostColumn(props: PostColumnProps) {
     const [tagList, setTagList] = React.useState<string[]>([])
     const { valueText, setValueText, isValidated, errorMessage, textValidation } = useValidation()
     const { tag, setTag, isTagValidated, errorTagMessage, tagValidation } = usePostTagValidation()
+    const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)")
 
     React.useEffect(() => {
         getTag(userState.groupId)
@@ -183,9 +185,9 @@ export default function PostColumn(props: PostColumnProps) {
                     </Toolbar>
                 </AppBar>
                 <DialogContent
-                    sx={{ display: "flex", justifyContent: "space-around", textAlign: "center", mt: "50px" }}
+                    sx={{ display: "flex", justifyContent: "space-around", textAlign: "center", pt: "50px", bgcolor:(prefersDarkMode ? "black" : "#e2efff") }}
                 >
-                    <div style={{ padding:"20px", marginRight: "-100px", backgroundColor:"white", height:window.innerHeight*0.74, borderRadius:"20px" }}>
+                    <div style={{ padding:"20px", marginRight: "-100px", backgroundColor:(prefersDarkMode ? "gray" : "white"), height:window.innerHeight*0.74, borderRadius:"20px" }}>
                         <Typography sx={{ mb: "20px" }} variant="h6">
                             今の感情は？
                         </Typography>
@@ -263,8 +265,8 @@ export default function PostColumn(props: PostColumnProps) {
                             </FormControl>
                         </Box>
                     </div>
-                    <div style={{ marginLeft: "-100px", backgroundColor:"white", height:window.innerHeight*0.74, padding:"20px", borderRadius:"20px" }}>
-                        <Typography variant="h6">質問内容*</Typography>
+                    <div style={{ marginLeft: "-100px", backgroundColor:(prefersDarkMode ? "gray" : "white"), height:window.innerHeight*0.74, padding:"20px", borderRadius:"20px" }}>
+                        <Typography variant="h6" >質問内容*</Typography>
                         <Box
                             component="form"
                             sx={{
@@ -294,6 +296,7 @@ export default function PostColumn(props: PostColumnProps) {
                                 sx={{
                                     fontSize: "18px",
                                     width: "100%",
+                                    color: "white",
                                     bgcolor: "#24292f",
                                     ":hover": { bgcolor: "#555555" },
                                 }}

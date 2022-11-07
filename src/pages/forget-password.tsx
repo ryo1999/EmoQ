@@ -36,7 +36,7 @@ export default function ForgetPassword() {
                 <CssBaseline />
                 <Box
                     sx={{
-                        mt: "70px",
+                        pt: "70px",
                         display: "flex",
                         flexDirection: "column",
                         alignItems: "center",
@@ -49,7 +49,7 @@ export default function ForgetPassword() {
                         メールが届いてない場合は迷惑メールフォルダもご確認ください
                     </Typography>
                     <Box sx={{ mt: 1, width: "100%", bgcolor: "white", p: "30px 20px", borderRadius:"20px" }}>
-                        <Typography variant="h6">登録したメールアドレスを入力</Typography>
+                        <Typography variant="h6" sx={{color:"black"}}>登録したメールアドレスを入力</Typography>
                         <TextField
                             margin="normal"
                             fullWidth

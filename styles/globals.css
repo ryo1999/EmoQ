@@ -1,5 +1,6 @@
 html,
 body {
+    height:100%;
     background-color: #e2efff;
     padding: 0;
     margin: 0;

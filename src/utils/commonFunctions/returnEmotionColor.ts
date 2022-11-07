@@ -5,7 +5,7 @@ const EmotionCOLORS: { [name: string]: string } = {
     びっくり: "#049FD9",
     なぜ: "#1A0D4E",
     焦り: "#C77628",
-    絶望: "black",
+    絶望: "#999999",
     どや: "#9CB6F7",
     感謝: "#DDC3B6",
     ホッ: "#73AF4C",

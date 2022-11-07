@@ -5,8 +5,8 @@ import TextField from "@mui/material/TextField"
 import Link from "@mui/material/Link"
 import Box from "@mui/material/Box"
 import Typography from "@mui/material/Typography"
-import Container from "@mui/material/Container"
 import { createTheme, ThemeProvider } from "@mui/material/styles"
+import useMediaQuery from "@mui/material/useMediaQuery"
 import { auth, createUserWithEmailAndPassword } from "@/firebase"
 import { ToastContainer, toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
@@ -26,6 +26,7 @@ export default function SignUp() {
         useMailValidation()
     const { passwordValueText, setPasswordValueText, isPasswordValidated, errorPasswordMessage, passwordValidation } =
         usePasswordValidation()
+    const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)")
 
     const handleSignUp = async () => {
         setLoading(true)
@@ -44,7 +45,7 @@ export default function SignUp() {
 
     return (
         <div>
-            <Box sx={{mt:"30px"}}>
+            <Box sx={{pt:"30px"}}>
                 <Typography variant="h4" sx={{ fontWeight: "bold", textAlign:"center" }}>
                     新規登録
                 </Typography>
@@ -52,7 +53,7 @@ export default function SignUp() {
                     より便利に利用するために、登録完了後、ブックマークへの追加をお勧めします
                 </Typography>
                 <Box sx={{ mt: 1, width: "35%", bgcolor: "white", p: "30px 20px", borderRadius: "20px", m:"0 auto" }}>
-                    <Typography variant="h6">アカウント名*</Typography>
+                    <Typography variant="h6" sx={{color:"black"}}>アカウント名*</Typography>
                     <TextField
                         error={!isValidated}
                         margin="normal"
@@ -63,10 +64,10 @@ export default function SignUp() {
                         autoComplete="account"
                         autoFocus
                         helperText={isValidated ? "" : errorMessage}
-                        sx={{ mb: "30px" }}
+                        sx={{ mb: "30px", bgcolor:(prefersDarkMode ? "#24292f" : "") }}
                         onChange={(e) => setValueText(e.target.value)}
                     />
-                    <Typography variant="h6">メールアドレス*</Typography>
+                    <Typography variant="h6" sx={{color:"black"}}>メールアドレス*</Typography>
                     <TextField
                         error={!isEmailValidated}
                         margin="normal"
@@ -77,10 +78,10 @@ export default function SignUp() {
                         autoComplete="email"
                         autoFocus
                         helperText={isEmailValidated ? "" : errorEmailMessage}
-                        sx={{ mb: "30px" }}
+                        sx={{ mb: "30px", bgcolor:(prefersDarkMode ? "#24292f" : "") }}
                         onChange={(e) => setEmailValueText(e.target.value)}
                     />
-                    <Typography variant="h6">パスワード*</Typography>
+                    <Typography variant="h6" sx={{color:"black"}}>パスワード*</Typography>
                     <TextField
                         error={!isPasswordValidated}
                         margin="normal"
@@ -92,6 +93,7 @@ export default function SignUp() {
                         autoComplete="current-password"
                         helperText={isPasswordValidated ? "" : errorPasswordMessage}
                         onChange={(e) => setPasswordValueText(e.target.value)}
+                        sx={{ bgcolor:(prefersDarkMode ? "#24292f" : "") }}
                     />
                     <LoadingButton
                         type="submit"
@@ -103,8 +105,10 @@ export default function SignUp() {
                             mt: "50px",
                             mb: "20px",
                             fontSize: "18px",
+                            color:"white",
                             bgcolor: "#24292f",
                             ":hover": { bgcolor: "#777777" },
+                            "&:disabled":{bgcolor:(prefersDarkMode ? "gray" : "")},
                         }}
                         disabled={!(textValidation && emailValidation && passwordValidation)}
                     >

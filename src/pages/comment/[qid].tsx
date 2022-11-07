@@ -11,6 +11,7 @@ import TextField from "@mui/material/TextField"
 import Button from "@mui/material/Button"
 import IconButton from "@mui/material/IconButton"
 import ArrowBackIcon from "@mui/icons-material/ArrowBack"
+import useMediaQuery from "@mui/material/useMediaQuery"
 import { useRecoilState, useRecoilValue } from "recoil"
 import { useInitializeRecoilState } from "@/hooks/useInitializeRecoilState"
 import { userInfo } from "@/store/userInfo"
@@ -31,6 +32,7 @@ const Comment = () => {
     const [emotion, setEmotion] = React.useState("ホッ")
     const { resetSelectedQuestion } = useInitializeRecoilState()
     const { valueText, setValueText, isValidated, errorMessage, setIsInputStart, textValidation } = useValidation()
+    const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)")
     const { height, width } = useGetWindowSize()
 
     React.useEffect(() => {
@@ -86,8 +88,8 @@ const Comment = () => {
                 <Box sx={{ width: "50%" }}>
                     <Box sx={{ display: "flex" }}>
                         <IconButton onClick={() => router.push("/home")} sx={{ mt: "5px" }}>
-                            <ArrowBackIcon sx={{ color: "black", fontSize: "20px" }} />
-                            <Typography variant="subtitle1" sx={{ color: "black", fontSize: "20px" }}>
+                            <ArrowBackIcon sx={{ color : (prefersDarkMode ? "white" : "black"), fontSize: "20px" }} />
+                            <Typography variant="subtitle1" sx={{ color : (prefersDarkMode ? "white" : "black"), fontSize: "20px" }}>
                                 ホームへ
                             </Typography>
                         </IconButton>

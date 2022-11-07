@@ -17,6 +17,7 @@ import { selectedFilter } from "@/store/selectedFilter"
 import { getTag } from "@/pages/api/tagApi"
 import { getAllUserName } from "@/pages/api/userApi"
 import HighlightOffIcon from "@mui/icons-material/HighlightOff"
+import useMediaQuery from "@mui/material/useMediaQuery"
 
 const MenuProps = {
     PaperProps: {
@@ -40,6 +41,7 @@ export default function TagFilter(props: TagFilterProps) {
     const [filter, setFilter] = useRecoilState(selectedFilter)
     const [tagList, setTagList] = React.useState<string[]>([])
     const [userList, setUserList] = React.useState<string[]>([])
+    const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)")
 
     React.useEffect(() => {
         if (isOpenFormDialog === false) {
@@ -204,9 +206,9 @@ export default function TagFilter(props: TagFilterProps) {
                                             }
                                             onDelete={() => handleClickDelete(value)}
                                             sx={{
-                                                borderColor: "#24292f",
+                                                borderColor: (prefersDarkMode ? "white" : "#24292f"),
                                                 fontSize: "15px",
-                                                color: "#24292f",
+                                                color: (prefersDarkMode ? "white" : "#24292f"),
                                                 maxWidth: "200px",
                                             }}
                                         />
