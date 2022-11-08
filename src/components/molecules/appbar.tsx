@@ -201,12 +201,14 @@ export default function Appbar() {
                             </MenuItem>
                             <Divider />
                             {router.pathname !== "/mypage" && (
-                                <MenuItem onClick={() => handleMenuClick("/mypage")}>
-                                    <PersonIcon sx={{ mr: "20px" }} />
-                                    マイページ
-                                </MenuItem>
+                                <>
+                                    <MenuItem onClick={() => handleMenuClick("/mypage")}>
+                                        <PersonIcon sx={{ mr: "20px" }} />
+                                        マイページ
+                                    </MenuItem>
+                                    <Divider />
+                                </>
                             )}
-                            <Divider />
                             <MenuItem onClick={() => setOpen(true)}>
                                 <GroupIcon sx={{ mr: "20px" }} />
                                 グループID
