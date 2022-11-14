@@ -8,6 +8,7 @@ import TextField from "@mui/material/TextField"
 import Link from "@mui/material/Link"
 import Box from "@mui/material/Box"
 import Typography from "@mui/material/Typography"
+import useMediaQuery from "@mui/material/useMediaQuery"
 import { auth, signInWithEmailAndPassword } from "@/firebase"
 import { useRecoilState } from "recoil"
 import { getUserInfo } from "@/pages/api/userApi"
@@ -20,6 +21,7 @@ export default function SignIn() {
     const [loading, setLoading] = React.useState(false)
     const [email, setEmail] = React.useState("")
     const [password, setPassword] = React.useState("")
+    const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)")
     const { height, width } = useGetWindowSize()
 
     React.useEffect(() => {
@@ -65,7 +67,7 @@ export default function SignIn() {
                 </Box>
             ) : (
                 <div>
-                    <Box sx={{ mt: "30px" }}>
+                    <Box sx={{ pt: "30px" }}>
                         <Typography variant="h5" sx={{ mb: "20px", textAlign: "center" }}>
                             疑問をグループで共有・解決！
                         </Typography>
@@ -85,7 +87,7 @@ export default function SignIn() {
                                 borderRadius: "20px",
                             }}
                         >
-                            <Typography variant="h6">メールアドレス*</Typography>
+                            <Typography variant="h6" sx={{color:"black"}}>メールアドレス*</Typography>
                             <TextField
                                 margin="normal"
                                 fullWidth
@@ -93,10 +95,10 @@ export default function SignIn() {
                                 name="email"
                                 autoComplete="email"
                                 autoFocus
-                                sx={{ mb: "30px" }}
+                                sx={{ mb: "30px", bgcolor:(prefersDarkMode ? "#24292f" : "")}}
                                 onChange={(e) => setEmail(e.target.value)}
                             />
-                            <Typography variant="h6">パスワード*</Typography>
+                            <Typography variant="h6" sx={{color:"black"}}>パスワード*</Typography>
                             <TextField
                                 margin="normal"
                                 fullWidth
@@ -105,6 +107,7 @@ export default function SignIn() {
                                 type="password"
                                 autoComplete="current-password"
                                 onChange={(e) => setPassword(e.target.value)}
+                                sx={{ bgcolor:(prefersDarkMode ? "#24292f" : "") }}
                             />
                             <LoadingButton
                                 type="submit"
@@ -116,8 +119,10 @@ export default function SignIn() {
                                     mt: 5,
                                     mb: 2,
                                     fontSize: "18px",
+                                    color:"white",
                                     bgcolor: "#24292f",
                                     ":hover": { bgcolor: "#777777" },
+                                    "&:disabled":{bgcolor:(prefersDarkMode ? "gray" : "")},
                                 }}
                                 disabled={email == "" || password == ""}
                             >

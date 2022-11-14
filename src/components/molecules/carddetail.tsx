@@ -19,6 +19,7 @@ import PublishedWithChangesIcon from "@mui/icons-material/PublishedWithChanges"
 import CommentIcon from "@mui/icons-material/Comment"
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz"
 import DeleteIcon from "@mui/icons-material/Delete"
+import useMediaQuery from "@mui/material/useMediaQuery"
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil"
 import { solvedQuestions } from "@/store/solvedQuestions"
 import { unSolvedQuestions } from "@/store/unSolvedQuestions"
@@ -57,6 +58,7 @@ const CardDetail = React.memo((props: CardContentProps) => {
     const [checkMark, setCheckMark] = React.useState(false)
     const [commentLength, setCommentLength] = React.useState(0)
     const [menuAnchorEl, setMenuAnchorEl] = React.useState<null | HTMLElement>(null)
+    const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)")
 
     const today = format(new Date(), "MM/dd HH:mm")
     const dateString = questionInfo.time.toLocaleString()
@@ -289,14 +291,14 @@ const CardDetail = React.memo((props: CardContentProps) => {
                         <Box sx={{ mb: "-8px" }}>
                             <IconButton onClick={handleClickBookMark}>
                                 {bookMark ? (
-                                    <BookmarkIcon sx={{ color: "black" }} />
+                                    <BookmarkIcon sx={{color : (prefersDarkMode ? "white" : "black")}} />
                                 ) : (
-                                    <BookmarkBorderIcon sx={{ color: "black" }} />
+                                    <BookmarkBorderIcon sx={{color : (prefersDarkMode ? "white" : "black")}} />
                                 )}
                             </IconButton>
                             <IconButton onClick={handleClickCommentIcon}>
-                                <CommentIcon sx={{ color: "black" }} />
-                                <Typography variant="button" sx={{ color: "black" }}>
+                                <CommentIcon sx={{color : (prefersDarkMode ? "white" : "black")}} />
+                                <Typography variant="button" sx={{color : (prefersDarkMode ? "white" : "black")}}>
                                     {commentLength}
                                 </Typography>
                             </IconButton>

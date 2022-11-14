@@ -36,17 +36,20 @@ export default function ForgetPassword() {
                 <CssBaseline />
                 <Box
                     sx={{
-                        mt: "70px",
+                        pt: "70px",
                         display: "flex",
                         flexDirection: "column",
                         alignItems: "center",
                     }}
                 >
-                    <Typography variant="h5" sx={{ mb: "50px" }}>
+                    <Typography variant="h5">
                         パスワード再設定用メール送信
                     </Typography>
+                    <Typography variant="caption" sx={{ mb: "50px" }}>
+                        メールが届いてない場合は迷惑メールフォルダもご確認ください
+                    </Typography>
                     <Box sx={{ mt: 1, width: "100%", bgcolor: "white", p: "30px 20px", borderRadius:"20px" }}>
-                        <Typography variant="h6">登録したメールアドレスを入力</Typography>
+                        <Typography variant="h6" sx={{color:"black"}}>登録したメールアドレスを入力</Typography>
                         <TextField
                             margin="normal"
                             fullWidth

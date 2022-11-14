@@ -12,6 +12,7 @@ import Tabs from "@mui/material/Tabs"
 import Tab from "@mui/material/Tab"
 import IconButton from "@mui/material/IconButton"
 import ArrowBackIcon from "@mui/icons-material/ArrowBack"
+import useMediaQuery from "@mui/material/useMediaQuery"
 import { Icon } from "@iconify/react"
 import { useRecoilState, useRecoilValue } from "recoil"
 import { selectedSort } from "@/store/selectedSort"
@@ -39,6 +40,7 @@ export default function MyPage() {
     const [unSolvedBookMarkQuestions, setUnSolvedBookMarkQuestions] = React.useState<QuestionsCollectionData[]>([])
     const [isOpenFormDialog, setOpenFormDialog] = React.useState(false)
     const { resetSelectedFilter } = useInitializeRecoilState()
+    const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)")
     const { height, width } = useGetWindowSize()
 
     React.useEffect(() => {
@@ -82,15 +84,15 @@ export default function MyPage() {
             <div>
                 <Box sx={{ display: "flex", justifyContent: "space-between" }}>
                     <IconButton onClick={handleClickToHome} sx={{ mt: "5px", mb:"-10px"}}>
-                        <ArrowBackIcon sx={{ color: "black", fontSize: "20px" }} />
-                        <Typography variant="subtitle1" sx={{ color: "black", fontSize: "20px" }}>
+                        <ArrowBackIcon sx={{ color : (prefersDarkMode ? "white" : "black"), fontSize: "20px" }} />
+                        <Typography variant="subtitle1" sx={{ color : (prefersDarkMode ? "white" : "black"), fontSize: "20px" }}>
                             ホームへ
                         </Typography>
                     </IconButton>
                     <Box>
                         <Tabs value={value} onChange={handleChange} sx={{ mr: "70px", bgcolor:"white" }}>
-                            <Tab label="過去の投稿" />
-                            <Tab label="ブックマーク" />
+                            <Tab label="過去の投稿" sx={{color:"black"}}/>
+                            <Tab label="ブックマーク" sx={{color:"black"}}/>
                         </Tabs>
                     </Box>
                 </Box>
@@ -98,7 +100,7 @@ export default function MyPage() {
                     <TagFilter isOpenFormDialog={isOpenFormDialog}/>
                     <div style={{ display: "flex", justifyContent: "space-around", width: "100%" }}>
                         <Box sx={{ width: "40%", backgroundColor:"#DDDDDD", padding:"10px", borderRadius:"20px" }}>
-                            <Typography sx={{ mb: "10px" }} variant="h5">
+                            <Typography sx={{ mb: "10px", color:"black" }} variant="h5">
                                 未解決
                             </Typography>
                             <Box sx={{ height: height*0.68, overflowY: "scroll" }}>
@@ -165,7 +167,7 @@ export default function MyPage() {
                             </Box>
                         </Box>
                         <Box sx={{ width: "40%", backgroundColor:"#DDDDDD", padding:"10px", borderRadius:"20px" }}>
-                            <Typography sx={{ mb: "10px" }} variant="h5">
+                            <Typography sx={{ mb: "10px", color:"black" }} variant="h5">
                                 解決済み
                             </Typography>
                             <Box sx={{ height: height*0.68, overflowY: "scroll" }}>

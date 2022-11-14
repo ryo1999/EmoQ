@@ -59,7 +59,7 @@ export default function Home() {
                     <Box sx={{ display: "flex", justifyContent: "space-around", width: "100%" }}>
                         <div style={{ width: "40%", backgroundColor:"#DDDDDD", padding:"10px", borderRadius:"20px" }}>
                             <div style={{ marginBottom: "20px" }}>
-                                <Typography variant="h5" >未解決</Typography>
+                                <Typography variant="h5" sx={{color:"black"}}>未解決</Typography>
                             </div>
                             <Box sx={{ height: height*0.73, overflowY: "scroll" }}>
                                 {filter.filterList.length === 0 &&
@@ -99,7 +99,7 @@ export default function Home() {
                         </div>
                         <div style={{ width: "40%", backgroundColor:"#DDDDDD", padding:"10px", borderRadius:"20px" }}>
                             <div style={{ marginBottom: "20px" }}>
-                                <Typography variant="h5">解決済み</Typography>
+                                <Typography variant="h5" sx={{color:"black"}}>解決済み</Typography>
                             </div>
                             <Box sx={{ height: height*0.73, overflowY: "scroll" }}>
                                 {filter.filterList.length === 0 &&
