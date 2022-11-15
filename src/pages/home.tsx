@@ -57,11 +57,15 @@ export default function Home() {
                 <>
                     <TagFilter isOpenFormDialog={isOpenFormDialog} />
                     <Box sx={{ display: "flex", justifyContent: "space-around", width: "100%" }}>
-                        <div style={{ width: "40%", backgroundColor:"#DDDDDD", padding:"10px", borderRadius:"20px" }}>
+                        <div
+                            style={{ width: "40%", backgroundColor: "#DDDDDD", padding: "10px", borderRadius: "20px" }}
+                        >
                             <div style={{ marginBottom: "20px" }}>
-                                <Typography variant="h5" sx={{color:"black"}}>未解決</Typography>
+                                <Typography variant="h5" sx={{ color: "black" }}>
+                                    未解決
+                                </Typography>
                             </div>
-                            <Box sx={{ height: height*0.73, overflowY: "scroll" }}>
+                            <Box sx={{ height: height * 0.73, overflowY: "scroll" }}>
                                 {filter.filterList.length === 0 &&
                                     unSolvedQuestionList.map((questionInfo) => {
                                         return (
@@ -97,11 +101,15 @@ export default function Home() {
                                     })}
                             </Box>
                         </div>
-                        <div style={{ width: "40%", backgroundColor:"#DDDDDD", padding:"10px", borderRadius:"20px" }}>
+                        <div
+                            style={{ width: "40%", backgroundColor: "#DDDDDD", padding: "10px", borderRadius: "20px" }}
+                        >
                             <div style={{ marginBottom: "20px" }}>
-                                <Typography variant="h5" sx={{color:"black"}}>解決済み</Typography>
+                                <Typography variant="h5" sx={{ color: "black" }}>
+                                    解決済み
+                                </Typography>
                             </div>
-                            <Box sx={{ height: height*0.73, overflowY: "scroll" }}>
+                            <Box sx={{ height: height * 0.73, overflowY: "scroll" }}>
                                 {filter.filterList.length === 0 &&
                                     solvedQuestionList.map((questionInfo) => {
                                         return (

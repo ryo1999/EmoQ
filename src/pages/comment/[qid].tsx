@@ -80,6 +80,10 @@ const Comment = () => {
         }
     }
 
+    const handleClickToHome = () =>{
+        router.push("/home")
+    }
+
     return (
         <div>
             <Appbar />
@@ -87,7 +91,7 @@ const Comment = () => {
             <Box sx={{ display: "flex" }}>
                 <Box sx={{ width: "50%" }}>
                     <Box sx={{ display: "flex" }}>
-                        <IconButton onClick={() => router.push("/home")} sx={{ mt: "5px" }}>
+                        <IconButton onClick={handleClickToHome} sx={{ mt: "5px" }}>
                             <ArrowBackIcon sx={{ color : (prefersDarkMode ? "white" : "black"), fontSize: "20px" }} />
                             <Typography variant="subtitle1" sx={{ color : (prefersDarkMode ? "white" : "black"), fontSize: "20px" }}>
                                 ホームへ

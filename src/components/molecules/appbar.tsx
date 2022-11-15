@@ -130,6 +130,19 @@ export default function Appbar() {
         })
     }
 
+    const handleClickGroupId = ()=>{
+        setOpen(true)
+    }
+    const handleClickGroupChange = () =>{
+        setIsOpenGroupListDialog(true)
+    }
+    const handleClickNewGroup = () =>{
+        setIsOpenNewGroupDialog(true)
+    }
+    const handleClickJoinGroup = () =>{
+        setIsOpenJoinGroupDialog(true)
+    }
+
     return (
         <Box>
             <AppBar sx={{ bgcolor: "#24292f" }} position="fixed">
@@ -201,30 +214,30 @@ export default function Appbar() {
                             </MenuItem>
                             <Divider />
                             {router.pathname !== "/mypage" && (
-                                <>
+                                <Box>
                                     <MenuItem onClick={() => handleMenuClick("/mypage")}>
                                         <PersonIcon sx={{ mr: "20px" }} />
                                         マイページ
                                     </MenuItem>
                                     <Divider />
-                                </>
+                                </Box>
                             )}
-                            <MenuItem onClick={() => setOpen(true)}>
+                            <MenuItem onClick={handleClickGroupId}>
                                 <GroupIcon sx={{ mr: "20px" }} />
                                 グループID
                             </MenuItem>
                             <Divider />
-                            <MenuItem onClick={() => setIsOpenGroupListDialog(true)}>
+                            <MenuItem onClick={handleClickGroupChange}>
                                 <ManageAccountsIcon sx={{ mr: "20px" }} />
                                 グループ変更
                             </MenuItem>
                             <Divider />
-                            <MenuItem onClick={() => setIsOpenNewGroupDialog(true)}>
+                            <MenuItem onClick={handleClickNewGroup}>
                                 <GroupAddIcon sx={{ mr: "20px" }} />
                                 グループ作成
                             </MenuItem>
                             <Divider />
-                            <MenuItem onClick={() => setIsOpenJoinGroupDialog(true)}>
+                            <MenuItem onClick={handleClickJoinGroup}>
                                 <LoginIcon sx={{ mr: "20px" }} />
                                 グループ参加
                             </MenuItem>

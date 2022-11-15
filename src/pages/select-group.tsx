@@ -9,6 +9,13 @@ export default function SelectGroup() {
     const [isOpenNewGroupDialog, setIsOpenNewGroupDialog] = React.useState(false)
     const [isOpenJoinGroupDialog, setIsOpenJoinGroupDialog] = React.useState(false)
 
+    const handleClickNewGroup = () =>{
+        setIsOpenNewGroupDialog(true)
+    }
+    const handleClickJoinGroup = () =>{
+        setIsOpenJoinGroupDialog(true)
+    }
+
     return (
         <div style={{ textAlign: "center" }}>
             <Box sx={{ mt: "200px", mb: "100px" }}>
@@ -17,7 +24,7 @@ export default function SelectGroup() {
             </Box>
             <Box sx={{ mt: "50px" }}>
                 <Button
-                    onClick={() => setIsOpenNewGroupDialog(true)}
+                    onClick={handleClickNewGroup}
                     variant="contained"
                     sx={{
                         mr: "100px",
@@ -31,7 +38,7 @@ export default function SelectGroup() {
                     新しくグループを作る
                 </Button>
                 <Button
-                    onClick={() => setIsOpenJoinGroupDialog(true)}
+                    onClick={handleClickJoinGroup}
                     variant="contained"
                     sx={{
                         fontSize: "30px",
