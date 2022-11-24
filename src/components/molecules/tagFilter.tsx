@@ -32,7 +32,7 @@ type TagFilterProps = {
     isOpenFormDialog: boolean
 }
 
-export default function TagFilter(props: TagFilterProps) {
+const TagFilter = React.memo((props: TagFilterProps) => {
     const { isOpenFormDialog } = props
     const userState = useRecoilValue(userInfo)
     const [sortText, setSortText] = useRecoilState(selectedSort)
@@ -237,4 +237,6 @@ export default function TagFilter(props: TagFilterProps) {
             </Box>
         </div>
     )
-}
+})
+
+export default TagFilter

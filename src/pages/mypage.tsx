@@ -27,7 +27,7 @@ import { useGetWindowSize } from "@/hooks/useGetWindowSize"
 import { QuestionsCollectionData } from "@/utils/types"
 import { auth } from "@/firebase"
 
-export default function MyPage() {
+const MyPage = React.memo(() => {
     const userState = useRecoilValue(userInfo)
     const sortText = useRecoilValue(selectedSort)
     const [unSolvedQuestionList, setUnSolvedQuestions] = useRecoilState<QuestionsCollectionData[]>(unSolvedQuestions)
@@ -259,4 +259,6 @@ export default function MyPage() {
             )}
         </div>
     )
-}
+})
+
+export default MyPage
