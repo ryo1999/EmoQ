@@ -6,6 +6,7 @@ import "../../styles/globals.css"
 import { createTheme, ThemeProvider } from "@mui/material/styles"
 import useMediaQuery from "@mui/material/useMediaQuery"
 import Head from "next/head"
+import "./wdyr"
 
 function MyApp({ Component, pageProps }: AppProps) {
     const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)")

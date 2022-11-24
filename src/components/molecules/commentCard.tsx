@@ -122,3 +122,4 @@ const CommentCard = React.memo((props: CardContentProps) => {
 })
 
 export default CommentCard
+CommentCard.whyDidYouRender = true

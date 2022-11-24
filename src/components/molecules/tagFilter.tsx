@@ -32,7 +32,7 @@ type TagFilterProps = {
     isOpenFormDialog: boolean
 }
 
-export default function TagFilter(props: TagFilterProps) {
+const TagFilter = React.memo((props: TagFilterProps) => {
     const { isOpenFormDialog } = props
     const userState = useRecoilValue(userInfo)
     const [sortText, setSortText] = useRecoilState(selectedSort)
@@ -45,22 +45,22 @@ export default function TagFilter(props: TagFilterProps) {
 
     React.useEffect(() => {
         if (isOpenFormDialog === false) {
-            getTag(userState.groupId)
+            getTag("oECoFoBz9jhjmMi0kDHn")
                 .then((data) => {
                     setTagList(data)
                 })
                 .catch((error) => {
                     console.error(error)
                 })
-            getAllUserName(userState.groupId)
+            getAllUserName("oECoFoBz9jhjmMi0kDHn")
                 .then((data) => {
                     setUserList(data)
                 })
                 .catch((error) => {
-                    console.log(error)
+                    console.error(error)
                 })
         }
-    }, [isOpenFormDialog,userState.groupId])
+    }, [isOpenFormDialog, "oECoFoBz9jhjmMi0kDHn"])
 
     const handleSortChange = (event: SelectChangeEvent) => {
         setSortText(event.target.value)
@@ -206,9 +206,9 @@ export default function TagFilter(props: TagFilterProps) {
                                             }
                                             onDelete={() => handleClickDelete(value)}
                                             sx={{
-                                                borderColor: (prefersDarkMode ? "white" : "#24292f"),
+                                                borderColor: prefersDarkMode ? "white" : "#24292f",
                                                 fontSize: "15px",
-                                                color: (prefersDarkMode ? "white" : "#24292f"),
+                                                color: prefersDarkMode ? "white" : "#24292f",
                                                 maxWidth: "200px",
                                             }}
                                         />
@@ -237,4 +237,6 @@ export default function TagFilter(props: TagFilterProps) {
             </Box>
         </div>
     )
-}
+})
+
+export default TagFilter

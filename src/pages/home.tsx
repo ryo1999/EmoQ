@@ -20,7 +20,7 @@ import { useGetWindowSize } from "@/hooks/useGetWindowSize"
 import { getQuestion } from "./api/questionApi"
 import { auth } from "@/firebase"
 
-export default function Home() {
+const Home = React.memo(() => {
     const router = useRouter()
     const userState = useRecoilValue(userInfo)
     const sortText = useRecoilValue(selectedSort)
@@ -34,7 +34,6 @@ export default function Home() {
         // auth.onAuthStateChanged((user) => {
         //     if (user) {
         if (userState.groupId !== undefined || ""){
-            console.log(userState.groupId)
             getQuestion(sortText, userState.groupId)
             .then((question) => {
                 setUnSolvedQuestions(question[0])
@@ -174,4 +173,6 @@ export default function Home() {
             )}
         </div>
     )
-}
+})
+
+export default Home

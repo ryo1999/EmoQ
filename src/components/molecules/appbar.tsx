@@ -31,7 +31,7 @@ import { useInitializeRecoilState } from "@/hooks/useInitializeRecoilState"
 import { confirmNotification, deleteNotification, getNotification } from "@/pages/api/userApi"
 import { getSelectQuestion } from "@/pages/api/questionApi"
 
-export default function Appbar() {
+const Appbar = React.memo(() => {
     const router = useRouter()
     const userState = useRecoilValue(userInfo)
     const setSelectedQuestion = useSetRecoilState(selectedQuestion)
@@ -313,4 +313,6 @@ export default function Appbar() {
             <ToastContainer position="bottom-center" pauseOnHover={false} closeOnClick autoClose={2000} />
         </Box>
     )
-}
+})
+
+export default Appbar
