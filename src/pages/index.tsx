@@ -24,37 +24,41 @@ export default function SignIn() {
     const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)")
     const { height, width } = useGetWindowSize()
 
-    React.useEffect(() => {
-        if (userState.userId !== "") {
-            setLoading(true)
-        }
-        auth.onAuthStateChanged((user) => {
-            if (user) {
-                router.push("/home")
-            }
-        })
-        return () => {
-            setLoading(false)
-        }
-    }, [])
+    // React.useEffect(() => {
+    //     if (userState.userId !== "") {
+    //         setLoading(true)
+    //     }
+    //     auth.onAuthStateChanged((user) => {
+    //         if (user) {
+    //             router.push("/home")
+    //         }
+    //     })
+    //     return () => {
+    //         setLoading(false)
+    //     }
+    // }, [])
+
+    // const handleSignIn = () => {
+    //     setLoading(true)
+    //     signInWithEmailAndPassword(auth, email, password)
+    //         .then((data) => {
+    //             if (data.user.uid) {
+    //                 getUserInfo(data.user.uid).then((userdata) => {
+    //                     if (userdata) {
+    //                         setUserState(userdata)
+    //                     }
+    //                 })
+    //                 router.push("/home")
+    //             }
+    //         })
+    //         .catch(() => {
+    //             setLoading(false)
+    //             toast.error("ログイン失敗")
+    //         })
+    // }
 
     const handleSignIn = () => {
-        setLoading(true)
-        signInWithEmailAndPassword(auth, email, password)
-            .then((data) => {
-                if (data.user.uid) {
-                    getUserInfo(data.user.uid).then((userdata) => {
-                        if (userdata) {
-                            setUserState(userdata)
-                        }
-                    })
-                    router.push("/home")
-                }
-            })
-            .catch(() => {
-                setLoading(false)
-                toast.error("ログイン失敗")
-            })
+        router.push("/home")
     }
 
     return (
@@ -124,7 +128,7 @@ export default function SignIn() {
                                     ":hover": { bgcolor: "#777777" },
                                     "&:disabled":{bgcolor:(prefersDarkMode ? "gray" : "")},
                                 }}
-                                disabled={email == "" || password == ""}
+                                // disabled={email == "" || password == ""}
                             >
                                 ログイン
                             </LoadingButton>

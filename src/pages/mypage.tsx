@@ -44,8 +44,8 @@ export default function MyPage() {
     const { height, width } = useGetWindowSize()
 
     React.useEffect(() => {
-        auth.onAuthStateChanged((user) => {
-            if (user) {
+        // auth.onAuthStateChanged((user) => {
+        //     if (user) {
                 getMyQuestion(userState.userId, sortText,userState.groupId)
                     .then((question) => {
                         setUnSolvedMyQuestions(question[0])
@@ -58,10 +58,10 @@ export default function MyPage() {
                         setSolvedBookMarkQuestions(bookmark[1])
                     })
                     .catch((error) => console.error(error))
-            } else {
-                router.push("/")
-            }
-        })
+        //     } else {
+        //         router.push("/")
+        //     }
+        // })
     }, [unSolvedQuestionList, solvedQuestionList])
 
     const handleChange = (event: React.SyntheticEvent, newValue: number) => {

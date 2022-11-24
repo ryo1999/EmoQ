@@ -36,8 +36,8 @@ const Comment = () => {
     const { height, width } = useGetWindowSize()
 
     React.useEffect(() => {
-        auth.onAuthStateChanged((user) => {
-            if (user) {
+        // auth.onAuthStateChanged((user) => {
+        //     if (user) {
                 getSelectQuestion(questionInfo.question_id, userState.groupId).then((question) => {
                     if (question !== undefined) {
                         setQuestionInfo(question)
@@ -48,10 +48,10 @@ const Comment = () => {
                         setCommentList(comment)
                     })
                     .catch((error) => console.error(error))
-            } else {
-                router.push("/")
-            }
-        })
+            // } else {
+            //     router.push("/")
+            // }
+        // })
         return () => {
             resetSelectedQuestion()
         }

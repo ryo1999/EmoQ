@@ -54,8 +54,8 @@ export default function Appbar() {
     } = useInitializeRecoilState()
 
     React.useEffect(() => {
-        auth.onAuthStateChanged((user) => {
-            if (user) {
+        // auth.onAuthStateChanged((user) => {
+        //     if (user) {
                 getNotification(userState.userId, userState.groupId)
                     .then((data) => {
                         setNotificationNumber(data.length)
@@ -64,10 +64,10 @@ export default function Appbar() {
                     .catch((error) => console.error(error))
                 confirmNotification(userState.userId).then((bool) => {
                     setOtherNotification(bool)
-                })
-            } else {
-                router.push("/")
-            }
+        //         })
+        //     } else {
+        //         router.push("/")
+        //     }
         })
     }, [userState.groupId])
 

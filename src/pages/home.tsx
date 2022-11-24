@@ -31,18 +31,21 @@ export default function Home() {
     const { height, width } = useGetWindowSize()
 
     React.useEffect(() => {
-        auth.onAuthStateChanged((user) => {
-            if (user) {
-                getQuestion(sortText, userState.groupId)
-                    .then((question) => {
-                        setUnSolvedQuestions(question[0])
-                        setSolvedQuestions(question[1])
-                    })
-                    .catch((error) => console.error(error))
-            } else {
-                router.push("/")
-            }
-        })
+        // auth.onAuthStateChanged((user) => {
+        //     if (user) {
+        if (userState.groupId !== undefined || ""){
+            console.log(userState.groupId)
+            getQuestion(sortText, userState.groupId)
+            .then((question) => {
+                setUnSolvedQuestions(question[0])
+                setSolvedQuestions(question[1])
+            })
+            .catch((error) => console.error(error))
+        }
+        // } else {
+        //     router.push("/")
+        // }
+        // })
     }, [userState.groupId])
 
     const handleClickOpen = () => {
