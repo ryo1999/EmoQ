@@ -19,7 +19,7 @@ type TagDialogProps = {
     setTagList: React.Dispatch<string[]>
 }
 
-const TagDialog = React.memo((props: TagDialogProps) => {
+const TagDialog = (props: TagDialogProps) => {
     const { tagList, isOpenTagDialog, setOpenTagDialog, setTagList } = props
     const userState = useRecoilValue(userInfo)
     const { valueText, setValueText, isValidated, errorMessage, textValidation } = useValidation(tagList)
@@ -70,6 +70,6 @@ const TagDialog = React.memo((props: TagDialogProps) => {
             </DialogActions>
         </Dialog>
     )
-})
+}
 
 export default TagDialog

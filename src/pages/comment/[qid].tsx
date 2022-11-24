@@ -24,7 +24,7 @@ import { useValidation } from "@/hooks/useValidation"
 import { useGetWindowSize } from "@/hooks/useGetWindowSize"
 import { CommentsCollectionData } from "@/utils/types"
 
-const Comment = React.memo(() => {
+const Comment = () => {
     const router = useRouter()
     const userState = useRecoilValue(userInfo)
     const [questionInfo, setQuestionInfo] = useRecoilState(selectedQuestion)
@@ -168,6 +168,6 @@ const Comment = React.memo(() => {
             </Box>
         </div>
     )
-})
+}
 
 export default Comment

@@ -20,7 +20,7 @@ type JoinGroupDialogProps = {
     setAvatarAnchorEl?: React.Dispatch<null | HTMLElement>
 }
 
-const JoinGroupDialog = React.memo((props: JoinGroupDialogProps) => {
+const JoinGroupDialog = (props: JoinGroupDialogProps) => {
     const router = useRouter()
     const { isOpenJoinGroupDialog, setIsOpenJoinGroupDialog, setAvatarAnchorEl } = props
     const [userState, setUserState] = useRecoilState(userInfo)
@@ -79,6 +79,6 @@ const JoinGroupDialog = React.memo((props: JoinGroupDialogProps) => {
             <ToastContainer position="bottom-center" pauseOnHover={false} closeOnClick autoClose={2000} />
         </Dialog>
     )
-})
+}
 
 export default JoinGroupDialog

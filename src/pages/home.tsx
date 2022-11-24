@@ -20,7 +20,7 @@ import { useGetWindowSize } from "@/hooks/useGetWindowSize"
 import { getQuestion } from "./api/questionApi"
 import { auth } from "@/firebase"
 
-const Home = React.memo(() => {
+const Home = () => {
     const router = useRouter()
     const userState = useRecoilValue(userInfo)
     const sortText = useRecoilValue(selectedSort)
@@ -173,6 +173,6 @@ const Home = React.memo(() => {
             )}
         </div>
     )
-})
+}
 
 export default Home

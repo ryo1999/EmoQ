@@ -55,7 +55,7 @@ const Transition = React.forwardRef(function Transition(
     return <Slide direction="up" ref={ref} {...props} />
 })
 
-const PostColumn = React.memo((props: PostColumnProps) => {
+const PostColumn = (props: PostColumnProps) => {
     const { isOpenFormDialog, setOpenFormDialog, setUnSolvedQuestions } = props
     const theme = useTheme()
     const [sortText, setSortText] = useRecoilState(selectedSort)
@@ -309,6 +309,6 @@ const PostColumn = React.memo((props: PostColumnProps) => {
             </Dialog>
         </>
     )
-})
+}
 
 export default PostColumn

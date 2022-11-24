@@ -23,7 +23,7 @@ type CardContentProps = {
     setCommentList: React.Dispatch<CommentsCollectionData[]>
 }
 
-const CommentCard = React.memo((props: CardContentProps) => {
+const CommentCard = (props: CardContentProps) => {
     const { commentInfo, replied_user_id, setCommentList } = props
     const userState = useRecoilValue(userInfo)
     const [menuAnchorEl, setMenuAnchorEl] = React.useState<null | HTMLElement>(null)
@@ -119,6 +119,6 @@ const CommentCard = React.memo((props: CardContentProps) => {
             </CardActions>
         </Card>
     )
-})
+}
 
 export default CommentCard
