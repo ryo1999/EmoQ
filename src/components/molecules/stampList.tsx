@@ -20,6 +20,7 @@ const EmotionIcon: { [name: string]: string } = {
     絶望: "fa6-regular:face-dizzy",
     どや: "fa6-regular:face-smile-wink",
     感謝: "fa6-regular:face-grin-hearts",
+    お願い:"la:praying-hands",
     ホッ: "fa-regular:handshake",
 }
 

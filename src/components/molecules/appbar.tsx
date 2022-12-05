@@ -93,8 +93,8 @@ const Appbar = React.memo(() => {
         localStorage.removeItem("recoil-persist")
     }
 
-    const handleClickLogOut = async () => {
-        await signOut(auth)
+    const handleClickLogOut = () => {
+        signOut(auth)
             .then(() => {
                 toast.loading("ログアウト")
                 RESET()

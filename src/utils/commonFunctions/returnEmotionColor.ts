@@ -8,6 +8,7 @@ const EmotionCOLORS: { [name: string]: string } = {
     絶望: "#999999",
     どや: "#9CB6F7",
     感謝: "#DDC3B6",
+    お願い:"#EB8B2F",
     ホッ: "#73AF4C",
 }
 

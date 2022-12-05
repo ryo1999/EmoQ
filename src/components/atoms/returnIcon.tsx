@@ -23,6 +23,8 @@ export default function ReturnIcon(emotion: string) {
             return <Icon color="white" icon="fa6-regular:face-grin-hearts" />
         case "ホッ":
             return <Icon color="white" icon="fa-regular:handshake" />
+        case "お願い":
+            return <Icon color="white" icon="la:praying-hands" />
         default:
             return <Icon color="white" icon="fa6-regular:face-meh" />
     }
